@@ -152,58 +152,68 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#f0f0f0', // Lighter background
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start', // Align to top for better content flow
     padding: 20,
-    paddingTop: 50, // 상단 패딩 추가
+    paddingTop: 60, // More top padding for status bar
   },
   title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
+    fontSize: 28, // Slightly larger title
+    fontWeight: '600', // Medium bold
+    color: '#333',
+    marginBottom: 25,
   },
   input: {
     width: '100%',
-    height: 40,
-    borderColor: 'gray',
+    height: 45, // Slightly taller input
+    borderColor: '#ccc', // Lighter border
     borderWidth: 1,
-    borderRadius: 5,
-    paddingHorizontal: 10,
-    marginBottom: 10,
+    borderRadius: 8, // Slightly more rounded corners
+    paddingHorizontal: 15,
+    marginBottom: 15,
+    backgroundColor: '#fff', // White background for inputs
+    fontSize: 16,
   },
   randomWord: {
-    fontSize: 18,
+    fontSize: 20, // Slightly larger random word
     fontWeight: 'bold',
-    marginVertical: 20,
+    color: '#555',
+    marginVertical: 25,
     textAlign: 'center',
+    paddingHorizontal: 10,
   },
   textArea: {
     width: '100%',
-    height: 200,
-    borderColor: 'gray',
+    height: 180, // Slightly smaller text area
+    borderColor: '#ccc',
     borderWidth: 1,
-    borderRadius: 5,
-    padding: 10,
+    borderRadius: 8,
+    padding: 15,
     marginBottom: 20,
+    backgroundColor: '#fff',
+    fontSize: 16,
   },
   savedFilesTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginTop: 20,
-    marginBottom: 10,
+    fontSize: 20,
+    fontWeight: '600',
+    color: '#333',
+    marginTop: 25,
+    marginBottom: 15,
   },
   fileList: {
     width: '100%',
-    maxHeight: 150, // Limit height to make room for other elements
-    borderColor: 'lightgray',
+    maxHeight: 180, // Adjusted height
+    borderColor: '#eee', // Lighter border for list
     borderWidth: 1,
-    borderRadius: 5,
+    borderRadius: 8,
+    backgroundColor: '#fff',
     marginBottom: 20,
   },
   fileItem: {
-    padding: 10,
-    borderBottomColor: 'lightgray',
+    paddingVertical: 12, // More vertical padding
+    paddingHorizontal: 15,
+    borderBottomColor: '#f0f0f0', // Lighter separator
     borderBottomWidth: 1,
   },
 });
