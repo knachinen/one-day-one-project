@@ -13,6 +13,7 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [savedFiles, setSavedFiles] = useState<{ name: string, uri: string }[]>([]);
   const [commonWordsList, setCommonWordsList] = useState<string[]>([]); // New state for common words
+  const [documentDirectoryUri, setDocumentDirectoryUri] = useState<string | null>(null); // State for FileSystem.documentDirectory
 
   // Load common words on component mount
   useEffect(() => {
@@ -29,6 +30,14 @@ export default function App() {
     }
     loadCommonWords();
     loadSavedFiles(); // Also load saved files
+
+      if (FileSystem.documentDirectory) {
+        setDocumentDirectoryUri(FileSystem.documentDirectory);
+      } else {
+        console.warn('FileSystem.documentDirectory is not available.');
+      }
+    }
+    loadCommonWords();
   }, []);
 
   const extractRandomWord = (text: string) => {
@@ -79,12 +88,12 @@ export default function App() {
 
   const loadSavedFiles = async () => {
     try {
-      if (!FileSystem.documentDirectory) {
+      if (!documentDirectoryUri) {
         Alert.alert('오류', '문서 디렉토리를 찾을 수 없습니다.');
         return;
       }
-      const writingsDirUri = FileSystem.documentDirectory + 'writings/';
-      const writingsDirectory = new FileSystem.Directory(FileSystem.documentDirectory, 'writings');
+      const writingsDirUri = documentDirectoryUri + 'writings/';
+      const writingsDirectory = new FileSystem.Directory(documentDirectoryUri, 'writings');
       await writingsDirectory.create(); // Ensure directory exists
       const files = await FileSystem.readDirectoryAsync(writingsDirUri);
       const fileList = files.map(name => ({
@@ -116,13 +125,12 @@ export default function App() {
     }
 
     try {
-      const filename = `writing_${Date.now()}.md`;
-      if (!FileSystem.documentDirectory) {
+      if (!documentDirectoryUri) {
         Alert.alert('오류', '문서 디렉토리를 찾을 수 없습니다.');
         return;
       }
-      const writingsDirUri = FileSystem.documentDirectory + 'writings/';
-      const writingsDirectory = new FileSystem.Directory(FileSystem.documentDirectory, 'writings');
+      const writingsDirUri = documentDirectoryUri + 'writings/';
+      const writingsDirectory = new FileSystem.Directory(documentDirectoryUri, 'writings');
       await writingsDirectory.create(); // Ensure directory exists
       const fileUri = writingsDirUri + filename;
       await FileSystem.writeAsStringAsync(fileUri, writingContent);

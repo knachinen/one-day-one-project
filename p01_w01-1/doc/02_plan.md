@@ -63,3 +63,49 @@
     *   `const writingsDirUri = FileSystem.documentDirectory + 'writings/';`와 같이 `writingsDirUri`를 구성합니다.
     *   `FileSystem.Directory`를 사용하여 디렉토리를 생성할 때도 이 `writingsDirUri`를 기반으로 `Directory` 인스턴스를 생성합니다.
     *   `FileSystem.readDirectoryAsync` 및 `fileList` 구성 시 `writingsDirUri`를 사용합니다.
+
+## (추가) "문서 디렉토리를 찾을 수 없습니다." 오류 수정 계획
+
+### 목표
+`p01_w01-1/App.tsx` 파일 내 `handleSave` 및 `loadSavedFiles` 함수에서 발생하는 "문서 디렉토리를 찾을 수 없습니다." 오류를 해결합니다. 이 오류는 `FileSystem.documentDirectory`가 `undefined`로 보고될 때 발생하며, `expo-file-system` 모듈의 초기화 또는 사용 시점 문제일 수 있습니다.
+
+### 세부 계획
+1.  **`FileSystem.documentDirectory` 로드를 `useEffect`로 관리:**
+    *   새로운 `useState` 변수 (`documentDirectoryUri`)를 추가하여 `FileSystem.documentDirectory` 값을 저장합니다.
+    *   컴포넌트가 마운트될 때 `useEffect` 훅 내에서 `FileSystem.documentDirectory`의 값을 확인하고, 그 값을 `documentDirectoryUri` 상태에 업데이트합니다.
+2.  **`handleSave` 및 `loadSavedFiles` 함수 수정:**
+    *   `handleSave` 및 `loadSavedFiles` 함수 내에서 `FileSystem.documentDirectory` 대신 `documentDirectoryUri` 상태 변수를 사용합니다.
+    *   `documentDirectoryUri`가 `null`이거나 `undefined`인 경우, 사용자에게 오류 메시지를 표시하고 함수 실행을 중단합니다.
+## (추가) `App.tsx` 파일 분할 계획
+
+### 목표
+`p01_w01-1/App.tsx` 파일을 기능별로 분리하여 코드 가독성, 재사용성 및 유지보수성을 향상시킵니다.
+
+### 세부 계획
+1.  **디렉토리 구조 생성:**
+    *   `src/components` 디렉토리를 생성하여 UI 컴포넌트를 분리합니다.
+    *   `src/hooks` 디렉토리를 생성하여 커스텀 훅을 분리합니다.
+    *   `src/utils` 디렉토리를 생성하여 유틸리티 함수를 분리합니다.
+    *   `src/services` 디렉토리를 생성하여 API 호출 및 파일 시스템 관련 로직을 분리합니다.
+2.  **`useFileSystem` Custom Hook 생성:**
+    *   `src/hooks/useFileSystem.ts` 파일을 생성합니다.
+    *   `documentDirectoryUri` 상태 관리, `loadSavedFiles`, `handleSave`, `loadFileContent` 함수를 `useFileSystem` 훅으로 이동시킵니다.
+    *   `useFileSystem` 훅은 `documentDirectoryUri`, `savedFiles`, `loadSavedFiles`, `handleSave`, `loadFileContent`를 반환하도록 합니다.
+3.  **`useWordFetcher` Custom Hook 생성:**
+    *   `src/hooks/useWordFetcher.ts` 파일을 생성합니다.
+    *   `webAddress`, `randomWord`, `isLoading`, `fetchRandomWord`, `extractRandomWord` 상태 및 함수를 `useWordFetcher` 훅으로 이동시킵니다.
+    *   `useWordFetcher` 훅은 `webAddress`, `setWebAddress`, `randomWord`, `isLoading`, `fetchRandomWord`, `commonWordsList`를 반환하도록 합니다.
+4.  **`CommonWordsService` 유틸리티 함수 분리:**
+    *   `src/services/CommonWordsService.ts` 파일을 생성합니다.
+    *   `App.tsx` 내 `useEffect`에서 `loadCommonWords` 함수를 이곳으로 이동시키고, `commonWordsList`를 반환하는 함수로 만듭니다.
+5.  **`SavedFilesList` 컴포넌트 생성:**
+    *   `src/components/SavedFilesList.tsx` 파일을 생성합니다.
+    *   `FlatList`를 사용하여 저장된 파일 목록을 렌더링하는 부분을 이 컴포넌트로 이동시킵니다. `savedFiles`, `loadFileContent` prop을 받도록 합니다.
+6.  **`App.tsx` 업데이트:**
+    *   분리된 훅과 컴포넌트를 가져와 사용하도록 `App.tsx`를 간결하게 만듭니다.
+    *   관련 `useState`와 `useEffect` 로직을 제거하고 커스텀 훅 호출로 대체합니다.
+7.  **스타일 분리:**
+    *   `styles` 객체를 `src/styles/AppStyles.ts` 파일로 분리합니다.
+8.  **문서 업데이트:** `02_plan.md` 및 `03_checklist.md` 파일을 업데이트하여 이 변경 사항을 반영합니다.
+9.  **커밋:** 모든 변경 사항을 커밋합니다.
+

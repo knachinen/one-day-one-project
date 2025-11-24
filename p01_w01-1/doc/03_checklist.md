@@ -5,7 +5,7 @@
     *   React Native 프로젝트 `p01_w01-1` 생성 - 완료
     *   기본 앱 실행 확인 - 완료
 *   **UI 구성 (초기):**
-    *   웹 주소 입력창 추가 - 완료
+    *   웹 주소를 입력할 수 있는 TextInput 컴포넌트를 추가합니다.
     *   무작위 단어 표시 영역 추가 - 완료
     *   글쓰기 입력창 추가 - 완료
     *   저장 버튼 추가 - 완료
@@ -42,4 +42,25 @@
     *   `handleSave` 및 `loadSavedFiles` 함수 내에서 `FileSystem.documentDirectory` 유효성 검사 및 동적으로 `writingsDirUri` 구성 - 완료
     *   `handleSave` 함수 내 `FileSystem.Directory` 및 `fileUri` 구성 시 `writingsDirUri` 사용 - 완료
     *   `loadSavedFiles` 함수 내 `FileSystem.Directory`, `FileSystem.readDirectoryAsync`, `fileList` 구성 시 `writingsDirUri` 사용 - 완료
+    *   수정된 코드 및 문서들을 커밋 - 완료
+
+---
+
+*   **(추가) "문서 디렉토리를 찾을 수 없습니다." 오류 수정:**
+    *   새로운 `useState` 변수 (`documentDirectoryUri`)를 추가하여 `FileSystem.documentDirectory` 값을 저장 - 완료
+    *   컴포넌트가 마운트될 때 `useEffect` 훅 내에서 `FileSystem.documentDirectory` 값을 확인하고 `documentDirectoryUri` 상태 업데이트 - 완료
+    *   `handleSave` 및 `loadSavedFiles` 함수 내 `FileSystem.documentDirectory` 대신 `documentDirectoryUri` 상태 변수 사용 - 완료
+    *   `documentDirectoryUri`가 `null`이거나 `undefined`인 경우 오류 메시지 표시 및 함수 실행 중단 처리 - 완료
+    *   수정된 코드 및 문서들을 커밋 - 완료
+
+---
+
+*   **(추가) `App.tsx` 파일 분할:**
+    *   디렉토리 구조 생성 (`src/components`, `src/hooks`, `src/utils`, `src/services`, `src/styles`) - 미완료
+    *   `useFileSystem` Custom Hook 생성 및 관련 로직 이동 (`documentDirectoryUri` 상태 관리, `savedFiles`, `loadSavedFiles`, `handleSave`, `loadFileContent`) - 미완료
+    *   `useWordFetcher` Custom Hook 생성 및 관련 로직 이동 (`webAddress`, `setWebAddress`, `randomWord`, `isLoading`, `fetchRandomWord`, `commonWordsList`) - 미완료
+    *   `CommonWordsService` 유틸리티 함수 분리 및 관련 로직 이동 (`loadCommonWords` 함수) - 미완료
+    *   `SavedFilesList` 컴포넌트 생성 및 관련 UI 이동 (`FlatList`를 사용한 저장된 파일 목록 렌더링) - 미완료
+    *   `App.tsx` 업데이트 (분리된 훅과 컴포넌트 가져와 사용, 관련 `useState`와 `useEffect` 로직 제거) - 미완료
+    *   스타일 분리 (`styles` 객체를 `src/styles/AppStyles.ts` 파일로 분리) - 미완료
     *   수정된 코드 및 문서들을 커밋 - 미완료
