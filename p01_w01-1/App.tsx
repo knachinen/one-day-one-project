@@ -1,13 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TextInput, Button, ActivityIndicator, Alert } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Button, ActivityIndicator, Alert, FlatList, TouchableOpacity } from 'react-native';
 import * as FileSystem from 'expo-file-system';
+
+const WRITINGS_DIRECTORY = FileSystem.documentDirectory + 'writings/';
 
 export default function App() {
   const [webAddress, setWebAddress] = useState('');
   const [randomWord, setRandomWord] = useState('여기에 무작위 단어가 표시됩니다.');
   const [writingContent, setWritingContent] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [savedFiles, setSavedFiles] = useState<{ name: string, uri: string }[]>([]);
+
+  useEffect(() => {
+    loadSavedFiles();
+  }, []);
 
   const extractRandomWord = (text: string) => {
     // Basic text cleaning: remove HTML tags and common punctuation, then split into words
@@ -48,6 +55,32 @@ export default function App() {
     }
   };
 
+  const loadSavedFiles = async () => {
+    try {
+      await FileSystem.makeDirectoryAsync(WRITINGS_DIRECTORY, { intermediates: true }); // Ensure directory exists
+      const files = await FileSystem.readDirectoryAsync(WRITINGS_DIRECTORY);
+      const fileList = files.map(name => ({
+        name: name,
+        uri: WRITINGS_DIRECTORY + name,
+      })).sort((a, b) => b.name.localeCompare(a.name)); // Sort by name descending (newest first)
+      setSavedFiles(fileList);
+    } catch (error) {
+      console.error("저장된 파일 목록 가져오기 실패:", error);
+      Alert.alert('오류', '저장된 파일을 불러오는 데 실패했습니다.');
+    }
+  };
+
+  const loadFileContent = async (fileUri: string) => {
+    try {
+      const content = await FileSystem.readAsStringAsync(fileUri);
+      setWritingContent(content);
+      Alert.alert('성공', '파일 내용이 불러와졌습니다.');
+    } catch (error) {
+      console.error("파일 내용 불러오기 실패:", error);
+      Alert.alert('오류', '파일 내용을 불러오는 데 실패했습니다.');
+    }
+  };
+
   const handleSave = async () => {
     if (!writingContent.trim()) {
       Alert.alert('알림', '저장할 내용이 없습니다.');
@@ -56,15 +89,12 @@ export default function App() {
 
     try {
       const filename = `writing_${Date.now()}.md`;
-      const directory = FileSystem.documentDirectory + 'writings/';
-      
-      // Ensure the directory exists
-      await FileSystem.makeDirectoryAsync(directory, { intermediates: true });
-
-      const fileUri = directory + filename;
+      await FileSystem.makeDirectoryAsync(WRITINGS_DIRECTORY, { intermediates: true }); // Ensure directory exists
+      const fileUri = WRITINGS_DIRECTORY + filename;
       await FileSystem.writeAsStringAsync(fileUri, writingContent);
       Alert.alert('성공', `글이 ${filename} 파일로 저장되었습니다.`);
       setWritingContent(''); // Clear content after saving
+      loadSavedFiles(); // Reload saved files list
     } catch (error) {
       console.error("파일 저장 실패:", error);
       Alert.alert('오류', '글 저장에 실패했습니다.');
@@ -101,6 +131,18 @@ export default function App() {
       />
 
       <Button title="저장" onPress={handleSave} />
+
+      <Text style={styles.savedFilesTitle}>저장된 파일</Text>
+      <FlatList
+        data={savedFiles}
+        keyExtractor={(item) => item.uri}
+        renderItem={({ item }) => (
+          <TouchableOpacity onPress={() => loadFileContent(item.uri)} style={styles.fileItem}>
+            <Text>{item.name}</Text>
+          </TouchableOpacity>
+        )}
+        style={styles.fileList}
+      />
 
       <StatusBar style="auto" />
     </View>
@@ -144,5 +186,24 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 10,
     marginBottom: 20,
+  },
+  savedFilesTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginTop: 20,
+    marginBottom: 10,
+  },
+  fileList: {
+    width: '100%',
+    maxHeight: 150, // Limit height to make room for other elements
+    borderColor: 'lightgray',
+    borderWidth: 1,
+    borderRadius: 5,
+    marginBottom: 20,
+  },
+  fileItem: {
+    padding: 10,
+    borderBottomColor: 'lightgray',
+    borderBottomWidth: 1,
   },
 });
