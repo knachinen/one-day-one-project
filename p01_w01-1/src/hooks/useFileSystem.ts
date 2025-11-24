@@ -17,10 +17,14 @@ export function useFileSystem() {
     async function initializeFileSystem() {
       if (FileSystem.documentDirectory) {
         setDocumentDirectoryUri(FileSystem.documentDirectory);
-        setIsReady(true); // Set isReady to true when documentDirectory is available
+        setIsReady(true);
+      } else if (FileSystem.cacheDirectory) {
+        setDocumentDirectoryUri(FileSystem.cacheDirectory);
+        setIsReady(true);
+        console.warn('FileSystem.documentDirectory is not available. Falling back to FileSystem.cacheDirectory.');
       } else {
-        console.warn('FileSystem.documentDirectory is not available.');
-        // Optionally, add a retry mechanism here or a loading fallback in App.tsx
+        console.error('Neither FileSystem.documentDirectory nor FileSystem.cacheDirectory is available.');
+        // Potentially handle this critical error more gracefully, e.g., disable file ops or show an unrecoverable error screen
       }
     }
     initializeFileSystem();
