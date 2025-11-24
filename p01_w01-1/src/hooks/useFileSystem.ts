@@ -14,16 +14,18 @@ export function useFileSystem() {
 
   useEffect(() => {
     async function initializeFileSystem() {
+      console.log('useEffect - FileSystem.documentDirectory:', FileSystem.documentDirectory); // Debug log
       if (FileSystem.documentDirectory) {
         setDocumentDirectoryUri(FileSystem.documentDirectory);
       } else {
-        console.warn('FileSystem.documentDirectory is not available.');
+        console.warn('FileSystem.documentDirectory is not available in useEffect.'); // Debug warn
       }
     }
     initializeFileSystem();
   }, []);
 
   const loadSavedFiles = async () => {
+    console.log('loadSavedFiles - documentDirectoryUri:', documentDirectoryUri); // Debug log
     if (!documentDirectoryUri) {
       Alert.alert('오류', '문서 디렉토리를 찾을 수 없습니다.');
       return;
@@ -56,6 +58,7 @@ export function useFileSystem() {
   };
 
   const handleSave = async (contentToSave: string) => {
+    console.log('handleSave - documentDirectoryUri:', documentDirectoryUri); // Debug log
     if (!contentToSave.trim()) {
       Alert.alert('알림', '저장할 내용이 없습니다.');
       return;
