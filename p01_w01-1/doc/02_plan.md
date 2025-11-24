@@ -43,3 +43,23 @@
 ### 세부 계획
 1.  `p01_w01-1/App.tsx` 파일의 `loadCommonWords` 함수 내에서 `Asset.fromModule(require('./commonWords.txt'))` 및 `await asset.downloadAsync()` 부분을 `const [{ localUri }] = await Asset.loadAsync(require('./commonWords.txt'));` 로 변경합니다.
 2.  `FileSystem.readAsStringAsync` 호출 시 `localUri`를 직접 사용하도록 변경합니다: `const text = await FileSystem.readAsStringAsync(localUri);`
+
+## (추가) 파일 저장 오류 (`TypeError: Cannot read property 'uri' of undefined`) 수정 계획
+
+### 목표
+`p01_w01-1/App.tsx` 파일 내 `handleSave` 함수에서 발생하는 `TypeError: Cannot read property 'uri' of undefined` 오류를 해결하여 파일 저장 기능을 정상화합니다. 이 오류는 `FileSystem.documentDirectory`가 예상치 못하게 `undefined`일 때 발생하는 것으로 보입니다.
+
+### 세부 계획
+1.  **`WRITINGS_DIRECTORY` 정의 방식 변경:**
+    *   현재 전역 상수로 정의된 `WRITINGS_DIRECTORY`를 제거합니다.
+    *   `handleSave` 함수와 `loadSavedFiles` 함수 내에서 `FileSystem.documentDirectory`가 사용 가능할 때 동적으로 `writingsDirUri`를 구성합니다.
+2.  **`handleSave` 함수 수정:**
+    *   `handleSave` 함수 시작 부분에서 `FileSystem.documentDirectory`가 유효한지 확인하고, 유효하지 않을 경우 경고 메시지를 표시하고 함수 실행을 중단합니다.
+    *   `const writingsDirUri = FileSystem.documentDirectory + 'writings/';`와 같이 `writingsDirUri`를 구성합니다.
+    *   `FileSystem.Directory`를 사용하여 디렉토리를 생성할 때도 이 `writingsDirUri`를 기반으로 `Directory` 인스턴스를 생성합니다. (예: `const writingsDirectory = new FileSystem.Directory(FileSystem.documentDirectory, 'writings');`)
+    *   `fileUri`를 구성할 때 `writingsDirUri + filename`을 사용합니다.
+3.  **`loadSavedFiles` 함수 수정:**
+    *   `loadSavedFiles` 함수 시작 부분에서 `FileSystem.documentDirectory`가 유효한지 확인하고, 유효하지 않을 경우 경고 메시지를 표시하고 함수 실행을 중단합니다.
+    *   `const writingsDirUri = FileSystem.documentDirectory + 'writings/';`와 같이 `writingsDirUri`를 구성합니다.
+    *   `FileSystem.Directory`를 사용하여 디렉토리를 생성할 때도 이 `writingsDirUri`를 기반으로 `Directory` 인스턴스를 생성합니다.
+    *   `FileSystem.readDirectoryAsync` 및 `fileList` 구성 시 `writingsDirUri`를 사용합니다.

@@ -33,6 +33,13 @@
 *   **(추가) `commonWords.txt` 로딩 오류 (`TypeError`, `readAsStringAsync` 경고) 수정:**
     *   `p01_w01-1/App.tsx` 파일에서 `Asset.fromModule` 및 `asset.downloadAsync()` 부분을 `Asset.loadAsync`로 변경 - 완료
     *   `FileSystem.readAsStringAsync` 호출 시 `localUri`를 직접 사용하도록 변경 - 완료
+    *   수정된 코드 및 문서들을 커밋 - 완료
+
+---
+
+*   **(추가) 파일 저장 오류 (`TypeError: Cannot read property 'uri' of undefined`) 수정:**
+    *   전역 상수 `WRITINGS_DIRECTORY` 제거 - 완료
+    *   `handleSave` 및 `loadSavedFiles` 함수 내에서 `FileSystem.documentDirectory` 유효성 검사 및 동적으로 `writingsDirUri` 구성 - 완료
+    *   `handleSave` 함수 내 `FileSystem.Directory` 및 `fileUri` 구성 시 `writingsDirUri` 사용 - 완료
+    *   `loadSavedFiles` 함수 내 `FileSystem.Directory`, `FileSystem.readDirectoryAsync`, `fileList` 구성 시 `writingsDirUri` 사용 - 완료
     *   수정된 코드 및 문서들을 커밋 - 미완료
-
-

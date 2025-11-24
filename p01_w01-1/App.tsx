@@ -4,7 +4,7 @@ import { StyleSheet, Text, View, TextInput, Button, ActivityIndicator, Alert, Fl
 import * as FileSystem from 'expo-file-system';
 import { Asset } from 'expo-asset'; // Import Asset
 
-const WRITINGS_DIRECTORY = FileSystem.documentDirectory + 'writings/';
+
 
 export default function App() {
   const [webAddress, setWebAddress] = useState('');
@@ -79,12 +79,17 @@ export default function App() {
 
   const loadSavedFiles = async () => {
     try {
+      if (!FileSystem.documentDirectory) {
+        Alert.alert('오류', '문서 디렉토리를 찾을 수 없습니다.');
+        return;
+      }
+      const writingsDirUri = FileSystem.documentDirectory + 'writings/';
       const writingsDirectory = new FileSystem.Directory(FileSystem.documentDirectory, 'writings');
       await writingsDirectory.create(); // Ensure directory exists
-      const files = await FileSystem.readDirectoryAsync(WRITINGS_DIRECTORY);
+      const files = await FileSystem.readDirectoryAsync(writingsDirUri);
       const fileList = files.map(name => ({
         name: name,
-        uri: WRITINGS_DIRECTORY + name,
+        uri: writingsDirUri + name,
       })).sort((a, b) => b.name.localeCompare(a.name)); // Sort by name descending (newest first)
       setSavedFiles(fileList);
     } catch (error) {
@@ -112,9 +117,14 @@ export default function App() {
 
     try {
       const filename = `writing_${Date.now()}.md`;
+      if (!FileSystem.documentDirectory) {
+        Alert.alert('오류', '문서 디렉토리를 찾을 수 없습니다.');
+        return;
+      }
+      const writingsDirUri = FileSystem.documentDirectory + 'writings/';
       const writingsDirectory = new FileSystem.Directory(FileSystem.documentDirectory, 'writings');
       await writingsDirectory.create(); // Ensure directory exists
-      const fileUri = WRITINGS_DIRECTORY + filename;
+      const fileUri = writingsDirUri + filename;
       await FileSystem.writeAsStringAsync(fileUri, writingContent);
       Alert.alert('성공', `글이 ${filename} 파일로 저장되었습니다.`);
       setWritingContent(''); // Clear content after saving
