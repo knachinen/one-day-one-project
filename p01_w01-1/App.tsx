@@ -80,7 +80,8 @@ export default function App() {
 
   const loadSavedFiles = async () => {
     try {
-      await FileSystem.makeDirectoryAsync(WRITINGS_DIRECTORY, { intermediates: true }); // Ensure directory exists
+      const writingsDirectory = new FileSystem.Directory(FileSystem.documentDirectory, 'writings');
+      await writingsDirectory.create(); // Ensure directory exists
       const files = await FileSystem.readDirectoryAsync(WRITINGS_DIRECTORY);
       const fileList = files.map(name => ({
         name: name,
@@ -112,7 +113,8 @@ export default function App() {
 
     try {
       const filename = `writing_${Date.now()}.md`;
-      await FileSystem.makeDirectoryAsync(WRITINGS_DIRECTORY, { intermediates: true }); // Ensure directory exists
+      const writingsDirectory = new FileSystem.Directory(FileSystem.documentDirectory, 'writings');
+      await writingsDirectory.create(); // Ensure directory exists
       const fileUri = WRITINGS_DIRECTORY + filename;
       await FileSystem.writeAsStringAsync(fileUri, writingContent);
       Alert.alert('성공', `글이 ${filename} 파일로 저장되었습니다.`);
