@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TextInput, Button, ActivityIndicator, Alert, FlatList, TouchableOpacity } from 'react-native';
 import * as FileSystem from 'expo-file-system';
+import { Asset } from 'expo-asset'; // Import Asset
 
 const WRITINGS_DIRECTORY = FileSystem.documentDirectory + 'writings/';
 
@@ -11,9 +12,24 @@ export default function App() {
   const [writingContent, setWritingContent] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [savedFiles, setSavedFiles] = useState<{ name: string, uri: string }[]>([]);
+  const [commonWordsList, setCommonWordsList] = useState<string[]>([]); // New state for common words
 
+  // Load common words on component mount
   useEffect(() => {
-    loadSavedFiles();
+    async function loadCommonWords() {
+      try {
+        const asset = Asset.fromModule(require('./commonWords.txt'));
+        await asset.downloadAsync();
+        const text = await FileSystem.readAsStringAsync(asset.localUri || asset.uri);
+        const words = text.split('\n').map(word => word.trim()).filter(word => word.length > 0);
+        setCommonWordsList(words);
+      } catch (error) {
+        console.error("자주 쓰이는 단어 파일 불러오기 실패:", error);
+        Alert.alert('오류', '자주 쓰이는 단어 파일을 불러오지 못했습니다.');
+      }
+    }
+    loadCommonWords();
+    loadSavedFiles(); // Also load saved files
   }, []);
 
   const extractRandomWord = (text: string) => {
@@ -34,8 +50,15 @@ export default function App() {
 
   const fetchRandomWord = async () => {
     if (!webAddress) {
-      Alert.alert('오류', '웹 주소를 입력해주세요.');
-      return;
+      // If webAddress is empty, use common words
+      if (commonWordsList.length > 0) {
+        const randomIndex = Math.floor(Math.random() * commonWordsList.length);
+        setRandomWord(commonWordsList[randomIndex]);
+        return;
+      } else {
+        Alert.alert('알림', '웹 주소를 입력하거나, 미리 정의된 단어 목록이 없습니다.');
+        return;
+      }
     }
 
     setIsLoading(true);
