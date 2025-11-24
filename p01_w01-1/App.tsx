@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { Text, View, TextInput, Button, ActivityIndicator, Alert } from 'react-native';
 
@@ -14,6 +14,8 @@ export default function App() {
     handleSave,
     writingContent,
     setWritingContent,
+    isReady, // Destructure isReady
+    loadSavedFiles, // Destructure loadSavedFiles
   } = useFileSystem();
 
   const {
@@ -23,6 +25,21 @@ export default function App() {
     isLoading,
     fetchRandomWord,
   } = useWordFetcher();
+
+  useEffect(() => {
+    if (isReady) {
+      loadSavedFiles(); // Load files once file system is ready
+    }
+  }, [isReady]);
+
+  if (!isReady) {
+    return (
+      <View style={styles.container}>
+        <ActivityIndicator size="large" color="#0000ff" style={{ flex: 1, justifyContent: 'center' }} />
+        <Text style={{ textAlign: 'center', marginTop: 10 }}>파일 시스템 준비 중...</Text>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>

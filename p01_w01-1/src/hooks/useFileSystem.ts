@@ -10,22 +10,23 @@ export type SavedFile = {
 export function useFileSystem() {
   const [documentDirectoryUri, setDocumentDirectoryUri] = useState<string | null>(null);
   const [savedFiles, setSavedFiles] = useState<SavedFile[]>([]);
-  const [writingContent, setWritingContent] = useState(''); // Added to facilitate handleSave
+  const [writingContent, setWritingContent] = useState('');
+  const [isReady, setIsReady] = useState<boolean>(false); // Add isReady state
 
   useEffect(() => {
     async function initializeFileSystem() {
-      console.log('useEffect - FileSystem.documentDirectory:', FileSystem.documentDirectory); // Debug log
       if (FileSystem.documentDirectory) {
         setDocumentDirectoryUri(FileSystem.documentDirectory);
+        setIsReady(true); // Set isReady to true when documentDirectory is available
       } else {
-        console.warn('FileSystem.documentDirectory is not available in useEffect.'); // Debug warn
+        console.warn('FileSystem.documentDirectory is not available.');
+        // Optionally, add a retry mechanism here or a loading fallback in App.tsx
       }
     }
     initializeFileSystem();
   }, []);
 
   const loadSavedFiles = async () => {
-    console.log('loadSavedFiles - documentDirectoryUri:', documentDirectoryUri); // Debug log
     if (!documentDirectoryUri) {
       Alert.alert('오류', '문서 디렉토리를 찾을 수 없습니다.');
       return;
@@ -58,7 +59,6 @@ export function useFileSystem() {
   };
 
   const handleSave = async (contentToSave: string) => {
-    console.log('handleSave - documentDirectoryUri:', documentDirectoryUri); // Debug log
     if (!contentToSave.trim()) {
       Alert.alert('알림', '저장할 내용이 없습니다.');
       return;
@@ -91,7 +91,8 @@ export function useFileSystem() {
     loadSavedFiles,
     loadFileContent,
     handleSave,
-    writingContent, // Export writingContent for App.tsx to use
-    setWritingContent, // Export setWritingContent for App.tsx to use
+    writingContent,
+    setWritingContent,
+    isReady, // Export isReady
   };
 }
