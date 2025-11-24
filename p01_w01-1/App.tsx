@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TextInput, Button, ActivityIndicator, Alert } from 'react-native';
+import * as FileSystem from 'expo-file-system';
 
 export default function App() {
   const [webAddress, setWebAddress] = useState('');
@@ -47,10 +48,27 @@ export default function App() {
     }
   };
 
-  const handleSave = () => {
-    console.log('웹 주소:', webAddress);
-    console.log('작성 내용:', writingContent);
-    // 여기에 저장 로직 추가
+  const handleSave = async () => {
+    if (!writingContent.trim()) {
+      Alert.alert('알림', '저장할 내용이 없습니다.');
+      return;
+    }
+
+    try {
+      const filename = `writing_${Date.now()}.md`;
+      const directory = FileSystem.documentDirectory + 'writings/';
+      
+      // Ensure the directory exists
+      await FileSystem.makeDirectoryAsync(directory, { intermediates: true });
+
+      const fileUri = directory + filename;
+      await FileSystem.writeAsStringAsync(fileUri, writingContent);
+      Alert.alert('성공', `글이 ${filename} 파일로 저장되었습니다.`);
+      setWritingContent(''); // Clear content after saving
+    } catch (error) {
+      console.error("파일 저장 실패:", error);
+      Alert.alert('오류', '글 저장에 실패했습니다.');
+    }
   };
 
   return (
