@@ -56,11 +56,11 @@
 ---
 
 *   **(추가) `App.tsx` 파일 분할:**
-    *   디렉토리 구조 생성 (`src/components`, `src/hooks`, `src/utils`, `src/services`, `src/styles`) - 미완료
-    *   `useFileSystem` Custom Hook 생성 및 관련 로직 이동 (`documentDirectoryUri` 상태 관리, `savedFiles`, `loadSavedFiles`, `handleSave`, `loadFileContent`) - 미완료
-    *   `useWordFetcher` Custom Hook 생성 및 관련 로직 이동 (`webAddress`, `setWebAddress`, `randomWord`, `isLoading`, `fetchRandomWord`, `commonWordsList`) - 미완료
-    *   `CommonWordsService` 유틸리티 함수 분리 및 관련 로직 이동 (`loadCommonWords` 함수) - 미완료
-    *   `SavedFilesList` 컴포넌트 생성 및 관련 UI 이동 (`FlatList`를 사용한 저장된 파일 목록 렌더링) - 미완료
-    *   `App.tsx` 업데이트 (분리된 훅과 컴포넌트 가져와 사용, 관련 `useState`와 `useEffect` 로직 제거) - 미완료
-    *   스타일 분리 (`styles` 객체를 `src/styles/AppStyles.ts` 파일로 분리) - 미완료
-    *   수정된 코드 및 문서들을 커밋 - 미완료
+    *   디렉토리 구조 생성 (`src/components`, `src/hooks`, `src/utils`, `src/services`, `src/styles`) - 완료
+    *   `useFileSystem` Custom Hook 생성 및 관련 로직 이동 (`documentDirectoryUri` 상태 관리, `savedFiles`, `loadSavedFiles`, `handleSave`, `loadFileContent`) - 완료
+    *   `useWordFetcher` Custom Hook 생성 및 관련 로직 이동 (`webAddress`, `setWebAddress`, `randomWord`, `isLoading`, `fetchRandomWord`, `commonWordsList`) - 완료
+    *   `CommonWordsService` 유틸리티 함수 분리 및 관련 로직 이동 (`loadCommonWords` 함수) - 완료
+    *   `SavedFilesList` 컴포넌트 생성 및 관련 UI 이동 (`FlatList`를 사용한 저장된 파일 목록 렌더링) - 완료
+    *   `App.tsx` 업데이트 (분리된 훅과 컴포넌트 가져와 사용, 관련 `useState`와 `useEffect` 로직 제거) - 완료
+    *   스타일 분리 (`styles` 객체를 `src/styles/AppStyles.ts` 파일로 분리) - 완료
+    *   수정된 코드 및 문서들을 커밋 - 완료
