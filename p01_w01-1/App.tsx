@@ -18,9 +18,8 @@ export default function App() {
   useEffect(() => {
     async function loadCommonWords() {
       try {
-        const asset = Asset.fromModule(require('./commonWords.txt'));
-        await asset.downloadAsync();
-        const text = await FileSystem.readAsStringAsync(asset.localUri || asset.uri);
+        const [{ localUri }] = await Asset.loadAsync(require('./commonWords.txt'));
+        const text = await FileSystem.readAsStringAsync(localUri);
         const words = text.split('\n').map(word => word.trim()).filter(word => word.length > 0);
         setCommonWordsList(words);
       } catch (error) {

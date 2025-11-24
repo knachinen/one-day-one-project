@@ -35,3 +35,11 @@
     ```
     이 변경은 `WRITINGS_DIRECTORY`에 해당하는 디렉토리가 없으면 생성하고, 이미 존재하면 아무 작업도 하지 않도록 합니다.
 
+## (추가) `commonWords.txt` 로딩 오류 (`TypeError`, `readAsStringAsync` 경고) 수정 계획
+
+### 목표
+`p01_w01-1/App.tsx` 파일 내 `loadCommonWords` 함수에서 발생하는 `TypeError: Cannot read property 'uri' of undefined` 오류 및 `readAsStringAsync` 경고를 해결하고 `commonWords.txt` 파일을 안정적으로 로드합니다.
+
+### 세부 계획
+1.  `p01_w01-1/App.tsx` 파일의 `loadCommonWords` 함수 내에서 `Asset.fromModule(require('./commonWords.txt'))` 및 `await asset.downloadAsync()` 부분을 `const [{ localUri }] = await Asset.loadAsync(require('./commonWords.txt'));` 로 변경합니다.
+2.  `FileSystem.readAsStringAsync` 호출 시 `localUri`를 직접 사용하도록 변경합니다: `const text = await FileSystem.readAsStringAsync(localUri);`

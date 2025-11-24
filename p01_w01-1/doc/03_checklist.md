@@ -28,3 +28,11 @@
     *   `p01_w01-1/App.tsx` 파일에서 `handleSave` 함수 내 `makeDirectoryAsync` 호출 변경 - 완료
     *   수정된 코드 및 문서들을 커밋 - 완료
 
+---
+
+*   **(추가) `commonWords.txt` 로딩 오류 (`TypeError`, `readAsStringAsync` 경고) 수정:**
+    *   `p01_w01-1/App.tsx` 파일에서 `Asset.fromModule` 및 `asset.downloadAsync()` 부분을 `Asset.loadAsync`로 변경 - 완료
+    *   `FileSystem.readAsStringAsync` 호출 시 `localUri`를 직접 사용하도록 변경 - 완료
+    *   수정된 코드 및 문서들을 커밋 - 미완료
+
+
