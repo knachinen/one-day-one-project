@@ -26,5 +26,5 @@
 *   **(추가) makeDirectoryAsync Deprecated 오류 수정:**
     *   `p01_w01-1/App.tsx` 파일에서 `loadSavedFiles` 함수 내 `makeDirectoryAsync` 호출 변경 - 완료
     *   `p01_w01-1/App.tsx` 파일에서 `handleSave` 함수 내 `makeDirectoryAsync` 호출 변경 - 완료
-    *   수정된 코드 및 문서들을 커밋 - 미완료
+    *   수정된 코드 및 문서들을 커밋 - 완료
 
