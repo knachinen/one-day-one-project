@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Alert } from 'react-native';
-import { getCommonWords } from '../../services/CommonWordsService'; // Import getCommonWords
+import { getCommonWords } from '../services/CommonWordsService'; // Import getCommonWords
 
 export function useWordFetcher() {
   const [webAddress, setWebAddress] = useState('');
