@@ -9,7 +9,7 @@ function isError(error: any): error is Error {
 
 export async function getCommonWords(): Promise<string[]> {
   try {
-    const assets = await Asset.loadAsync(require("../../commonWords.txt"));
+    const assets = await Asset.loadAsync(require("../../assets/commonWords.txt"));
 
     const localUri = assets[0]?.localUri;
 

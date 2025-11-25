@@ -1,18 +1,22 @@
-import React, { useEffect } from 'react';
-import { StatusBar } from 'expo-status-bar';
-import { Text, View, TextInput, Button, ActivityIndicator, Alert } from 'react-native';
+import React, { useEffect } from "react";
+import { StatusBar } from "expo-status-bar";
+import {
+  Text,
+  View,
+  TextInput,
+  Button,
+  ActivityIndicator,
+  Alert,
+} from "react-native";
 
-import * as eva from '@eva-design/eva';
-import { ApplicationProvider, IconRegistry } from '@ui-kitten/components';
-import { EvaIconsPack } from '@ui-kitten/eva-icons';
+import * as eva from "@eva-design/eva";
+import { ApplicationProvider, IconRegistry } from "@ui-kitten/components";
+import { EvaIconsPack } from "@ui-kitten/eva-icons";
 
-import { useFileSystem } from './src/hooks/useFileSystem';
-import { useWordFetcher } from './src/hooks/useWordFetcher';
-import { SavedFilesList } from './src/components/SavedFilesList';
-import { styles } from './src/styles/AppStyles'; // Import styles
-
-import { GluestackUIProvider } from '@/components/ui/gluestack-ui-provider';
-import '@/global.css';
+import { useFileSystem } from "./src/hooks/useFileSystem";
+import { useWordFetcher } from "./src/hooks/useWordFetcher";
+import { SavedFilesList } from "./src/components/SavedFilesList";
+import { styles } from "./src/styles/AppStyles"; // Import styles
 
 export default function App() {
   const {
@@ -25,13 +29,8 @@ export default function App() {
     loadSavedFiles, // Destructure loadSavedFiles
   } = useFileSystem();
 
-  const {
-    webAddress,
-    setWebAddress,
-    randomWord,
-    isLoading,
-    fetchRandomWord,
-  } = useWordFetcher();
+  const { webAddress, setWebAddress, randomWord, isLoading, fetchRandomWord } =
+    useWordFetcher();
 
   useEffect(() => {
     if (isReady) {
@@ -41,14 +40,16 @@ export default function App() {
 
   if (!isReady) {
     return (
-      
-    <GluestackUIProvider mode="dark">
       <View style={styles.container}>
-        <ActivityIndicator size="large" color="#0000ff" style={{ flex: 1, justifyContent: 'center' }} />
-        <Text style={{ textAlign: 'center', marginTop: 10 }}>파일 시스템 준비 중...</Text>
+        <ActivityIndicator
+          size="large"
+          color="#0000ff"
+          style={{ flex: 1, justifyContent: "center" }}
+        />
+        <Text style={{ textAlign: "center", marginTop: 10 }}>
+          파일 시스템 준비 중...
+        </Text>
       </View>
-    </GluestackUIProvider>
-  
     );
   }
 
@@ -67,10 +68,18 @@ export default function App() {
             keyboardType="url"
             autoCapitalize="none"
           />
-          <Button title="단어 가져오기" onPress={fetchRandomWord} disabled={isLoading} />
+          <Button
+            title="단어 가져오기"
+            onPress={fetchRandomWord}
+            disabled={isLoading}
+          />
 
           {isLoading ? (
-            <ActivityIndicator size="large" color="#0000ff" style={{ marginVertical: 20 }} />
+            <ActivityIndicator
+              size="large"
+              color="#0000ff"
+              style={{ marginVertical: 20 }}
+            />
           ) : (
             <Text style={styles.randomWord}>{randomWord}</Text>
           )}
@@ -86,7 +95,11 @@ export default function App() {
 
           <Button title="저장" onPress={() => handleSave(writingContent)} />
 
-          <SavedFilesList savedFiles={savedFiles} loadFileContent={loadFileContent} styles={styles} />
+          <SavedFilesList
+            savedFiles={savedFiles}
+            loadFileContent={loadFileContent}
+            styles={styles}
+          />
 
           <StatusBar style="auto" />
         </View>
