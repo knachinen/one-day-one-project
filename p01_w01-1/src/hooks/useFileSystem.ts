@@ -65,11 +65,6 @@ export function useFileSystem() {
       }
 
       const contents = await writingsDirectory.list();
-      console.log(
-        "저장된 파일 디렉토리 (writingsDirectory): ",
-        writingsDirectory.uri
-      );
-      console.log("저장된 파일 목록 (contents): ", contents);
 
       // 1. 필요한 데이터로 변환
       const unSortedFileList = contents
