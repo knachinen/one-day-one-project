@@ -1,22 +1,24 @@
 import React, { useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
-import {
-  Text,
-  View,
-  TextInput,
-  Button,
-  ActivityIndicator,
-  Alert,
-} from "react-native";
+import { Alert } from "react-native";
 
 import * as eva from "@eva-design/eva";
-import { ApplicationProvider, IconRegistry } from "@ui-kitten/components";
+
+import {
+  ApplicationProvider,
+  IconRegistry,
+  Layout,
+  Text as UIKittenText,
+  Input,
+  Button as UIKittenButton,
+  Spinner,
+} from "@ui-kitten/components";
 import { EvaIconsPack } from "@ui-kitten/eva-icons";
 
 import { useFileSystem } from "./src/hooks/useFileSystem";
 import { useWordFetcher } from "./src/hooks/useWordFetcher";
 import { SavedFilesList } from "./src/components/SavedFilesList";
-import { styles } from "./src/styles/AppStyles"; // Import styles
+import { styles } from "./src/styles/AppStyles";
 
 export default function App() {
   const {
@@ -25,8 +27,8 @@ export default function App() {
     handleSave,
     writingContent,
     setWritingContent,
-    isReady, // Destructure isReady
-    loadSavedFiles, // Destructure loadSavedFiles
+    isReady,
+    loadSavedFiles,
   } = useFileSystem();
 
   const { webAddress, setWebAddress, randomWord, isLoading, fetchRandomWord } =
@@ -34,75 +36,77 @@ export default function App() {
 
   useEffect(() => {
     if (isReady) {
-      loadSavedFiles(); // Load files once file system is ready
+      loadSavedFiles();
     }
   }, [isReady]);
 
-  if (!isReady) {
-    return (
-      <View style={styles.container}>
-        <ActivityIndicator
-          size="large"
-          color="#0000ff"
-          style={{ flex: 1, justifyContent: "center" }}
-        />
-        <Text style={{ textAlign: "center", marginTop: 10 }}>
-          파일 시스템 준비 중...
-        </Text>
-      </View>
-    );
-  }
+  // 💡 [수정] isReady 검사를 <ApplicationProvider> 밖에서 제거하고,
+  // Provider 내부에서 로딩 상태를 처리합니다.
 
   return (
     <>
       <IconRegistry icons={EvaIconsPack} />
       <ApplicationProvider {...eva} theme={eva.light}>
-        <View style={styles.container}>
-          <Text style={styles.title}>1일 1코딩 - p01_w01-1</Text>
-
-          <TextInput
-            style={styles.input}
-            placeholder="웹 주소를 입력하세요 (예: https://example.com)"
-            value={webAddress}
-            onChangeText={setWebAddress}
-            keyboardType="url"
-            autoCapitalize="none"
-          />
-          <Button
-            title="단어 가져오기"
-            onPress={fetchRandomWord}
-            disabled={isLoading}
-          />
-
-          {isLoading ? (
-            <ActivityIndicator
-              size="large"
-              color="#0000ff"
-              style={{ marginVertical: 20 }}
-            />
+        <Layout style={styles.container}>
+          {/* 💡 [핵심 수정] isReady 검사를 ApplicationProvider 내부에서 수행 */}
+          {!isReady ? (
+            <Layout style={[styles.container, styles.loadingOverlay]}>
+              <Spinner size="large" />
+              <UIKittenText style={{ textAlign: "center", marginTop: 10 }}>
+                파일 시스템 준비 중...
+              </UIKittenText>
+            </Layout>
           ) : (
-            <Text style={styles.randomWord}>{randomWord}</Text>
+            // 파일 시스템이 준비되면 전체 UI를 렌더링
+            <>
+              <UIKittenText style={styles.title}>
+                1일 1코딩 - p01_w01-1
+              </UIKittenText>
+
+              <Input
+                placeholder="웹 주소를 입력하세요 (예: https://example.com)"
+                value={webAddress}
+                onChangeText={setWebAddress}
+                keyboardType="url"
+                autoCapitalize="none"
+                style={styles.input}
+                placeholderTextColor={styles.input.color}
+              />
+              <UIKittenButton onPress={fetchRandomWord} disabled={isLoading}>
+                단어 가져오기
+              </UIKittenButton>
+
+              {isLoading ? (
+                <Spinner size="large" style={{ marginVertical: 20 }} />
+              ) : (
+                <UIKittenText style={styles.randomWord}>
+                  {randomWord}
+                </UIKittenText>
+              )}
+
+              <Input
+                placeholder="여기에 글을 작성하세요..."
+                value={writingContent}
+                onChangeText={setWritingContent}
+                multiline={true}
+                textAlignVertical="top"
+                style={styles.textArea}
+                placeholderTextColor={styles.textArea.color}
+              />
+
+              <UIKittenButton onPress={() => handleSave(writingContent)}>
+                저장
+              </UIKittenButton>
+
+              <SavedFilesList
+                savedFiles={savedFiles}
+                loadFileContent={loadFileContent}
+              />
+            </>
           )}
 
-          <TextInput
-            style={styles.textArea}
-            placeholder="여기에 글을 작성하세요..."
-            value={writingContent}
-            onChangeText={setWritingContent}
-            multiline
-            textAlignVertical="top"
-          />
-
-          <Button title="저장" onPress={() => handleSave(writingContent)} />
-
-          <SavedFilesList
-            savedFiles={savedFiles}
-            loadFileContent={loadFileContent}
-            styles={styles}
-          />
-
           <StatusBar style="auto" />
-        </View>
+        </Layout>
       </ApplicationProvider>
     </>
   );

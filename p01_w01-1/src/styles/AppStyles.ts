@@ -1,70 +1,82 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f0f0f0', // Lighter background
-    alignItems: 'center',
-    justifyContent: 'flex-start', // Align to top for better content flow
+    backgroundColor: "#f0f0f0", // Lighter background
+    alignItems: "center",
+    justifyContent: "flex-start", // Align to top for better content flow
     padding: 20,
     paddingTop: 60, // More top padding for status bar
   },
   title: {
     fontSize: 28, // Slightly larger title
-    fontWeight: '600', // Medium bold
-    color: '#333',
+    fontWeight: "600", // Medium bold
+    color: "#333",
     marginBottom: 25,
   },
   input: {
-    width: '100%',
+    width: "100%",
     height: 45, // Slightly taller input
-    borderColor: '#ccc', // Lighter border
+    borderColor: "#ccc", // Lighter border
     borderWidth: 1,
     borderRadius: 8, // Slightly more rounded corners
     paddingHorizontal: 15,
     marginBottom: 15,
-    backgroundColor: '#fff', // White background for inputs
+    backgroundColor: "#fff", // White background for inputs
     fontSize: 16,
+    color: "#555",
   },
   randomWord: {
     fontSize: 20, // Slightly larger random word
-    fontWeight: 'bold',
-    color: '#555',
+    fontWeight: "bold",
+    color: "#555",
     marginVertical: 25,
-    textAlign: 'center',
+    textAlign: "center",
     paddingHorizontal: 10,
   },
   textArea: {
-    width: '100%',
+    width: "100%",
     height: 180, // Slightly smaller text area
-    borderColor: '#ccc',
+    borderColor: "#ccc",
     borderWidth: 1,
     borderRadius: 8,
     padding: 15,
     marginBottom: 20,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     fontSize: 16,
+    color: "#555",
   },
   savedFilesTitle: {
     fontSize: 20,
-    fontWeight: '600',
-    color: '#333',
+    fontWeight: "600",
+    color: "#333",
     marginTop: 25,
     marginBottom: 15,
   },
   fileList: {
-    width: '100%',
+    width: "100%",
     maxHeight: 180, // Adjusted height
-    borderColor: '#eee', // Lighter border for list
+    borderColor: "#eee", // Lighter border for list
     borderWidth: 1,
     borderRadius: 8,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     marginBottom: 20,
   },
   fileItem: {
     paddingVertical: 12, // More vertical padding
     paddingHorizontal: 15,
-    borderBottomColor: '#f0f0f0', // Lighter separator
+    borderBottomColor: "#f0f0f0", // Lighter separator
     borderBottomWidth: 1,
+  },
+  loadingOverlay: {
+    // 1. flex: 1을 사용하여 부모(Layout)의 전체 공간을 차지하게 합니다.
+    flex: 1,
+    // 2. justifyContent와 alignItems를 사용하여 자식 요소(Spinner, Text)를 중앙에 배치합니다.
+    justifyContent: "center",
+    alignItems: "center",
+    // (선택 사항) 로딩 중 배경색을 명확히 하고 싶다면 배경색 지정
+    // backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    paddingTop: 0, // 컨테이너에 이미 paddingTop이 있다면, 오버레이에서는 제거
   },
 });
