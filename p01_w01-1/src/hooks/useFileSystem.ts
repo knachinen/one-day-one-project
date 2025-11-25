@@ -120,7 +120,7 @@ export function useFileSystem() {
       }
 
       const timestamp = getFormattedDateTime();
-      const filename = `writing_${timestamp}.md`;
+      const filename = `${timestamp}.md`;
 
       // 2. 파일의 최종 URI를 명시적으로 구성
       const fileUri = writingsDirectory.uri + filename; // '.../files/writings/' + 'writing_...'

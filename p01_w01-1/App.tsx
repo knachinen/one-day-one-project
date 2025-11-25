@@ -18,7 +18,7 @@ import { EvaIconsPack } from "@ui-kitten/eva-icons";
 import { useFileSystem } from "./src/hooks/useFileSystem";
 import { useWordFetcher } from "./src/hooks/useWordFetcher";
 import { SavedFilesList } from "./src/components/SavedFilesList";
-import { styles } from "./src/styles/AppStyles";
+import { styles, Colors } from "./src/styles/AppStyles";
 
 export default function App() {
   const {
@@ -61,7 +61,8 @@ export default function App() {
               <UIKittenButton
                 onPress={fetchRandomWord}
                 disabled={isLoading}
-                status="primary"
+                status="basic"
+                // appearance="outline"
                 size="large"
               >
                 {isLoading ? (
@@ -86,16 +87,21 @@ export default function App() {
 
               <UIKittenButton
                 onPress={() => handleSave(writingContent)}
-                status="success"
-                size="large"
+                style={{
+                  backgroundColor: Colors.text, // 배경색을 검은색(Colors.text)으로
+                  borderColor: Colors.text, // 테두리도 검은색으로
+                  marginTop: 10, // 상단 여백 추가
+                }}
               >
                 저장
               </UIKittenButton>
 
-              <SavedFilesList
-                savedFiles={savedFiles}
-                loadFileContent={loadFileContent}
-              />
+              <Layout style={styles.fileListContainer}>
+                <SavedFilesList
+                  savedFiles={savedFiles}
+                  loadFileContent={loadFileContent}
+                />
+              </Layout>
             </>
           )}
 
