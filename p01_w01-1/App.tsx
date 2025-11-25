@@ -7,6 +7,9 @@ import { useWordFetcher } from './src/hooks/useWordFetcher';
 import { SavedFilesList } from './src/components/SavedFilesList';
 import { styles } from './src/styles/AppStyles'; // Import styles
 
+import { GluestackUIProvider } from '@/components/ui/gluestack-ui-provider';
+import '@/global.css';
+
 export default function App() {
   const {
     savedFiles,
@@ -34,10 +37,14 @@ export default function App() {
 
   if (!isReady) {
     return (
+      
+    <GluestackUIProvider mode="dark">
       <View style={styles.container}>
         <ActivityIndicator size="large" color="#0000ff" style={{ flex: 1, justifyContent: 'center' }} />
         <Text style={{ textAlign: 'center', marginTop: 10 }}>파일 시스템 준비 중...</Text>
       </View>
+    </GluestackUIProvider>
+  
     );
   }
 
