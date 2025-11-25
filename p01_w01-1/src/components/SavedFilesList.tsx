@@ -10,7 +10,7 @@ type SavedFilesListProps = {
 
 export function SavedFilesList({ savedFiles, loadFileContent }: SavedFilesListProps) {
   return (
-    <Layout style={componentStyles.container}>
+    <Layout level="1" style={componentStyles.container}>
       <UIKittenText category='h6' style={componentStyles.savedFilesTitle}>저장된 파일</UIKittenText>
       <List
         data={savedFiles}
@@ -19,6 +19,8 @@ export function SavedFilesList({ savedFiles, loadFileContent }: SavedFilesListPr
           <ListItem
             title={item.name}
             onPress={() => loadFileContent(item.uri)}
+            status="basic"
+            size="large"
             style={componentStyles.fileItem}
           />
         )}
@@ -28,28 +30,41 @@ export function SavedFilesList({ savedFiles, loadFileContent }: SavedFilesListPr
   );
 }
 
+// Mimicking Eva Design System Light Theme Colors (copied from AppStyles.ts for consistency)
+const Colors = {
+  primary: "#3366FF",
+  background: "#F2F4F7", // A slightly off-white for background
+  surface: "#FFFFFF", // White for cards/inputs
+  text: "#222B45", // Dark text
+  textLight: "#8F9BB3", // Lighter text for placeholders/secondary info
+  border: "#E4E9F2", // Light border
+  gray500: "#8F9BB3", // Medium gray
+  gray300: "#C5CEE0", // Lighter gray
+};
+
 const componentStyles = StyleSheet.create({
   container: {
     width: '100%',
     marginTop: 25,
     marginBottom: 20,
-    backgroundColor: 'transparent', // Make background transparent if Layout has default color
+    // background is handled by Layout's level prop
   },
   savedFilesTitle: {
-    marginTop: 0, // Reset margin since Layout padding handles it
+    marginTop: 0,
     marginBottom: 15,
     textAlign: 'center',
+    color: Colors.text, // Ensure text color is from theme
   },
   fileList: {
     width: '100%',
     maxHeight: 180,
-    borderColor: '#eee',
+    borderColor: Colors.border, // Use theme border color
     borderWidth: 1,
     borderRadius: 8,
-    backgroundColor: '#fff',
+    backgroundColor: Colors.surface, // Use theme surface color
   },
   fileItem: {
     borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
+    borderBottomColor: Colors.border, // Use theme border color
   },
 });

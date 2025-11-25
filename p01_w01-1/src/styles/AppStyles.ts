@@ -1,9 +1,21 @@
 import { StyleSheet } from "react-native";
 
+// Mimicking Eva Design System Light Theme Colors
+const Colors = {
+  primary: "#3366FF",
+  background: "#F2F4F7", // A slightly off-white for background
+  surface: "#FFFFFF", // White for cards/inputs
+  text: "#222B45", // Dark text
+  textLight: "#8F9BB3", // Lighter text for placeholders/secondary info
+  border: "#E4E9F2", // Light border
+  gray500: "#8F9BB3", // Medium gray
+  gray300: "#C5CEE0", // Lighter gray
+};
+
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f0f0f0", // Lighter background
+    backgroundColor: Colors.background, // Lighter background
     alignItems: "center",
     justifyContent: "flex-start", // Align to top for better content flow
     padding: 20,
@@ -12,25 +24,25 @@ export const styles = StyleSheet.create({
   title: {
     fontSize: 28, // Slightly larger title
     fontWeight: "600", // Medium bold
-    color: "#333",
+    color: Colors.text,
     marginBottom: 25,
   },
   input: {
     width: "100%",
     height: 45, // Slightly taller input
-    borderColor: "#ccc", // Lighter border
+    borderColor: Colors.border, // Lighter border
     borderWidth: 1,
     borderRadius: 8, // Slightly more rounded corners
     paddingHorizontal: 15,
     marginBottom: 15,
-    backgroundColor: "#fff", // White background for inputs
+    backgroundColor: Colors.surface, // White background for inputs
     fontSize: 16,
-    color: "#555",
+    color: Colors.text,
   },
   randomWord: {
     fontSize: 20, // Slightly larger random word
     fontWeight: "bold",
-    color: "#555",
+    color: Colors.text,
     marginVertical: 25,
     textAlign: "center",
     paddingHorizontal: 10,
@@ -38,35 +50,35 @@ export const styles = StyleSheet.create({
   textArea: {
     width: "100%",
     height: 180, // Slightly smaller text area
-    borderColor: "#ccc",
+    borderColor: Colors.border,
     borderWidth: 1,
     borderRadius: 8,
     padding: 15,
     marginBottom: 20,
-    backgroundColor: "#fff",
+    backgroundColor: Colors.surface,
     fontSize: 16,
-    color: "#555",
+    color: Colors.text,
   },
   savedFilesTitle: {
     fontSize: 20,
     fontWeight: "600",
-    color: "#333",
+    color: Colors.text,
     marginTop: 25,
     marginBottom: 15,
   },
   fileList: {
     width: "100%",
     maxHeight: 180, // Adjusted height
-    borderColor: "#eee", // Lighter border for list
+    borderColor: Colors.border, // Lighter border for list
     borderWidth: 1,
     borderRadius: 8,
-    backgroundColor: "#fff",
+    backgroundColor: Colors.surface,
     marginBottom: 20,
   },
   fileItem: {
     paddingVertical: 12, // More vertical padding
     paddingHorizontal: 15,
-    borderBottomColor: "#f0f0f0", // Lighter separator
+    borderBottomColor: Colors.border, // Lighter separator
     borderBottomWidth: 1,
   },
   loadingOverlay: {
