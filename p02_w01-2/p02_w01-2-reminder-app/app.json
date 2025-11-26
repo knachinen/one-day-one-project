@@ -2,6 +2,7 @@
   "expo": {
     "name": "p02_w01-2-reminder-app",
     "slug": "p02_w01-2-reminder-app",
+    "projectId": "aa97633a-c97c-4b7b-a97a-92ef5302ee50",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -9,7 +10,8 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.knachinen.p02-w012reminderapp"
     },
     "android": {
       "adaptiveIcon": {
@@ -19,7 +21,8 @@
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "package": "com.knachinen.p02_w012reminderapp"
     },
     "web": {
       "output": "static",
