@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, StatusBar, StyleSheet, View } from 'react-native';
+import { StatusBar, StyleSheet, View } from 'react-native';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { NoteList } from './src/components/NoteList';
 import { NoteEditor } from './src/components/NoteEditor';
 import { Note, loadNotes, saveNotes } from './src/utils/storage';
@@ -58,25 +59,27 @@ export default function App() {
     };
 
     return (
-        <SafeAreaView style={styles.container}>
-            <StatusBar barStyle="light-content" backgroundColor={COLORS.background} />
-            <View style={styles.content}>
-                {isEditing ? (
-                    <NoteEditor
-                        note={currentNote}
-                        onSave={handleSaveNote}
-                        onCancel={handleCancelEdit}
-                    />
-                ) : (
-                    <NoteList
-                        notes={notes}
-                        onSelectNote={handleSelectNote}
-                        onDeleteNote={handleDeleteNote}
-                        onCreateNote={handleCreateNote}
-                    />
-                )}
-            </View>
-        </SafeAreaView>
+        <SafeAreaProvider>
+            <SafeAreaView style={styles.container}>
+                <StatusBar barStyle="light-content" backgroundColor={COLORS.background} />
+                <View style={styles.content}>
+                    {isEditing ? (
+                        <NoteEditor
+                            note={currentNote}
+                            onSave={handleSaveNote}
+                            onCancel={handleCancelEdit}
+                        />
+                    ) : (
+                        <NoteList
+                            notes={notes}
+                            onSelectNote={handleSelectNote}
+                            onDeleteNote={handleDeleteNote}
+                            onCreateNote={handleCreateNote}
+                        />
+                    )}
+                </View>
+            </SafeAreaView>
+        </SafeAreaProvider>
     );
 }
 

@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Note } from '../utils/storage';
 import { COLORS, COMMON_STYLES } from '../styles/theme';
 
@@ -11,6 +12,8 @@ interface NoteListProps {
 }
 
 export const NoteList: React.FC<NoteListProps> = ({ notes, onSelectNote, onDeleteNote, onCreateNote }) => {
+    const insets = useSafeAreaInsets();
+
     const renderItem = ({ item }: { item: Note }) => (
         <TouchableOpacity
             style={[COMMON_STYLES.glassContainer, styles.itemContainer]}
@@ -37,12 +40,15 @@ export const NoteList: React.FC<NoteListProps> = ({ notes, onSelectNote, onDelet
                 data={notes}
                 renderItem={renderItem}
                 keyExtractor={(item) => item.id}
-                contentContainerStyle={styles.listContent}
+                contentContainerStyle={[styles.listContent, { paddingBottom: 80 + insets.bottom }]}
                 ListEmptyComponent={
                     <Text style={styles.emptyText}>No notes yet. Create one!</Text>
                 }
             />
-            <TouchableOpacity style={styles.fab} onPress={onCreateNote}>
+            <TouchableOpacity
+                style={[styles.fab, { bottom: 24 + insets.bottom }]}
+                onPress={onCreateNote}
+            >
                 <Text style={styles.fabText}>+</Text>
             </TouchableOpacity>
         </View>
