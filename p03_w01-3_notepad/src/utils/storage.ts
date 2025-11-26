@@ -9,6 +9,25 @@ export interface Note {
 }
 
 const STORAGE_KEY = '@mvp_notepad_notes';
+const THEME_KEY = '@mvp_notepad_theme';
+
+export const saveTheme = async (theme: 'dark' | 'light'): Promise<void> => {
+    try {
+        await AsyncStorage.setItem(THEME_KEY, theme);
+    } catch (e) {
+        console.error('Failed to save theme', e);
+    }
+};
+
+export const loadTheme = async (): Promise<'dark' | 'light'> => {
+    try {
+        const theme = await AsyncStorage.getItem(THEME_KEY);
+        return (theme === 'dark' || theme === 'light') ? theme : 'dark';
+    } catch (e) {
+        console.error('Failed to load theme', e);
+        return 'dark';
+    }
+};
 
 export const saveNotes = async (notes: Note[]): Promise<void> => {
     try {

@@ -1,29 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import { View, TextInput, TouchableOpacity, Text, StyleSheet, KeyboardAvoidingView, Platform } from 'react-native';
 import { Note } from '../utils/storage';
-import { COLORS, COMMON_STYLES } from '../styles/theme';
+import { ThemeColors } from '../styles/theme';
 
 interface NoteEditorProps {
     note?: Note;
     onSave: (title: string, content: string) => void;
     onCancel: () => void;
+    theme: ThemeColors;
 }
 
-export const NoteEditor: React.FC<NoteEditorProps> = ({ note, onSave, onCancel }) => {
+export const NoteEditor: React.FC<NoteEditorProps> = ({ note, onSave, onCancel, theme }) => {
     const [title, setTitle] = useState(note?.title || '');
     const [content, setContent] = useState(note?.content || '');
 
     return (
         <KeyboardAvoidingView
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-            style={styles.container}
+            style={[styles.container, { backgroundColor: theme.background }]}
         >
             <View style={styles.header}>
                 <TouchableOpacity onPress={onCancel}>
-                    <Text style={styles.cancelButton}>Cancel</Text>
+                    <Text style={[styles.cancelButton, { color: theme.textSecondary }]}>Cancel</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                    style={styles.saveButton}
+                    style={[styles.saveButton, { backgroundColor: theme.primary }]}
                     onPress={() => onSave(title, content)}
                 >
                     <Text style={styles.saveButtonText}>Save</Text>
@@ -31,17 +32,17 @@ export const NoteEditor: React.FC<NoteEditorProps> = ({ note, onSave, onCancel }
             </View>
 
             <TextInput
-                style={styles.titleInput}
+                style={[styles.titleInput, { color: theme.text }]}
                 placeholder="Title"
-                placeholderTextColor={COLORS.textSecondary}
+                placeholderTextColor={theme.textSecondary}
                 value={title}
                 onChangeText={setTitle}
             />
 
             <TextInput
-                style={styles.contentInput}
+                style={[styles.contentInput, { color: theme.text }]}
                 placeholder="Start typing..."
-                placeholderTextColor={COLORS.textSecondary}
+                placeholderTextColor={theme.textSecondary}
                 value={content}
                 onChangeText={setContent}
                 multiline
@@ -55,7 +56,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 20,
-        backgroundColor: COLORS.background,
     },
     header: {
         flexDirection: 'row',
@@ -65,11 +65,9 @@ const styles = StyleSheet.create({
         paddingTop: 10,
     },
     cancelButton: {
-        color: COLORS.textSecondary,
         fontSize: 16,
     },
     saveButton: {
-        backgroundColor: COLORS.primary,
         paddingHorizontal: 16,
         paddingVertical: 8,
         borderRadius: 20,
@@ -80,7 +78,6 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
     titleInput: {
-        color: COLORS.text,
         fontSize: 24,
         fontWeight: 'bold',
         marginBottom: 20,
@@ -88,7 +85,6 @@ const styles = StyleSheet.create({
     },
     contentInput: {
         flex: 1,
-        color: COLORS.text,
         fontSize: 16,
         lineHeight: 24,
         padding: 0,

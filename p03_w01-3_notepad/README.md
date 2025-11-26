@@ -1,50 +1,61 @@
-# Welcome to your Expo app 👋
+# 📝 MVP Notepad (React Native + TypeScript)
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+심플하고 모던한 디자인의 MVP 메모장 애플리케이션입니다. React Native (Expo)와 TypeScript를 사용하여 개발되었으며, 글래스모피즘(Glassmorphism) 디자인과 다크/라이트 모드를 지원합니다.
 
-## Get started
+## ✨ 주요 기능
 
-1. Install dependencies
+-   **메모 관리 (CRUD)**: 메모 작성, 조회, 수정, 삭제 기능.
+-   **데이터 영구 저장**: `AsyncStorage`를 사용하여 앱을 재시작해도 데이터가 유지됩니다.
+-   **다크/라이트 모드**: 사용자의 취향에 따라 테마를 전환할 수 있습니다 (설정 자동 저장).
+-   **프리미엄 디자인**: 글래스모피즘 효과와 부드러운 인터랙션을 적용했습니다.
+-   **안전한 레이아웃**: 노치 디자인이 있는 최신 기기에서도 완벽하게 동작합니다 (`SafeArea` 지원).
+-   **삭제 방지**: 실수로 메모를 삭제하지 않도록 확인 알림을 제공합니다.
 
-   ```bash
-   npm install
-   ```
+## 🛠️ 기술 스택
 
-2. Start the app
+-   **Framework**: React Native (Expo SDK 54)
+-   **Language**: TypeScript
+-   **Storage**: @react-native-async-storage/async-storage
+-   **Styling**: StyleSheet, React Native Safe Area Context
 
-   ```bash
-   npx expo start
-   ```
+## 🚀 실행 방법
 
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
+### 1. 프로젝트 클론 및 이동
 ```bash
-npm run reset-project
+git clone <repository-url>
+cd p03_w01-3_notepad
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+### 2. 의존성 설치
+```bash
+npm install
+```
 
-## Learn more
+### 3. 앱 실행
+```bash
+npx expo start
+```
+-   **iOS 시뮬레이터**: 터미널에서 `i` 입력
+-   **Android 에뮬레이터**: 터미널에서 `a` 입력
+-   **실물 디바이스**: Expo Go 앱으로 QR 코드 스캔
 
-To learn more about developing your project with Expo, look at the following resources:
+## 📂 프로젝트 구조
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+```
+p03_w01-3_notepad/
+├── App.tsx                 # 메인 진입점 및 상태 관리
+├── src/
+│   ├── components/         # UI 컴포넌트
+│   │   ├── NoteList.tsx    # 메모 목록
+│   │   └── NoteEditor.tsx  # 메모 작성/수정 에디터
+│   ├── styles/             # 스타일 정의
+│   │   └── theme.ts        # 테마(다크/라이트) 및 공통 스타일
+│   └── utils/              # 유틸리티 함수
+│       └── storage.ts      # 데이터 저장 로직 (AsyncStorage)
+├── assets/                 # 이미지 및 아이콘 리소스
+└── package.json            # 프로젝트 설정 및 의존성
+```
 
-## Join the community
+## 📝 라이선스
 
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+This project is licensed under the MIT License.

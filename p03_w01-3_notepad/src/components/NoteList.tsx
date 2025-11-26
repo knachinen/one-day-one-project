@@ -1,52 +1,70 @@
 import React from 'react';
-import { View, Text, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Note } from '../utils/storage';
-import { COLORS, COMMON_STYLES } from '../styles/theme';
+import { COLORS, createCommonStyles, ThemeColors } from '../styles/theme';
 
 interface NoteListProps {
     notes: Note[];
     onSelectNote: (note: Note) => void;
     onDeleteNote: (id: string) => void;
     onCreateNote: () => void;
+    theme: ThemeColors;
 }
 
-export const NoteList: React.FC<NoteListProps> = ({ notes, onSelectNote, onDeleteNote, onCreateNote }) => {
+export const NoteList: React.FC<NoteListProps> = ({ notes, onSelectNote, onDeleteNote, onCreateNote, theme }) => {
     const insets = useSafeAreaInsets();
 
     const renderItem = ({ item }: { item: Note }) => (
         <TouchableOpacity
-            style={[COMMON_STYLES.glassContainer, styles.itemContainer]}
+            style={[
+                createCommonStyles(theme).glassContainer,
+                styles.itemContainer,
+                { backgroundColor: theme.glass, borderColor: theme.glassBorder }
+            ]}
             onPress={() => onSelectNote(item)}
         >
             <View style={styles.textContainer}>
-                <Text style={styles.itemTitle} numberOfLines={1}>{item.title || 'Untitled'}</Text>
-                <Text style={styles.itemContent} numberOfLines={2}>{item.content || 'No content'}</Text>
-                <Text style={styles.itemDate}>{new Date(item.updatedAt).toLocaleDateString()}</Text>
+                <Text style={[styles.itemTitle, { color: theme.text }]} numberOfLines={1}>{item.title || 'Untitled'}</Text>
+                <Text style={[styles.itemContent, { color: theme.textSecondary }]} numberOfLines={2}>{item.content || 'No content'}</Text>
+                <Text style={[styles.itemDate, { color: theme.textSecondary }]}>{new Date(item.updatedAt).toLocaleDateString()}</Text>
             </View>
             <TouchableOpacity
                 style={styles.deleteButton}
-                onPress={() => onDeleteNote(item.id)}
+                onPress={() => {
+                    Alert.alert(
+                        "Delete Note",
+                        "Are you sure you want to delete this note?",
+                        [
+                            { text: "Cancel", style: "cancel" },
+                            {
+                                text: "Delete",
+                                style: "destructive",
+                                onPress: () => onDeleteNote(item.id)
+                            }
+                        ]
+                    );
+                }}
             >
-                <Text style={styles.deleteButtonText}>×</Text>
+                <Text style={[styles.deleteButtonText, { color: theme.danger }]}>×</Text>
             </TouchableOpacity>
         </TouchableOpacity>
     );
 
     return (
         <View style={styles.container}>
-            <Text style={COMMON_STYLES.title}>My Notes</Text>
+            <Text style={[createCommonStyles(theme).title, { color: theme.text }]}>My Notes</Text>
             <FlatList
                 data={notes}
                 renderItem={renderItem}
                 keyExtractor={(item) => item.id}
                 contentContainerStyle={[styles.listContent, { paddingBottom: 80 + insets.bottom }]}
                 ListEmptyComponent={
-                    <Text style={styles.emptyText}>No notes yet. Create one!</Text>
+                    <Text style={[styles.emptyText, { color: theme.textSecondary }]}>No notes yet. Create one!</Text>
                 }
             />
             <TouchableOpacity
-                style={[styles.fab, { bottom: 24 + insets.bottom }]}
+                style={[styles.fab, { bottom: 24 + insets.bottom, backgroundColor: theme.primary }]}
                 onPress={onCreateNote}
             >
                 <Text style={styles.fabText}>+</Text>
@@ -75,25 +93,21 @@ const styles = StyleSheet.create({
         marginRight: 10,
     },
     itemTitle: {
-        color: COLORS.text,
         fontSize: 18,
         fontWeight: '600',
         marginBottom: 4,
     },
     itemContent: {
-        color: COLORS.textSecondary,
         fontSize: 14,
         marginBottom: 8,
     },
     itemDate: {
-        color: COLORS.textSecondary,
         fontSize: 12,
     },
     deleteButton: {
         padding: 8,
     },
     deleteButtonText: {
-        color: COLORS.danger,
         fontSize: 24,
         fontWeight: 'bold',
     },
@@ -104,7 +118,6 @@ const styles = StyleSheet.create({
         width: 56,
         height: 56,
         borderRadius: 28,
-        backgroundColor: COLORS.primary,
         justifyContent: 'center',
         alignItems: 'center',
         elevation: 8,
@@ -119,7 +132,6 @@ const styles = StyleSheet.create({
         marginTop: -4,
     },
     emptyText: {
-        color: COLORS.textSecondary,
         textAlign: 'center',
         marginTop: 40,
         fontSize: 16,

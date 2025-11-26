@@ -1,19 +1,30 @@
 import React, { useState, useEffect } from 'react';
-import { StatusBar, StyleSheet, View } from 'react-native';
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import { StatusBar, StyleSheet, View, TouchableOpacity, Text } from 'react-native';
+import { SafeAreaProvider, SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { NoteList } from './src/components/NoteList';
 import { NoteEditor } from './src/components/NoteEditor';
-import { Note, loadNotes, saveNotes } from './src/utils/storage';
-import { COLORS } from './src/styles/theme';
+import { Note, loadNotes, saveNotes, loadTheme, saveTheme } from './src/utils/storage';
+import { THEMES, ThemeMode } from './src/styles/theme';
 
-export default function App() {
+function MainContent() {
     const [notes, setNotes] = useState<Note[]>([]);
     const [isEditing, setIsEditing] = useState(false);
     const [currentNote, setCurrentNote] = useState<Note | undefined>(undefined);
+    const [themeMode, setThemeMode] = useState<ThemeMode>('dark');
+    const insets = useSafeAreaInsets();
+
+    const theme = THEMES[themeMode];
 
     useEffect(() => {
         loadNotes().then(setNotes);
+        loadTheme().then(setThemeMode);
     }, []);
+
+    const toggleTheme = async () => {
+        const newMode = themeMode === 'dark' ? 'light' : 'dark';
+        setThemeMode(newMode);
+        await saveTheme(newMode);
+    };
 
     const handleSaveNote = async (title: string, content: string) => {
         const newNote: Note = {
@@ -59,26 +70,41 @@ export default function App() {
     };
 
     return (
+        <SafeAreaView style={[styles.container, { backgroundColor: theme.background }]}>
+            <StatusBar barStyle={theme.statusBar} backgroundColor={theme.background} />
+            <View style={styles.header}>
+                {!isEditing && (
+                    <TouchableOpacity onPress={toggleTheme} style={styles.themeButton}>
+                        <Text style={{ fontSize: 24 }}>{themeMode === 'dark' ? '☀️' : '🌙'}</Text>
+                    </TouchableOpacity>
+                )}
+            </View>
+            <View style={styles.content}>
+                {isEditing ? (
+                    <NoteEditor
+                        note={currentNote}
+                        onSave={handleSaveNote}
+                        onCancel={handleCancelEdit}
+                        theme={theme}
+                    />
+                ) : (
+                    <NoteList
+                        notes={notes}
+                        onSelectNote={handleSelectNote}
+                        onDeleteNote={handleDeleteNote}
+                        onCreateNote={handleCreateNote}
+                        theme={theme}
+                    />
+                )}
+            </View>
+        </SafeAreaView>
+    );
+}
+
+export default function App() {
+    return (
         <SafeAreaProvider>
-            <SafeAreaView style={styles.container}>
-                <StatusBar barStyle="light-content" backgroundColor={COLORS.background} />
-                <View style={styles.content}>
-                    {isEditing ? (
-                        <NoteEditor
-                            note={currentNote}
-                            onSave={handleSaveNote}
-                            onCancel={handleCancelEdit}
-                        />
-                    ) : (
-                        <NoteList
-                            notes={notes}
-                            onSelectNote={handleSelectNote}
-                            onDeleteNote={handleDeleteNote}
-                            onCreateNote={handleCreateNote}
-                        />
-                    )}
-                </View>
-            </SafeAreaView>
+            <MainContent />
         </SafeAreaProvider>
     );
 }
@@ -86,7 +112,15 @@ export default function App() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: COLORS.background,
+    },
+    header: {
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        paddingHorizontal: 20,
+        paddingTop: 10,
+    },
+    themeButton: {
+        padding: 8,
     },
     content: {
         flex: 1,
