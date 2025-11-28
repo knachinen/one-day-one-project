@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+
+<html class="" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Memo Detail</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">tailwind.config = {darkMode: "class", theme: {extend: {colors: {primary: "#D0BB95", "background-light": "#f7f7f6", "background-dark": "#1d1a15", "text-light": "#1D1D1F", "text-dark": "#E5E5E7", "text-secondary-light": "#8E8E93", "text-secondary-dark": "#8D8D93", "chip-light": "#EFEFF4", "chip-dark": "#2C2C2E"}, fontFamily: {display: "Inter"}, borderRadius: {DEFAULT: "0.25rem", lg: "0.5rem", xl: "0.75rem", full: "9999px"}}}};</script>
+<style>
+    .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        font-size: 24px; /* Default size */
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display">
+<div class="relative flex h-auto min-h-screen w-full flex-col">
+<!-- Top App Bar -->
+<div class="flex items-center bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm sticky top-0 z-10 p-4 pb-2 justify-between border-b border-white/10">
+<div class="flex size-10 shrink-0 items-center justify-start text-primary">
+<span class="material-symbols-outlined !text-3xl">arrow_back_ios_new</span>
+</div>
+<h2 class="text-text-light dark:text-text-dark text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center">Memo</h2>
+<div class="flex w-10 items-center justify-end">
+<button class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 bg-transparent text-primary gap-2 text-base font-bold leading-normal tracking-[0.015em] min-w-0 p-0">
+<span class="material-symbols-outlined">more_horiz</span>
+</button>
+</div>
+</div>
+<!-- Main Content -->
+<main class="flex-grow px-4 pt-4 pb-24">
+<!-- Memo Body Text -->
+<p class="text-text-light dark:text-text-dark text-base font-normal leading-relaxed pb-3 pt-1">
+        This is a sample memo captured in Paperclip. The full, unformatted text of the memo goes here. This area is designed for maximum readability and focus. It will be scrollable to accommodate long text snippets, ensuring that the user can comfortably read through their entire note without interruption. The design prioritizes content over chrome. Tap anywhere on this text to start editing.
+      </p>
+<!-- Meta Text -->
+<p class="text-text-secondary-light dark:text-text-secondary-dark text-sm font-normal leading-normal py-4">
+        Created: Oct 26, 2023, 10:15 AM
+      </p>
+<!-- Chips / Tags -->
+<div class="flex flex-wrap gap-2 pt-2 pb-4 border-t border-b border-black/10 dark:border-white/10">
+<div class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-full bg-chip-light dark:bg-chip-dark pl-4 pr-3">
+<p class="text-primary text-sm font-medium leading-normal">ideas</p>
+<span class="material-symbols-outlined !text-lg text-text-secondary-light dark:text-text-secondary-dark cursor-pointer">close</span>
+</div>
+<div class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-full bg-chip-light dark:bg-chip-dark pl-4 pr-3">
+<p class="text-primary text-sm font-medium leading-normal">work</p>
+<span class="material-symbols-outlined !text-lg text-text-secondary-light dark:text-text-secondary-dark cursor-pointer">close</span>
+</div>
+<div class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-full bg-chip-light dark:bg-chip-dark pl-4 pr-3">
+<p class="text-primary text-sm font-medium leading-normal">quotes</p>
+<span class="material-symbols-outlined !text-lg text-text-secondary-light dark:text-text-secondary-dark cursor-pointer">close</span>
+</div>
+<button class="flex h-8 shrink-0 items-center justify-center gap-x-1 rounded-full border border-dashed border-text-secondary-light dark:border-text-secondary-dark px-3 text-text-secondary-light dark:text-text-secondary-dark">
+<span class="material-symbols-outlined !text-lg">add</span>
+<p class="text-sm font-medium">Add Tag</p>
+</button>
+</div>
+</main>
+<!-- Bottom Toolbar -->
+<div class="fixed bottom-0 left-0 right-0 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm border-t border-black/10 dark:border-white/10">
+<div class="flex justify-between gap-2 px-4 py-3 safe-area-bottom">
+<div class="flex gap-2 text-primary">
+<button class="p-2 rounded-lg hover:bg-primary/10">
+<span class="material-symbols-outlined">edit</span>
+</button>
+<button class="p-2 rounded-lg hover:bg-primary/10">
+<span class="material-symbols-outlined">label</span>
+</button>
+<button class="p-2 rounded-lg hover:bg-primary/10">
+<span class="material-symbols-outlined">archive</span>
+</button>
+</div>
+<div class="flex gap-2 text-primary">
+<button class="p-2 rounded-lg hover:bg-primary/10">
+<span class="material-symbols-outlined">share</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</body></html>

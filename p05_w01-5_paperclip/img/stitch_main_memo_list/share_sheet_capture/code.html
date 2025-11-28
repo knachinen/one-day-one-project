@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+
+<html class="" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Share Sheet Capture</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>tailwind.config = {darkMode: "class", theme: {extend: {colors: {primary: "#D0BB95", "background-light": "#f7f7f6", "background-dark": "#1d1a15"}, fontFamily: {display: "Inter"}, borderRadius: {DEFAULT: "0.25rem", lg: "0.5rem", xl: "0.75rem", full: "9999px"}}}};</script>
+<style>
+        body {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display">
+<div class="relative flex h-auto min-h-screen w-full flex-col bg-background-light dark:bg-background-dark">
+<!-- Top App Bar -->
+<div class="flex items-center bg-background-light dark:bg-background-dark p-4 pb-2 justify-between border-b border-gray-200/10 dark:border-gray-700/50 sticky top-0 z-10">
+<button class="text-primary text-base font-medium leading-normal shrink-0">Cancel</button>
+<h2 class="text-gray-900 dark:text-white text-lg font-bold leading-tight tracking-[-0.015em] text-center">Save to Paperclip</h2>
+<button class="text-primary text-base font-bold leading-normal shrink-0">Save</button>
+</div>
+<div class="flex-grow p-4 space-y-6">
+<!-- Text Preview Area -->
+<div class="bg-white/50 dark:bg-white/5 border border-gray-200 dark:border-gray-800 rounded-lg p-4 h-64 overflow-y-auto">
+<p class="text-gray-800 dark:text-gray-300 text-base font-normal leading-normal">
+                    This is a preview of the text you are saving. It is a scrollable area to ensure that you can see all the content before it gets saved into your private archive. The text is captured directly from the source application. Minimalism is not a lack of something. It’s simply the perfect amount of something. It’s about stripping away the non-essential to focus on what truly matters.
+                </p>
+</div>
+<!-- MetaText / Source Display -->
+<p class="text-gray-500 dark:text-gray-400 text-sm font-normal leading-normal px-1">From: Safari</p>
+<!-- TextField / Tag Input -->
+<div class="flex w-full flex-wrap items-end gap-4">
+<label class="flex flex-col w-full flex-1">
+<p class="text-gray-900 dark:text-white text-base font-medium leading-normal pb-2 px-1">Tags</p>
+<div class="flex w-full flex-1 items-stretch rounded-lg">
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-gray-900 dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-gray-300 dark:border-gray-700 bg-white dark:bg-background-dark focus:border-primary h-14 placeholder:text-gray-400 dark:placeholder:text-gray-500 p-[15px] text-base font-normal leading-normal" placeholder="Add tags (e.g. work, ideas)" value=""/>
+</div>
+</label>
+</div>
+<!-- Chips / Suggested Tags -->
+<div class="flex gap-2 py-1 overflow-x-auto">
+<button class="flex h-8 shrink-0 items-center justify-center gap-x-1.5 rounded-full bg-primary/10 dark:bg-primary/20 px-3 hover:bg-primary/20 dark:hover:bg-primary/30 transition-colors">
+<span class="material-symbols-outlined text-primary text-base">add</span>
+<p class="text-primary text-sm font-medium leading-normal">work</p>
+</button>
+<button class="flex h-8 shrink-0 items-center justify-center gap-x-1.5 rounded-full bg-primary/10 dark:bg-primary/20 px-3 hover:bg-primary/20 dark:hover:bg-primary/30 transition-colors">
+<span class="material-symbols-outlined text-primary text-base">add</span>
+<p class="text-primary text-sm font-medium leading-normal">ideas</p>
+</button>
+<button class="flex h-8 shrink-0 items-center justify-center gap-x-1.5 rounded-full bg-primary/10 dark:bg-primary/20 px-3 hover:bg-primary/20 dark:hover:bg-primary/30 transition-colors">
+<span class="material-symbols-outlined text-primary text-base">add</span>
+<p class="text-primary text-sm font-medium leading-normal">reading-list</p>
+</button>
+</div>
+</div>
+</div>
+</body></html>

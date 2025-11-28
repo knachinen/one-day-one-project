@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+
+<html class="" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Settings (Privacy &amp; Sync)</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>tailwind.config = {darkMode: "class", theme: {extend: {colors: {primary: "#D0BB95", "background-light": "#f7f7f6", "background-dark": "#1d1a15"}, fontFamily: {display: "Inter"}, borderRadius: {DEFAULT: "0.25rem", lg: "0.5rem", xl: "0.75rem", full: "9999px"}}}};</script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display">
+<div class="relative flex h-auto min-h-screen w-full flex-col">
+<!-- Top App Bar -->
+<div class="flex items-center bg-background-light dark:bg-background-dark px-4 py-3 justify-between sticky top-0 z-10 border-b border-gray-200 dark:border-gray-800">
+<div class="text-slate-800 dark:text-white flex size-10 shrink-0 items-center justify-center">
+<span class="material-symbols-outlined text-2xl">arrow_back_ios_new</span>
+</div>
+<h2 class="text-slate-900 dark:text-white text-lg font-semibold leading-tight tracking-tight flex-1 text-center">Privacy &amp; Sync</h2>
+<div class="flex size-10 shrink-0 items-center"></div> <!-- Spacer -->
+</div>
+<div class="flex flex-col flex-1 p-4 space-y-8">
+<!-- Synchronization Section -->
+<section>
+<h4 class="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-wider px-4 pb-2">SYNCHRONIZATION</h4>
+<div class="flex flex-col bg-white dark:bg-[#1C2935] rounded-xl overflow-hidden shadow-sm">
+<div class="flex items-center gap-4 px-4 min-h-14 justify-between">
+<div class="flex items-center gap-4">
+<div class="text-white flex items-center justify-center rounded-lg bg-primary shrink-0 size-8">
+<span class="material-symbols-outlined text-lg">cloud</span>
+</div>
+<p class="text-slate-900 dark:text-white text-base font-normal leading-normal flex-1 truncate">Sync with iCloud</p>
+</div>
+<div class="shrink-0">
+<label class="relative flex h-[31px] w-[51px] cursor-pointer items-center rounded-full border-none bg-slate-200 dark:bg-slate-700/50 p-0.5 has-[:checked]:justify-end has-[:checked]:bg-primary">
+<div class="h-full w-[27px] rounded-full bg-white transition-transform" style="box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 4px;"></div>
+<input checked="" class="invisible absolute" type="checkbox"/>
+</label>
+</div>
+</div>
+</div>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-normal leading-normal pt-2 px-4">Keep your snippets securely backed up and synced across your devices.</p>
+</section>
+<!-- Security Section -->
+<section>
+<h4 class="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-wider px-4 pb-2">SECURITY</h4>
+<div class="flex flex-col bg-white dark:bg-[#1C2935] rounded-xl overflow-hidden shadow-sm">
+<div class="flex items-center gap-4 px-4 min-h-14 justify-between">
+<div class="flex items-center gap-4">
+<div class="text-white flex items-center justify-center rounded-lg bg-green-500 shrink-0 size-8">
+<span class="material-symbols-outlined text-lg">face</span>
+</div>
+<p class="text-slate-900 dark:text-white text-base font-normal leading-normal flex-1 truncate">Lock with Face ID</p>
+</div>
+<div class="shrink-0">
+<label class="relative flex h-[31px] w-[51px] cursor-pointer items-center rounded-full border-none bg-slate-200 dark:bg-slate-700/50 p-0.5 has-[:checked]:justify-end has-[:checked]:bg-primary">
+<div class="h-full w-[27px] rounded-full bg-white transition-transform" style="box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 4px;"></div>
+<input class="invisible absolute" type="checkbox"/>
+</label>
+</div>
+</div>
+</div>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-normal leading-normal pt-2 px-4">Require authentication to open Paperclip.</p>
+</section>
+<!-- Data Section -->
+<section>
+<h4 class="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-wider px-4 pb-2">DATA</h4>
+<div class="flex flex-col bg-white dark:bg-[#1C2935] rounded-xl overflow-hidden shadow-sm">
+<div class="flex items-center gap-4 px-4 min-h-14 justify-between group cursor-pointer">
+<div class="flex items-center gap-4">
+<div class="text-white flex items-center justify-center rounded-lg bg-orange-500 shrink-0 size-8">
+<span class="material-symbols-outlined text-lg">archive</span>
+</div>
+<p class="text-slate-900 dark:text-white text-base font-normal leading-normal flex-1 truncate">Export All Snippets</p>
+</div>
+<div class="shrink-0 text-slate-400 dark:text-slate-500 transition-transform group-hover:translate-x-1">
+<span class="material-symbols-outlined text-xl">arrow_forward_ios</span>
+</div>
+</div>
+<div class="border-t border-gray-200 dark:border-gray-700/50 mx-4"></div>
+<div class="flex items-center gap-4 px-4 min-h-14 justify-between group cursor-pointer">
+<div class="flex items-center gap-4">
+<div class="text-white flex items-center justify-center rounded-lg bg-red-500 shrink-0 size-8">
+<span class="material-symbols-outlined text-lg">delete</span>
+</div>
+<p class="text-red-500 dark:text-red-500 text-base font-normal leading-normal flex-1 truncate">Delete All Snippets</p>
+</div>
+<div class="shrink-0 text-slate-400 dark:text-slate-500 transition-transform group-hover:translate-x-1">
+<span class="material-symbols-outlined text-xl">arrow_forward_ios</span>
+</div>
+</div>
+</div>
+</section>
+</div>
+</div>
+</body></html>
