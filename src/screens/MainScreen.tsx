@@ -15,8 +15,7 @@ import { Button, Timer } from '../components';
 import { Colors } from '../constants/colors';
 import { Typography, Spacing } from '../constants/typography';
 import { TIMER_DURATION } from '../constants/colors';
-import { useTimer, useAction, useGoal } from '../hooks';
-import { notificationService } from '../services/notification';
+import { useTimer, useAction, useGoal, useActionLogic } from '../hooks';
 
 interface MainScreenProps {
     actionId: string;
@@ -29,6 +28,7 @@ export const MainScreen: React.FC<MainScreenProps> = ({
 }) => {
     const realm = useRealm();
     const { timeLeft, isRunning, isCompleted, start, pause, reset } = useTimer();
+    const { completeAction } = useActionLogic();
 
     // 현재 액션 가져오기
     const currentAction = useAction(actionId);
@@ -51,19 +51,7 @@ export const MainScreen: React.FC<MainScreenProps> = ({
         });
 
         try {
-            // Realm에서 액션 완료 처리
-            realm.write(() => {
-                if (currentAction) {
-                    currentAction.status = 'completed';
-                    currentAction.completedAt = new Date();
-                }
-            });
-
-            // AsyncStorage에서 현재 액션 ID 제거
-            await AsyncStorage.removeItem('current_action_id');
-
-            // 알림 취소
-            await notificationService.cancelNotification(actionId);
+            await completeAction(actionId);
 
             // 완료 메시지 표시
             Alert.alert(
@@ -77,7 +65,6 @@ export const MainScreen: React.FC<MainScreenProps> = ({
                 ]
             );
         } catch (err) {
-            console.error('액션 완료 처리 실패:', err);
             Alert.alert('오류', '완료 처리에 실패했습니다.');
         }
     };

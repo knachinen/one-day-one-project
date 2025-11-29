@@ -15,9 +15,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { Button, Input } from '../components';
 import { Colors } from '../constants/colors';
 import { Typography, Spacing } from '../constants/typography';
-import { Action } from '../models';
-import { notificationService } from '../services/notification';
-import { useGoal } from '../hooks';
+import { useGoal, useActionLogic } from '../hooks';
 
 interface ActionCreateScreenProps {
     goalId: string;
@@ -28,71 +26,17 @@ export const ActionCreateScreen: React.FC<ActionCreateScreenProps> = ({
     goalId,
     onActionCreated,
 }) => {
-    const realm = useRealm();
     const [description, setDescription] = useState('');
     const [reminderTime, setReminderTime] = useState(new Date(Date.now() + 60000)); // 1분 후
     const [showTimePicker, setShowTimePicker] = useState(false);
-    const [error, setError] = useState('');
-    const [loading, setLoading] = useState(false);
+
+    const { createAction, loading, error, setError } = useActionLogic();
 
     // 현재 목표 가져오기
     const currentGoal = useGoal(goalId);
 
-    const handleCreateAction = async () => {
-        // 유효성 검증
-        if (!description.trim()) {
-            setError('10초 행동을 입력해주세요');
-            return;
-        }
-
-        if (description.trim().length < 2) {
-            setError('행동은 최소 2글자 이상이어야 합니다');
-            return;
-        }
-
-        setLoading(true);
-        setError('');
-
-        try {
-            // Realm에 액션 저장
-            const newAction = realm.write(() => {
-                const action = realm.create(Action, {
-                    _id: new BSON.ObjectId(),
-                    description: description.trim(),
-                    status: 'pending',
-                    createdAt: new Date(),
-                    reminderTime,
-                });
-
-                // 목표에 액션 추가
-                currentGoal?.actions.push(action);
-                return action;
-            });
-
-            // AsyncStorage에 현재 액션 ID 저장
-            await AsyncStorage.setItem('current_action_id', newAction._id.toString());
-
-            // 알림 스케줄링
-            try {
-                await notificationService.scheduleNotification(
-                    newAction._id.toString(),
-                    '⚛️ 10초 행동 시간!',
-                    description.trim(),
-                    reminderTime
-                );
-            } catch (notiError) {
-                console.error('알림 스케줄링 실패:', notiError);
-                // 알림 실패해도 액션 생성은 성공으로 처리
-            }
-
-            // 성공 후 다음 화면으로
-            onActionCreated();
-        } catch (err) {
-            console.error('액션 생성 실패:', err);
-            setError('액션 생성에 실패했습니다. 다시 시도해주세요.');
-        } finally {
-            setLoading(false);
-        }
+    const handleCreateAction = () => {
+        createAction(goalId, description, reminderTime, onActionCreated);
     };
 
     const formatTime = (date: Date) => {

@@ -13,56 +13,18 @@ import { BSON } from 'realm';
 import { Button, Input } from '../components';
 import { Colors } from '../constants/colors';
 import { Typography, Spacing } from '../constants/typography';
-import { Goal } from '../models';
+import { useGoalLogic } from '../hooks';
 
 interface GoalInputScreenProps {
     onGoalCreated: () => void;
 }
 
 export const GoalInputScreen: React.FC<GoalInputScreenProps> = ({ onGoalCreated }) => {
-    const realm = useRealm();
     const [goalTitle, setGoalTitle] = useState('');
-    const [error, setError] = useState('');
-    const [loading, setLoading] = useState(false);
+    const { createGoal, loading, error, setError } = useGoalLogic();
 
-    const handleCreateGoal = async () => {
-        // 유효성 검증
-        if (!goalTitle.trim()) {
-            setError('목표를 입력해주세요');
-            return;
-        }
-
-        if (goalTitle.trim().length < 3) {
-            setError('목표는 최소 3글자 이상이어야 합니다');
-            return;
-        }
-
-        setLoading(true);
-        setError('');
-
-        try {
-            // Realm에 목표 저장
-            const newGoal = realm.write(() => {
-                return realm.create(Goal, {
-                    _id: new BSON.ObjectId(),
-                    title: goalTitle.trim(),
-                    createdAt: new Date(),
-                    status: 'active',
-                    actions: [],
-                });
-            });
-
-            // AsyncStorage에 현재 목표 ID 저장
-            await AsyncStorage.setItem('current_goal_id', newGoal._id.toString());
-
-            // 성공 후 다음 화면으로
-            onGoalCreated();
-        } catch (err) {
-            console.error('목표 생성 실패:', err);
-            setError('목표 생성에 실패했습니다. 다시 시도해주세요.');
-        } finally {
-            setLoading(false);
-        }
+    const handleCreateGoal = () => {
+        createGoal(goalTitle, onGoalCreated);
     };
 
     return (
