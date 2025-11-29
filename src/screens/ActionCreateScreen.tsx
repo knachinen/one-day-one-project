@@ -35,9 +35,9 @@ export const ActionCreateScreen: React.FC<ActionCreateScreenProps> = ({
     // 현재 목표 가져오기
     const currentGoal = useGoal(goalId);
 
-    const handleCreateAction = () => {
+    const handleCreateAction = React.useCallback(() => {
         createAction(goalId, description, reminderTime, onActionCreated);
-    };
+    }, [createAction, goalId, description, reminderTime, onActionCreated]);
 
     const formatTime = (date: Date) => {
         return date.toLocaleTimeString('ko-KR', {

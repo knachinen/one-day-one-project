@@ -23,9 +23,9 @@ export const GoalInputScreen: React.FC<GoalInputScreenProps> = ({ onGoalCreated 
     const [goalTitle, setGoalTitle] = useState('');
     const { createGoal, loading, error, setError } = useGoalLogic();
 
-    const handleCreateGoal = () => {
+    const handleCreateGoal = React.useCallback(() => {
         createGoal(goalTitle, onGoalCreated);
-    };
+    }, [createGoal, goalTitle, onGoalCreated]);
 
     return (
         <SafeAreaView style={styles.container}>

@@ -43,7 +43,7 @@ export const MainScreen: React.FC<MainScreenProps> = ({
         }
     }, [isCompleted]);
 
-    const handleComplete = async () => {
+    const handleComplete = React.useCallback(async () => {
         // 햅틱 피드백 - 성공
         ReactNativeHapticFeedback.trigger('notificationSuccess', {
             enableVibrateFallback: true,
@@ -67,9 +67,9 @@ export const MainScreen: React.FC<MainScreenProps> = ({
         } catch (err) {
             Alert.alert('오류', '완료 처리에 실패했습니다.');
         }
-    };
+    }, [actionId, completeAction, onActionCompleted]);
 
-    const handleManualComplete = () => {
+    const handleManualComplete = React.useCallback(() => {
         Alert.alert(
             '완료 확인',
             '정말로 이 행동을 완료하셨나요?',
@@ -84,7 +84,7 @@ export const MainScreen: React.FC<MainScreenProps> = ({
                 },
             ]
         );
-    };
+    }, [handleComplete]);
 
     const getBackgroundColor = () => {
         if (isCompleted) return Colors.success;
