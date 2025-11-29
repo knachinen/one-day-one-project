@@ -1,4 +1,13 @@
-import React, { useState } from 'react';
+
+
+import { StackScreenProps } from '@react-navigation/stack';
+import { RootStackParamList } from '../navigation/AppNavigator';
+
+interface GoalInputScreenProps extends StackScreenProps<RootStackParamList, 'GoalInput'> {
+    onGoalCreated: (goalId?: string) => void;
+}
+
+import React, { useState, useEffect } from 'react';
 import {
     View,
     Text,
@@ -13,19 +22,30 @@ import { BSON } from 'realm';
 import { Button, Input } from '../components';
 import { Colors } from '../constants/colors';
 import { Typography, Spacing } from '../constants/typography';
-import { useGoalLogic } from '../hooks';
+import { useGoalLogic, useGoal } from '../hooks'; // Import useGoal
 
-interface GoalInputScreenProps {
-    onGoalCreated: () => void;
-}
+export const GoalInputScreen: React.FC<GoalInputScreenProps> = ({ navigation, route, onGoalCreated }) => {
+    const goalId = route.params?.goalId; // Get goalId from route params
+    const existingGoal = useGoal(goalId); // Fetch existing goal if goalId is provided
 
-export const GoalInputScreen: React.FC<GoalInputScreenProps> = ({ onGoalCreated }) => {
-    const [goalTitle, setGoalTitle] = useState('');
-    const { createGoal, loading, error, setError } = useGoalLogic();
+    const [goalTitle, setGoalTitle] = useState(existingGoal ? existingGoal.title : '');
+    const { createGoal, updateGoal, loading, error, setError } = useGoalLogic(); // Destructure updateGoal
 
-    const handleCreateGoal = React.useCallback(() => {
-        createGoal(goalTitle, onGoalCreated);
-    }, [createGoal, goalTitle, onGoalCreated]);
+    useEffect(() => {
+        if (existingGoal) {
+            setGoalTitle(existingGoal.title);
+        }
+    }, [existingGoal]);
+
+    const handleSaveGoal = React.useCallback(() => {
+        if (goalId) {
+            updateGoal(goalId, goalTitle, onGoalCreated);
+        } else {
+            createGoal(goalTitle, onGoalCreated);
+        }
+    }, [createGoal, updateGoal, goalId, goalTitle, onGoalCreated]);
+
+    const buttonText = goalId ? "목표 수정하기" : "시작하기";
 
     return (
         <SafeAreaView style={styles.container}>
@@ -37,9 +57,9 @@ export const GoalInputScreen: React.FC<GoalInputScreenProps> = ({ onGoalCreated 
                     {/* 헤더 */}
                     <View style={styles.header}>
                         <Text style={styles.emoji}>⚛️</Text>
-                        <Text style={styles.title}>Atomizer</Text>
+                        <Text style={styles.title}>{goalId ? "목표 수정" : "Atomizer"}</Text>
                         <Text style={styles.subtitle}>
-                            큰 목표를 10초 단위로 쪼개어{'\n'}실행하는 습관을 만들어보세요
+                            {goalId ? "목표를 수정해주세요" : "큰 목표를 10초 단위로 쪼개어\n실행하는 습관을 만들어보세요"}
                         </Text>
                     </View>
 
@@ -57,15 +77,15 @@ export const GoalInputScreen: React.FC<GoalInputScreenProps> = ({ onGoalCreated 
                             autoFocusOnMount
                             maxLength={100}
                             returnKeyType="done"
-                            onSubmitEditing={handleCreateGoal}
+                            onSubmitEditing={handleSaveGoal}
                         />
                     </View>
 
                     {/* 버튼 */}
                     <View style={styles.buttonContainer}>
                         <Button
-                            title="시작하기"
-                            onPress={handleCreateGoal}
+                            title={buttonText}
+                            onPress={handleSaveGoal}
                             disabled={!goalTitle.trim() || loading}
                             loading={loading}
                         />

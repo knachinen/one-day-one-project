@@ -20,19 +20,17 @@ import { Colors } from "../constants/colors";
 import { Typography, Spacing } from "../constants/typography";
 import { useGoal, useActionLogic } from "../hooks";
 
-type ActionCreateScreenProps = StackScreenProps<
-  RootStackParamList,
-  "ActionCreate"
->; // Update prop type
+type ActionCreateScreenProps = {
+  navigation: StackScreenProps<RootStackParamList, "ActionCreate">['navigation'];
+  goalId: string;
+  onActionCreated: () => void;
+}; // Update prop type
 
 export const ActionCreateScreen: React.FC<ActionCreateScreenProps> = ({
-  navigation, // Add navigation prop
-  route, // Add route prop
+  navigation,
+  goalId, // Accept goalId directly as a prop
+  onActionCreated, // Accept onActionCreated directly as a prop
 }) => {
-  const goalId = (route.params as any)?.goalId; // Get goalId from route params
-  const onActionCreated = () => {
-    /* no-op, handled by AppNavigator */
-  }; // onActionCreated is no longer passed as a prop from AppNavigator for this screen.
 
   const [description, setDescription] = useState("");
   const [reminderTime, setReminderTime] = useState(

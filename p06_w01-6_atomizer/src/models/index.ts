@@ -40,7 +40,7 @@ export class Goal extends Realm.Object<Goal> {
             title: 'string',
             createdAt: 'date',
             status: 'string',
-            isActive: { type: 'boolean', default: false }, // Added isActive to schema
+            isActive: { type: 'bool', default: false }, // Added isActive to schema
             actions: 'Action[]',
         },
     };

@@ -18,7 +18,7 @@ export const useGoal = (goalId: string) => {
         } catch (e) {
             return collection.filtered('false == true'); // 빈 결과 반환
         }
-    })[0];
+    }, [goalId])[0]; // Add goalId as a dependency here
     return goal || null;
 };
 

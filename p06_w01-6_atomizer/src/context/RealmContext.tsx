@@ -8,7 +8,7 @@ interface RealmProviderProps {
 
 export const RealmProvider: React.FC<RealmProviderProps> = ({ children }) => {
     return (
-        <RealmReactProvider schema={[Goal, Action]} schemaVersion={1}>
+        <RealmReactProvider schema={[Goal, Action]} schemaVersion={2}>
             {children}
         </RealmReactProvider>
     );

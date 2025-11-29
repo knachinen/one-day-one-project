@@ -5,10 +5,12 @@ import { useQuery } from '@realm/react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { GoalInputScreen, ActionCreateScreen, MainScreen, GoalSelectionScreen } from '../screens';
 import { useActiveGoal } from '../hooks';
+import Realm from 'realm'; // Import Realm for flags
+import { Goal } from '../models'; // Import Goal model for useQuery
 
 export type RootStackParamList = {
-    GoalInput: undefined;
-    GoalSelection: undefined; // Added GoalSelection
+    GoalInput: { goalId?: string };
+    GoalSelection: undefined;
     ActionCreate: { goalId: string };
     Main: { actionId: string; goalId: string };
 };
@@ -19,11 +21,16 @@ export const AppNavigator: React.FC = () => {
     const [initialRoute, setInitialRoute] = useState<keyof RootStackParamList | null>(null);
     const [routeParams, setRouteParams] = useState<any>(null);
 
-    const activeGoal = useActiveGoal(); // Renamed currentGoal to activeGoal for clarity
+    const activeGoal = useActiveGoal();
+    const goals = useQuery(Goal); // Use useQuery to get all goals
 
     useEffect(() => {
+        // Set the flag at the earliest possible point if not already set globally
+        // This is a global flag, so setting it multiple times is fine, but it needs to be set before Realm.open
+        Realm.flags.THROW_ON_GLOBAL_REALM = true;
+
         determineInitialRoute();
-    }, [activeGoal]); // Added activeGoal to dependencies
+    }, [activeGoal, goals.length]); // Add goals.length to dependencies
 
     const determineInitialRoute = async () => {
         try {
@@ -42,13 +49,8 @@ export const AppNavigator: React.FC = () => {
                 return;
             }
 
-            // If no active goal, check if any goals exist
-            // Temporarily open Realm to check
-            const allGoalsRealm = await Realm.open({ schema: [Goal, Action] });
-            const goalsCount = allGoalsRealm.objects('Goal').length;
-            allGoalsRealm.close();
-
-            if (goalsCount > 0) {
+            // If no active goal, check if any goals exist using the useQuery result
+            if (goals.length > 0) {
                 setInitialRoute('GoalSelection'); // If goals exist but none are active, go to selection
                 return;
             }
@@ -78,9 +80,11 @@ export const AppNavigator: React.FC = () => {
             >
                 <Stack.Screen name="GoalSelection" component={GoalSelectionScreen} />
                 <Stack.Screen name="GoalInput">
-                    {({ navigation }) => (
+                    {({ navigation, route }) => (
                         <GoalInputScreen
-                            onGoalCreated={() => {
+                            navigation={navigation}
+                            route={route}
+                            onGoalCreated={(goalId?: string) => {
                                 // 목표 생성 후 목표 선택 화면으로
                                 navigation.replace('GoalSelection');
                             }}
@@ -88,10 +92,13 @@ export const AppNavigator: React.FC = () => {
                     )}
                 </Stack.Screen>
 
-                <Stack.Screen name="ActionCreate">
-                    {({ route, navigation }) => (
+                <Stack.Screen name="ActionCreate"
+                    initialParams={initialRoute === 'ActionCreate' ? routeParams : undefined}
+                >
+                    {({ navigation }) => (
                         <ActionCreateScreen
-                            goalId={(route.params as any)?.goalId || activeGoal?._id.toHexString() || ''}
+                            navigation={navigation}
+                            goalId={routeParams?.goalId || activeGoal?._id.toHexString() || ''}
                             onActionCreated={async () => {
                                 // 액션 생성 후 메인 화면으로
                                 if (activeGoal) {
@@ -105,11 +112,13 @@ export const AppNavigator: React.FC = () => {
                     )}
                 </Stack.Screen>
 
-                <Stack.Screen name="Main">
+                <Stack.Screen name="Main"
+                    initialParams={initialRoute === 'Main' ? routeParams : undefined}
+                >
                     {({ route, navigation }) => (
                         <MainScreen
                             actionId={(route.params as any)?.actionId || ''}
-                            goalId={(route.params as any)?.goalId || ''} // Added goalId prop
+                            goalId={(route.params as any)?.goalId || ''}
                             onActionCompleted={() => {
                                 // 액션 완료 후 다시 액션 생성 화면으로
                                 if (activeGoal) {
