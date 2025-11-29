@@ -17,6 +17,7 @@ import { Typography, Spacing } from '../constants/typography';
 import { TIMER_DURATION } from '../constants/colors';
 import { Goal, Action } from '../models';
 import { useTimer } from '../hooks/useTimer';
+import { notificationService } from '../services/notification';
 
 interface MainScreenProps {
     actionId: string;
@@ -67,6 +68,9 @@ export const MainScreen: React.FC<MainScreenProps> = ({
 
             // AsyncStorage에서 현재 액션 ID 제거
             await AsyncStorage.removeItem('current_action_id');
+
+            // 알림 취소
+            await notificationService.cancelNotification(actionId);
 
             // 완료 메시지 표시
             Alert.alert(

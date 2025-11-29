@@ -16,6 +16,7 @@ import { Button, Input } from '../components';
 import { Colors } from '../constants/colors';
 import { Typography, Spacing } from '../constants/typography';
 import { Goal, Action } from '../models';
+import { notificationService } from '../services/notification';
 
 interface ActionCreateScreenProps {
     goalId: string;
@@ -73,7 +74,18 @@ export const ActionCreateScreen: React.FC<ActionCreateScreenProps> = ({
             // AsyncStorage에 현재 액션 ID 저장
             await AsyncStorage.setItem('current_action_id', newAction._id.toString());
 
-            // TODO: 알림 스케줄링 (Phase 6에서 구현)
+            // 알림 스케줄링
+            try {
+                await notificationService.scheduleNotification(
+                    newAction._id.toString(),
+                    '⚛️ 10초 행동 시간!',
+                    description.trim(),
+                    reminderTime
+                );
+            } catch (notiError) {
+                console.error('알림 스케줄링 실패:', notiError);
+                // 알림 실패해도 액션 생성은 성공으로 처리
+            }
 
             // 성공 후 다음 화면으로
             onActionCreated();
