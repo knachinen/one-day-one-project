@@ -5,8 +5,8 @@ import {
     StyleSheet,
     KeyboardAvoidingView,
     Platform,
-    SafeAreaView,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRealm } from '@realm/react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { BSON } from 'realm';

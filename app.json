@@ -37,6 +37,7 @@
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
+      "./plugins/withNotifeeFix",
       [
         "expo-build-properties",
         {

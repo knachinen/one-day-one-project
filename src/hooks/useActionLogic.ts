@@ -49,15 +49,19 @@ export const useActionLogic = () => {
             await AsyncStorage.setItem('current_action_id', newAction._id.toString());
 
             // 알림 스케줄링
-            try {
-                await notificationService.scheduleNotification(
-                    newAction._id.toString(),
-                    '⚛️ 10초 행동 시간!',
-                    description.trim(),
-                    reminderTime
-                );
-            } catch (notiError) {
-                console.error('알림 스케줄링 실패:', notiError);
+            if (reminderTime.getTime() > Date.now()) {
+                try {
+                    await notificationService.scheduleNotification(
+                        newAction._id.toString(),
+                        '⚛️ 10초 행동 시간!',
+                        description.trim(),
+                        reminderTime
+                    );
+                } catch (notiError) {
+                    console.error('알림 스케줄링 실패:', notiError);
+                }
+            } else {
+                console.log('알림 시간이 과거여서 스케줄링을 건너뜁니다.');
             }
 
             if (onSuccess) onSuccess();

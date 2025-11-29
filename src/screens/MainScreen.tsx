@@ -3,10 +3,10 @@ import {
     View,
     Text,
     StyleSheet,
-    SafeAreaView,
     ScrollView,
     Alert,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRealm, useQuery } from '@realm/react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { BSON } from 'realm';

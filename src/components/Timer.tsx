@@ -58,7 +58,7 @@ export const Timer: React.FC<TimerProps> = ({
     const getTimerColor = () => {
         if (!isRunning) return Colors.primary;
         if (timeLeft <= 3) return Colors.error;
-        return Colors.focus;
+        return Colors.text;
     };
 
     return (
