@@ -15,8 +15,9 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { Button, Input } from '../components';
 import { Colors } from '../constants/colors';
 import { Typography, Spacing } from '../constants/typography';
-import { Goal, Action } from '../models';
+import { Action } from '../models';
 import { notificationService } from '../services/notification';
+import { useGoal } from '../hooks';
 
 interface ActionCreateScreenProps {
     goalId: string;
@@ -35,10 +36,7 @@ export const ActionCreateScreen: React.FC<ActionCreateScreenProps> = ({
     const [loading, setLoading] = useState(false);
 
     // 현재 목표 가져오기
-    const goals = useQuery(Goal, (goals) => {
-        return goals.filtered('_id == $0', new BSON.ObjectId(goalId));
-    });
-    const currentGoal = goals[0];
+    const currentGoal = useGoal(goalId);
 
     const handleCreateAction = async () => {
         // 유효성 검증

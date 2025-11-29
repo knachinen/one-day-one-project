@@ -3,9 +3,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useQuery } from '@realm/react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { BSON } from 'realm';
 import { GoalInputScreen, ActionCreateScreen, MainScreen } from '../screens';
-import { Goal, Action } from '../models';
+import { useActiveGoal } from '../hooks';
 
 export type RootStackParamList = {
     GoalInput: undefined;
@@ -19,10 +18,7 @@ export const AppNavigator: React.FC = () => {
     const [initialRoute, setInitialRoute] = useState<keyof RootStackParamList | null>(null);
     const [routeParams, setRouteParams] = useState<any>(null);
 
-    const goals = useQuery(Goal, (goals) => {
-        return goals.filtered('status == "active"').sorted('createdAt', true);
-    });
-    const currentGoal = goals[0];
+    const currentGoal = useActiveGoal();
 
     useEffect(() => {
         determineInitialRoute();

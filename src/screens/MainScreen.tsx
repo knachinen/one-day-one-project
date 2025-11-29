@@ -15,8 +15,7 @@ import { Button, Timer } from '../components';
 import { Colors } from '../constants/colors';
 import { Typography, Spacing } from '../constants/typography';
 import { TIMER_DURATION } from '../constants/colors';
-import { Goal, Action } from '../models';
-import { useTimer } from '../hooks/useTimer';
+import { useTimer, useAction, useGoal } from '../hooks';
 import { notificationService } from '../services/notification';
 
 interface MainScreenProps {
@@ -32,16 +31,10 @@ export const MainScreen: React.FC<MainScreenProps> = ({
     const { timeLeft, isRunning, isCompleted, start, pause, reset } = useTimer();
 
     // 현재 액션 가져오기
-    const actions = useQuery(Action, (actions) => {
-        return actions.filtered('_id == $0', new BSON.ObjectId(actionId));
-    });
-    const currentAction = actions[0];
+    const currentAction = useAction(actionId);
 
     // 액션의 목표 찾기
-    const goals = useQuery(Goal);
-    const currentGoal = goals.find((goal) =>
-        goal.actions.some((action) => action._id.equals(new BSON.ObjectId(actionId)))
-    );
+    const currentGoal = useGoal(actionId);
 
     // 타이머 완료 시 처리
     useEffect(() => {
