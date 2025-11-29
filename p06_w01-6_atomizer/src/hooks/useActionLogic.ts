@@ -45,8 +45,8 @@ export const useActionLogic = () => {
                 return action;
             });
 
-            // AsyncStorage에 현재 액션 ID 저장
-            await AsyncStorage.setItem('current_action_id', newAction._id.toString());
+            // AsyncStorage에 현재 액션 ID 저장 (목표 ID에 따라 고유하게)
+            await AsyncStorage.setItem(`current_action_id_for_${goalId}`, newAction._id.toString());
 
             // 알림 스케줄링
             if (reminderTime.getTime() > Date.now()) {
@@ -73,7 +73,7 @@ export const useActionLogic = () => {
         }
     };
 
-    const completeAction = async (actionId: string, onSuccess?: () => void) => {
+    const completeAction = async (goalId: string, actionId: string, onSuccess?: () => void) => {
         try {
             const action = realm.objectForPrimaryKey(Action, new BSON.ObjectId(actionId));
 
@@ -84,7 +84,7 @@ export const useActionLogic = () => {
                 }
             });
 
-            await AsyncStorage.removeItem('current_action_id');
+            await AsyncStorage.removeItem(`current_action_id_for_${goalId}`);
             await notificationService.cancelNotification(actionId);
 
             if (onSuccess) onSuccess();

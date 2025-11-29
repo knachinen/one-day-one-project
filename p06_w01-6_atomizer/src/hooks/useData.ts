@@ -2,10 +2,10 @@ import { useQuery, useRealm } from '@realm/react';
 import { BSON } from 'realm';
 import { Goal, Action } from '../models';
 
-// 활성 목표 가져오기 (가장 최근 것)
+// 활성 목표 가져오기 (isActive 프로퍼티 기준)
 export const useActiveGoal = () => {
     const goals = useQuery(Goal, (collection) => {
-        return collection.filtered('status == "active"').sorted('createdAt', true);
+        return collection.filtered('isActive == true');
     });
     return goals[0] || null;
 };

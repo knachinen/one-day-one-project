@@ -24,17 +24,25 @@ export const useGoalLogic = () => {
         setError('');
 
         try {
-            const newGoal = realm.write(() => {
-                return realm.create(Goal, {
+            realm.write(() => {
+                // Deactivate all existing goals
+                realm.objects(Goal).forEach(goal => {
+                    if (goal.isActive) {
+                        goal.isActive = false;
+                    }
+                });
+
+                const newGoal = realm.create(Goal, {
                     _id: new BSON.ObjectId(),
                     title: title.trim(),
                     createdAt: new Date(),
                     status: 'active',
+                    isActive: true, // Set the new goal as active
                     actions: [],
                 });
             });
 
-            await AsyncStorage.setItem('current_goal_id', newGoal._id.toString());
+            // await AsyncStorage.setItem('current_goal_id', newGoal._id.toString()); // Removed this line
 
             if (onSuccess) onSuccess();
         } catch (err) {

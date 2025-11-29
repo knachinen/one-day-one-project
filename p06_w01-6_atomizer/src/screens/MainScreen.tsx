@@ -19,11 +19,13 @@ import { useTimer, useAction, useGoal, useActionLogic } from '../hooks';
 
 interface MainScreenProps {
     actionId: string;
+    goalId: string; // Added goalId prop
     onActionCompleted: () => void;
 }
 
 export const MainScreen: React.FC<MainScreenProps> = ({
     actionId,
+    goalId, // Destructure goalId
     onActionCompleted,
 }) => {
     const realm = useRealm();
@@ -33,8 +35,8 @@ export const MainScreen: React.FC<MainScreenProps> = ({
     // 현재 액션 가져오기
     const currentAction = useAction(actionId);
 
-    // 액션의 목표 찾기
-    const currentGoal = useGoal(actionId);
+    // 액션의 목표 찾기 (goalId prop 사용)
+    const currentGoal = useGoal(goalId);
 
     // 타이머 완료 시 처리
     useEffect(() => {
@@ -51,7 +53,7 @@ export const MainScreen: React.FC<MainScreenProps> = ({
         });
 
         try {
-            await completeAction(actionId);
+            await completeAction(goalId, actionId); // Pass goalId here
 
             // 완료 메시지 표시
             Alert.alert(
@@ -67,7 +69,7 @@ export const MainScreen: React.FC<MainScreenProps> = ({
         } catch (err) {
             Alert.alert('오류', '완료 처리에 실패했습니다.');
         }
-    }, [actionId, completeAction, onActionCompleted]);
+    }, [actionId, goalId, completeAction, onActionCompleted]); // Add goalId to dependencies
 
     const handleManualComplete = React.useCallback(() => {
         Alert.alert(
