@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { SafeAreaView, StyleSheet, StatusBar } from 'react-native';
+import { StyleSheet, StatusBar } from 'react-native';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { HomeScreen } from './src/screens/HomeScreen';
 import { PDFScreen } from './src/screens/PDFScreen';
 
@@ -7,14 +8,16 @@ export default function App() {
   const [pdfUri, setPdfUri] = useState<string | null>(null);
 
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="dark-content" />
-      {pdfUri ? (
-        <PDFScreen uri={pdfUri} onBack={() => setPdfUri(null)} />
-      ) : (
-        <HomeScreen onPickDocument={setPdfUri} />
-      )}
-    </SafeAreaView>
+    <SafeAreaProvider>
+      <SafeAreaView style={styles.container}>
+        <StatusBar barStyle="dark-content" />
+        {pdfUri ? (
+          <PDFScreen uri={pdfUri} onBack={() => setPdfUri(null)} />
+        ) : (
+          <HomeScreen onPickDocument={setPdfUri} />
+        )}
+      </SafeAreaView>
+    </SafeAreaProvider>
   );
 }
 
