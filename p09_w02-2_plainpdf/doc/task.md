@@ -1,0 +1,25 @@
+# Plain PDF Project Tasks
+
+- [x] Project Initialization
+    - [x] Initialize Expo project with TypeScript
+    - [x] Install dependencies (`react-native-pdf`, `react-native-svg`, `expo-sqlite`, etc.)
+    - [x] Configure project structure (src/components, src/screens, etc.)
+- [x] PDF Viewer Implementation
+    - [x] Implement Document Picker to load PDF
+    - [x] Integrate PDF Viewer component
+    - [x] Implement basic navigation (swipe, zoom)
+- [/] Annotation System - Core
+    - [/] Create Annotation Overlay Layer
+    - [/] Implement Coordinate Normalization/Denormalization
+- [x] Annotation Tools
+    - [x] Implement Highlight Tool (Transparent View Overlay)
+    - [x] Implement Text Note Tool (Icon + Modal)
+    - [x] Implement Freehand Drawing Tool (SVG Path)
+- [x] Data Persistence
+    - [x] Setup SQLite Database
+    - [x] Implement Annotation Saving (Auto-save)
+    - [x] Implement Annotation Loading
+- [x] Final Polish & Verification
+    - [x] Verify Android/iOS compatibility
+    - [x] Verify Data Persistence
+    - [x] Create Walkthrough
