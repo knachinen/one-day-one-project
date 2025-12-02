@@ -8,27 +8,51 @@ interface AnnotationLayerProps {
     width: number;
     height: number;
     page: number;
+    docId: string;
     activeTool: AnnotationType | null;
     onAddAnnotation: (annotation: Annotation) => void;
     onRequestText: (x: number, y: number) => void;
 }
 
-export const AnnotationLayer: React.FC<AnnotationLayerProps> = ({ annotations, width, height, page, activeTool, onAddAnnotation, onRequestText }) => {
+export const AnnotationLayer: React.FC<AnnotationLayerProps> = ({ annotations, width, height, page, docId, activeTool, onAddAnnotation, onRequestText }) => {
     const [currentPath, setCurrentPath] = useState<string>('');
     const [currentRect, setCurrentRect] = useState<HighlightData | null>(null);
 
+    const activeToolRef = useRef(activeTool);
+    activeToolRef.current = activeTool;
+
+    // Refs to track gesture state without stale closures
+    const currentPathRef = useRef<string>('');
+    const startPointRef = useRef<{ x: number, y: number } | null>(null);
+
+    // Refs for callbacks to avoid stale closures in PanResponder
+    const onAddAnnotationRef = useRef(onAddAnnotation);
+    onAddAnnotationRef.current = onAddAnnotation;
+    const onRequestTextRef = useRef(onRequestText);
+    onRequestTextRef.current = onRequestText;
+
     const panResponder = useRef(
         PanResponder.create({
-            onStartShouldSetPanResponder: () => activeTool !== null,
-            onMoveShouldSetPanResponder: () => activeTool !== null,
+            onStartShouldSetPanResponder: () => {
+                return activeToolRef.current !== null;
+            },
+            onStartShouldSetPanResponderCapture: () => {
+                return activeToolRef.current !== null;
+            },
+            onMoveShouldSetPanResponder: () => activeToolRef.current !== null,
+            onMoveShouldSetPanResponderCapture: () => activeToolRef.current !== null,
             onPanResponderGrant: (evt, gestureState) => {
+                const tool = activeToolRef.current;
                 const { locationX, locationY } = evt.nativeEvent;
                 const x = locationX / width;
                 const y = locationY / height;
 
-                if (activeTool === 'draw') {
-                    setCurrentPath(`M ${locationX} ${locationY}`);
-                } else if (activeTool === 'highlight') {
+                if (tool === 'draw') {
+                    const initialPath = `M ${locationX} ${locationY}`;
+                    currentPathRef.current = initialPath;
+                    setCurrentPath(initialPath);
+                } else if (tool === 'highlight') {
+                    startPointRef.current = { x, y };
                     setCurrentRect({
                         x,
                         y,
@@ -40,63 +64,83 @@ export const AnnotationLayer: React.FC<AnnotationLayerProps> = ({ annotations, w
                 }
             },
             onPanResponderMove: (evt, gestureState) => {
+                // console.log('PanResponder: Move');
+                const tool = activeToolRef.current;
                 const { locationX, locationY } = evt.nativeEvent;
 
-                if (activeTool === 'draw') {
-                    setCurrentPath((prev) => `${prev} L ${locationX} ${locationY}`);
-                } else if (activeTool === 'highlight' && currentRect) {
+                if (tool === 'draw') {
+                    const newPath = `${currentPathRef.current} L ${locationX} ${locationY}`;
+                    currentPathRef.current = newPath;
+                    setCurrentPath(newPath);
+                } else if (tool === 'highlight' && startPointRef.current) {
                     const currentX = locationX / width;
                     const currentY = locationY / height;
-                    setCurrentRect((prev) => {
-                        if (!prev) return null;
-                        return {
-                            ...prev,
-                            width: currentX - prev.x,
-                            height: currentY - prev.y,
-                        };
+                    const startX = startPointRef.current.x;
+                    const startY = startPointRef.current.y;
+
+                    setCurrentRect({
+                        x: startX,
+                        y: startY,
+                        width: currentX - startX,
+                        height: currentY - startY,
+                        color: 'yellow',
+                        opacity: 0.3,
                     });
                 }
             },
+            onPanResponderTerminationRequest: () => false,
+            onShouldBlockNativeResponder: () => true,
             onPanResponderRelease: (evt, gestureState) => {
-                if (activeTool === 'draw') {
+                const tool = activeToolRef.current;
+                if (tool === 'draw') {
                     const newAnnotation: Annotation = {
                         id: Date.now(),
-                        docId: 'temp', // TODO: Pass docId
+                        docId,
                         page,
                         type: 'draw',
                         data: JSON.stringify({
-                            path: currentPath, // Note: Storing absolute path for MVP. Should normalize.
+                            path: currentPathRef.current,
                             color: 'red',
                             strokeWidth: 2,
                         }),
                         timestamp: Date.now(),
                     };
-                    onAddAnnotation(newAnnotation);
+                    onAddAnnotationRef.current(newAnnotation);
                     setCurrentPath('');
-                } else if (activeTool === 'highlight' && currentRect) {
+                    currentPathRef.current = '';
+                } else if (tool === 'highlight' && startPointRef.current) {
+                    const { locationX, locationY } = evt.nativeEvent;
+                    const currentX = locationX / width;
+                    const currentY = locationY / height;
+                    const startX = startPointRef.current.x;
+                    const startY = startPointRef.current.y;
+                    const widthVal = currentX - startX;
+                    const heightVal = currentY - startY;
+
                     // Normalize rect (handle negative width/height)
                     const normalizedRect = {
-                        x: currentRect.width < 0 ? currentRect.x + currentRect.width : currentRect.x,
-                        y: currentRect.height < 0 ? currentRect.y + currentRect.height : currentRect.y,
-                        width: Math.abs(currentRect.width),
-                        height: Math.abs(currentRect.height),
+                        x: widthVal < 0 ? startX + widthVal : startX,
+                        y: heightVal < 0 ? startY + heightVal : startY,
+                        width: Math.abs(widthVal),
+                        height: Math.abs(heightVal),
                         color: 'yellow',
                         opacity: 0.3,
                     };
 
                     const newAnnotation: Annotation = {
                         id: Date.now(),
-                        docId: 'temp',
+                        docId,
                         page,
                         type: 'highlight',
                         data: JSON.stringify(normalizedRect),
                         timestamp: Date.now(),
                     };
-                    onAddAnnotation(newAnnotation);
+                    onAddAnnotationRef.current(newAnnotation);
                     setCurrentRect(null);
-                } else if (activeTool === 'text') {
+                    startPointRef.current = null;
+                } else if (tool === 'text') {
                     const { locationX, locationY } = evt.nativeEvent;
-                    onRequestText(locationX / width, locationY / height);
+                    onRequestTextRef.current(locationX / width, locationY / height);
                 }
             },
         })
@@ -105,7 +149,6 @@ export const AnnotationLayer: React.FC<AnnotationLayerProps> = ({ annotations, w
     return (
         <View
             style={[styles.container, { width, height }]}
-            pointerEvents={activeTool ? 'auto' : 'none'}
             {...panResponder.panHandlers}
         >
             <Svg height={height} width={width} style={StyleSheet.absoluteFill}>
@@ -174,5 +217,6 @@ const styles = StyleSheet.create({
         top: 0,
         left: 0,
         zIndex: 10,
+        elevation: 10, // Required for Android to receive touches over native views
     },
 });

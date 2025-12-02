@@ -23,9 +23,10 @@ export const PDFScreen: React.FC<PDFScreenProps> = ({ uri, onBack }) => {
     const [pendingTextAnnotation, setPendingTextAnnotation] = useState<{ page: number, x: number, y: number } | null>(null);
 
     React.useEffect(() => {
-        console.log('PDFScreen mounted with URI:', uri);
+        console.log('PDFScreen: Loading annotations for URI:', uri);
         initDatabase();
         const loaded = getAnnotations(uri);
+        console.log('PDFScreen: Loaded annotations:', loaded);
         setAnnotations(loaded);
     }, [uri]);
 
@@ -38,6 +39,7 @@ export const PDFScreen: React.FC<PDFScreenProps> = ({ uri, onBack }) => {
             return;
         }
         const newAnnotations = [...annotations, annotation];
+        console.log('PDFScreen: Adding annotation, new count:', newAnnotations.length);
         setAnnotations(newAnnotations);
         saveAnnotation(annotation);
     };
@@ -91,46 +93,27 @@ export const PDFScreen: React.FC<PDFScreenProps> = ({ uri, onBack }) => {
                 </TouchableOpacity>
             </View>
 
-            {/* Debugging: Try to render simple PDF first */}
-            <Pdf
-                source={{ uri, cache: true }}
-                onLoadComplete={(numberOfPages, filePath, { width, height }) => {
-                    console.log(`Simple PDF Loaded: pages=${numberOfPages}`);
-                }}
-                onPageChanged={(page, numberOfPages) => {
-                    console.log(`Current page: ${page}`);
-                }}
-                onError={(error) => {
-                    console.log('Simple PDF Error:', error);
-                }}
-                onPressLink={(uri) => {
-                    console.log(`Link pressed: ${uri}`);
-                }}
-                style={styles.pdf}
-                trustAllCerts={false}
-            />
-
-            {/* 
+            {/* Pre-loader: Render standard PDF to get dimensions/page count */}
             {!isReady && (
-                <View style={{ position: 'absolute', top: 0, left: 0, width: Dimensions.get('window').width, height: Dimensions.get('window').height, zIndex: -1, opacity: 0.1 }}>
-                    <Pdf
-                        source={{ uri: 'http://samples.leanpub.com/thereactnativebook-sample.pdf', cache: true }}
-                        onLoadComplete={(numberOfPages, filePath, { width, height }) => {
-                            console.log(`PDF Loaded: pages=${numberOfPages}, width=${width}, height=${height}`);
-                            setTotalPages(numberOfPages);
-                            // Calculate height based on screen width to maintain aspect ratio
-                            const scale = Dimensions.get('window').width / width;
-                            setPageWidth(Dimensions.get('window').width);
-                            setPageHeight(height * scale);
-                            setIsReady(true);
-                        }}
-                        onError={(error) => {
-                            console.log('PDF Error:', error);
-                        }}
-                    />
-                </View>
+                <Pdf
+                    source={{ uri, cache: true }}
+                    onLoadComplete={(numberOfPages, filePath, { width, height }) => {
+                        setTotalPages(numberOfPages);
+                        // Calculate height based on screen width to maintain aspect ratio
+                        const scale = Dimensions.get('window').width / width;
+                        setPageWidth(Dimensions.get('window').width);
+                        setPageHeight(height * scale);
+                        setIsReady(true);
+                    }}
+                    onError={(error) => {
+                        // console.log('Pre-loader Error:', error);
+                    }}
+                    style={styles.pdf}
+                    trustAllCerts={false}
+                />
             )}
 
+            {/* Custom Paging List for Annotations */}
             {isReady && (
                 <FlatList
                     data={Array.from({ length: totalPages }, (_, i) => i + 1)}
@@ -140,9 +123,9 @@ export const PDFScreen: React.FC<PDFScreenProps> = ({ uri, onBack }) => {
                     initialNumToRender={2}
                     maxToRenderPerBatch={2}
                     scrollEnabled={activeTool === null}
+                    extraData={[activeTool, annotations]}
                 />
             )}
-            */}
             <Toolbar activeTool={activeTool} onSelectTool={setActiveTool} />
             <TextInputModal
                 visible={isModalVisible}
@@ -166,6 +149,9 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         borderBottomColor: '#ddd',
         paddingTop: 10,
+    },
+    backButton: {
+        padding: 10,
     },
     backButtonText: {
         color: '#007AFF',

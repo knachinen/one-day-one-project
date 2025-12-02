@@ -30,6 +30,7 @@ export const PDFPage: React.FC<PDFPageProps> = ({ uri, page, width, height, anno
                 width={width}
                 height={height}
                 page={page}
+                docId={uri}
                 activeTool={activeTool}
                 onAddAnnotation={onAddAnnotation}
                 onRequestText={onRequestText}
