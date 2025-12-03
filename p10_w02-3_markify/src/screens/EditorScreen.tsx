@@ -5,6 +5,7 @@ import * as Clipboard from 'expo-clipboard';
 import { RouteProp, useRoute, useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '../types/navigation';
 import { useStore } from '../store/useStore';
+import Markdown from 'react-native-markdown-display';
 
 type EditorScreenRouteProp = RouteProp<RootStackParamList, 'Editor'>;
 
@@ -13,6 +14,7 @@ export default function EditorScreen() {
     const route = useRoute<EditorScreenRouteProp>();
     const { title, content: initialContent } = route.params;
     const [content, setContent] = useState(initialContent);
+    const [isPreview, setIsPreview] = useState(false);
     const addNote = useStore((state) => state.addNote);
 
     const handleSave = () => {
@@ -50,14 +52,30 @@ export default function EditorScreen() {
                 <Button title="Share" onPress={handleShare} />
                 <Button title="Save" onPress={handleSave} />
             </View>
-            <ScrollView style={styles.scrollView}>
-                <TextInput
-                    style={styles.editor}
-                    multiline
-                    value={content}
-                    onChangeText={setContent}
-                    textAlignVertical="top"
+            <View style={styles.toggleContainer}>
+                <Button
+                    title="Edit"
+                    onPress={() => setIsPreview(false)}
+                    color={!isPreview ? theme.colors.primary : '#999'}
                 />
+                <Button
+                    title="Preview"
+                    onPress={() => setIsPreview(true)}
+                    color={isPreview ? theme.colors.primary : '#999'}
+                />
+            </View>
+            <ScrollView style={styles.scrollView}>
+                {isPreview ? (
+                    <Markdown style={markdownStyles}>{content}</Markdown>
+                ) : (
+                    <TextInput
+                        style={styles.editor}
+                        multiline
+                        value={content}
+                        onChangeText={setContent}
+                        textAlignVertical="top"
+                    />
+                )}
             </ScrollView>
         </View>
     );
@@ -92,4 +110,50 @@ const styles = StyleSheet.create({
         color: theme.colors.text,
         textAlignVertical: 'top',
     },
+    toggleContainer: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        gap: theme.spacing.m,
+        marginBottom: theme.spacing.m,
+    },
 });
+
+const markdownStyles = {
+    body: {
+        color: theme.colors.text,
+        fontSize: theme.textVariants.body.fontSize,
+    },
+    heading1: {
+        fontSize: 28,
+        fontWeight: 'bold',
+        marginTop: 20,
+        marginBottom: 10,
+    },
+    heading2: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        marginTop: 16,
+        marginBottom: 8,
+    },
+    heading3: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginTop: 12,
+        marginBottom: 6,
+    },
+    code_inline: {
+        backgroundColor: '#f0f0f0',
+        padding: 2,
+        borderRadius: 4,
+        fontFamily: 'monospace',
+    },
+    code_block: {
+        backgroundColor: '#f0f0f0',
+        padding: 10,
+        borderRadius: 4,
+        fontFamily: 'monospace',
+    },
+    link: {
+        color: '#0066cc',
+    },
+};
