@@ -23,7 +23,7 @@ export default function EditorScreen() {
     const route = useRoute<EditorScreenRouteProp>();
     const { title, content: initialContent } = route.params;
     const [content, setContent] = useState(initialContent);
-    const [isPreview, setIsPreview] = useState(false);
+    const [isPreview, setIsPreview] = useState(true);
     const [isMenuVisible, setIsMenuVisible] = useState(false);
     const addNote = useStore((state) => state.addNote);
 
