@@ -1,59 +1,30 @@
-import React from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, Alert } from 'react-native';
-import { theme } from '../constants/theme';
-import { useStore } from '../store/useStore';
-import { useNavigation } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParamList } from '../types/navigation';
-import { Note } from '../types/note';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function HistoryScreen() {
-    const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
-    const notes = useStore((state) => state.notes);
-    const deleteNote = useStore((state) => state.deleteNote);
-
-    const handlePress = (note: Note) => {
-        navigation.navigate('Editor', { title: note.title, content: note.content });
-    };
-
-    const handleDelete = (id: string) => {
-        Alert.alert('Delete Note', 'Are you sure?', [
-            { text: 'Cancel', style: 'cancel' },
-            { text: 'Delete', style: 'destructive', onPress: () => deleteNote(id) },
-        ]);
-    };
-
-    const renderItem = ({ item }: { item: Note }) => (
-        <TouchableOpacity
-            style={styles.item}
-            onPress={() => handlePress(item)}
-            onLongPress={() => handleDelete(item.id)}
-        >
-            <Text style={styles.itemTitle} numberOfLines={1}>
-                {item.title}
-            </Text>
-            <Text style={styles.itemDate}>
-                {new Date(item.createdAt).toLocaleDateString()}
-            </Text>
-        </TouchableOpacity>
-    );
+    // ... existing code ...
 
     return (
-        <View style={styles.container}>
-            <Text style={styles.title}>History</Text>
-            <FlatList
-                data={notes}
-                keyExtractor={(item) => item.id}
-                renderItem={renderItem}
-                contentContainerStyle={styles.listContent}
-                ListEmptyComponent={<Text style={styles.emptyText}>No saved notes</Text>}
-            />
-        </View>
+        <SafeAreaView style={styles.safeArea}>
+            <View style={styles.contentContainer}>
+                <Text style={styles.title}>History</Text>
+                <FlatList
+                    data={notes}
+                    keyExtractor={(item) => item.id}
+                    renderItem={renderItem}
+                    contentContainerStyle={styles.flatListContent} // Use flatListContent here
+                    ListEmptyComponent={<Text style={styles.emptyText}>No saved notes</Text>}
+                />
+            </View>
+        </SafeAreaView>
     );
 }
 
 const styles = StyleSheet.create({
-    container: {
+    safeArea: {
+        flex: 1,
+        backgroundColor: theme.colors.background,
+    },
+    contentContainer: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
@@ -66,7 +37,9 @@ const styles = StyleSheet.create({
         color: theme.colors.text,
         marginBottom: theme.spacing.m,
     },
-    listContent: {
+    flatListContent: { // New style for FlatList content
+        flexGrow: 1, // Allow content to grow
+        width: '100%', // Ensure it takes full width
         paddingBottom: theme.spacing.xl,
     },
     item: {
@@ -76,6 +49,7 @@ const styles = StyleSheet.create({
         marginBottom: theme.spacing.s,
         borderWidth: 1,
         borderColor: theme.colors.border,
+        width: '100%', // Ensure items take full width of their container
     },
     itemTitle: {
         fontSize: 18,
