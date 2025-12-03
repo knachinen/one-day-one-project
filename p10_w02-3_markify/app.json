@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "p10_w02-3_markify",
+    "name": "Markify",
     "slug": "p10_w02-3_markify",
     "version": "1.0.0",
     "scheme": "markify",
@@ -38,10 +38,7 @@
           "iosActivationRules": {
             "NSExtensionActivationSupportsWebURLWithMaxCount": 1
           },
-          "androidIntentFilters": [
-            "text/plain",
-            "text/*"
-          ]
+          "androidIntentFilters": ["text/plain", "text/*"]
         }
       ]
     ]
