@@ -1,8 +1,43 @@
+import React from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, Alert } from 'react-native';
+import { theme } from '../constants/theme';
+import { useStore } from '../store/useStore';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from '../types/navigation';
+import { Note } from '../types/note';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function HistoryScreen() {
-    // ... existing code ...
+    const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+    const notes = useStore((state) => state.notes);
+    const deleteNote = useStore((state) => state.deleteNote);
+
+    const handlePress = (note: Note) => {
+        navigation.navigate('Editor', { title: note.title, content: note.content });
+    };
+
+    const handleDelete = (id: string) => {
+        Alert.alert('Delete Note', 'Are you sure?', [
+            { text: 'Cancel', style: 'cancel' },
+            { text: 'Delete', style: 'destructive', onPress: () => deleteNote(id) },
+        ]);
+    };
+
+    const renderItem = ({ item }: { item: Note }) => (
+        <TouchableOpacity
+            style={styles.item}
+            onPress={() => handlePress(item)}
+            onLongPress={() => handleDelete(item.id)}
+        >
+            <Text style={styles.itemTitle} numberOfLines={1}>
+                {item.title}
+            </Text>
+            <Text style={styles.itemDate}>
+                {new Date(item.createdAt).toLocaleDateString()}
+            </Text>
+        </TouchableOpacity>
+    );
 
     return (
         <SafeAreaView style={styles.safeArea}>
@@ -12,7 +47,7 @@ export default function HistoryScreen() {
                     data={notes}
                     keyExtractor={(item) => item.id}
                     renderItem={renderItem}
-                    contentContainerStyle={styles.flatListContent} // Use flatListContent here
+                    contentContainerStyle={styles.flatListContent}
                     ListEmptyComponent={<Text style={styles.emptyText}>No saved notes</Text>}
                 />
             </View>
@@ -38,9 +73,9 @@ const styles = StyleSheet.create({
         color: theme.colors.text,
         marginBottom: theme.spacing.m,
     },
-    flatListContent: { // New style for FlatList content
-        flexGrow: 1, // Allow content to grow
-        width: '100%', // Ensure it takes full width
+    flatListContent: {
+        flexGrow: 1,
+        width: '100%',
         paddingBottom: theme.spacing.xl,
     },
     item: {
@@ -50,7 +85,7 @@ const styles = StyleSheet.create({
         marginBottom: theme.spacing.s,
         borderWidth: 1,
         borderColor: theme.colors.border,
-        width: '100%', // Ensure items take full width of their container
+        width: '100%',
     },
     itemTitle: {
         fontSize: 18,
