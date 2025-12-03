@@ -16,6 +16,7 @@
     "domino": "^2.1.6",
     "expo": "~54.0.25",
     "expo-clipboard": "^8.0.7",
+    "expo-share-intent": "^5.1.0",
     "expo-sharing": "^14.0.7",
     "expo-status-bar": "~3.0.8",
     "lucide-react-native": "^0.555.0",
