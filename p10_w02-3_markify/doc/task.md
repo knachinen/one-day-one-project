@@ -30,3 +30,9 @@
 - [x] **Verification & Polish** <!-- id: 22 -->
     - [x] Verify all MVP requirements <!-- id: 23 -->
     - [x] UI Polish (Loading states, Error messages) <!-- id: 24 -->
+
+- [x] **Bug Fixes** <!-- id: 25 -->
+    - [x] Fix Turndown "document is not defined" error (Polyfill DOM with domino) <!-- id: 26 -->
+    - [x] Remove script/style tags from output <!-- id: 27 -->
+    - [x] Fix Axios Network Error (Cleartext traffic / User-Agent) <!-- id: 28 -->
+    - [x] Add HTML text input as alternative to URL <!-- id: 29 -->
