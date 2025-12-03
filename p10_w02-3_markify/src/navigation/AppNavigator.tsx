@@ -1,7 +1,6 @@
 import React, { createRef } from 'react';
 import { NavigationContainer, NavigationContainerRef } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import HomeScreen from '../screens/HomeScreen';
 import HistoryScreen from '../screens/HistoryScreen';
 import EditorScreen from '../screens/EditorScreen';
 import BookmarkletScreen from '../screens/BookmarkletScreen';
@@ -21,8 +20,7 @@ export function navigate(name: keyof RootStackParamList, params?: any) {
 export default function AppNavigator() {
     return (
         <NavigationContainer ref={navigationRef}>
-            <Stack.Navigator initialRouteName="Home">
-                <Stack.Screen name="Home" component={HomeScreen} />
+            <Stack.Navigator initialRouteName="History">
                 <Stack.Screen name="History" component={HistoryScreen} />
                 <Stack.Screen name="Editor" component={EditorScreen} />
                 <Stack.Screen name="Bookmarklet" component={BookmarkletScreen} options={{ title: '북마클릿 설정' }} />
