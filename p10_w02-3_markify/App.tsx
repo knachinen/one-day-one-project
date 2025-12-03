@@ -6,6 +6,7 @@ import { useShareIntent } from 'expo-share-intent';
 import { Alert } from 'react-native';
 import * as Linking from 'expo-linking';
 import { convertToMarkdown } from './src/utils/converter';
+import { navigate } from './src/navigation/AppNavigator';
 
 export default function App() {
   const { hasShareIntent, shareIntent, resetShareIntent, error } = useShareIntent();
@@ -49,34 +50,53 @@ export default function App() {
   // Handle deep link from bookmarklet
   useEffect(() => {
     const handleDeepLink = (event: { url: string }) => {
-      const { queryParams } = Linking.parse(event.url);
+      console.log('Deep Link Received:', event.url);
 
-      if (queryParams?.html) {
-        const html = decodeURIComponent(queryParams.html as string);
-        console.log('Received HTML from bookmarklet, length:', html.length);
+      // Manual URL parsing for better reliability
+      try {
+        const url = event.url;
 
-        try {
-          const titleMatch = html.match(/<title>(.*?)<\/title>/i);
-          const title = titleMatch ? titleMatch[1] : 'Bookmarklet Content';
-          const markdown = convertToMarkdown(html);
+        // Check if it's a convert URL
+        if (url.includes('markify://convert?html=')) {
+          // Extract HTML parameter manually
+          const htmlStart = url.indexOf('html=') + 5;
+          const encodedHtml = url.substring(htmlStart);
+          const html = decodeURIComponent(encodedHtml);
 
-          Alert.alert(
-            'HTML Received',
-            `Title: ${title}\nHTML Length: ${html.length}\n\nConverted to Markdown!`,
-            [
-              {
-                text: 'OK',
-                onPress: () => {
-                  // TODO: Navigate to Editor with markdown
-                  console.log('Markdown length:', markdown.length);
+          console.log('Received HTML from bookmarklet, length:', html.length);
+
+          try {
+            const titleMatch = html.match(/<title>(.*?)<\/title>/i);
+            const title = titleMatch ? titleMatch[1] : 'Bookmarklet Content';
+            const markdown = convertToMarkdown(html);
+
+            Alert.alert(
+              'HTML Received',
+              `Title: ${title}\nHTML Length: ${html.length}\n\nConverted to Markdown!`,
+              [
+                {
+                  text: 'View',
+                  onPress: () => {
+                    console.log('Navigating to Editor with markdown length:', markdown.length);
+                    // Navigate to Editor with converted markdown
+                    setTimeout(() => {
+                      navigate('Editor', { title, content: markdown });
+                    }, 100);
+                  },
                 },
-              },
-            ]
-          );
-        } catch (error) {
-          console.error('Conversion error:', error);
-          Alert.alert('Error', 'Failed to convert HTML to Markdown');
+                {
+                  text: 'Cancel',
+                  style: 'cancel',
+                },
+              ]
+            );
+          } catch (error) {
+            console.error('Conversion error:', error);
+            Alert.alert('Error', 'Failed to convert HTML to Markdown');
+          }
         }
+      } catch (error) {
+        console.error('Deep link parsing error:', error);
       }
     };
 
@@ -85,6 +105,7 @@ export default function App() {
 
     // Handle initial URL if app was opened via deep link
     Linking.getInitialURL().then((url) => {
+      console.log('Initial URL:', url);
       if (url) {
         handleDeepLink({ url });
       }

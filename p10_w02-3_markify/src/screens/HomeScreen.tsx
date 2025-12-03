@@ -95,6 +95,8 @@ export default function HomeScreen() {
 
             <View style={styles.spacer} />
             <Button title="Go to History" onPress={() => navigation.navigate('History')} />
+            <View style={styles.smallSpacer} />
+            <Button title="북마클릿 설정" onPress={() => navigation.navigate('Bookmarklet')} color="#666" />
         </View>
     );
 }
@@ -124,6 +126,9 @@ const styles = StyleSheet.create({
     },
     spacer: {
         height: theme.spacing.xl,
+    },
+    smallSpacer: {
+        height: theme.spacing.s,
     },
     toggleContainer: {
         flexDirection: 'row',
