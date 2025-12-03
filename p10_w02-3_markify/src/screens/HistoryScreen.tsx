@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, Alert, Modal, TouchableWithoutFeedback, Platform } from 'react-native';
 import { theme } from '../constants/theme';
 import { useStore } from '../store/useStore';
@@ -7,13 +7,34 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../types/navigation';
 import { Note } from '../types/note';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { SettingsIcon } from 'lucide-react-native'; // Assuming SettingsIcon exists, or use MenuIcon
+import { SettingsIcon } from 'lucide-react-native';
+
+// Custom Header Settings Button
+const HeaderSettingsButton = ({ toggleMenu, color }: { toggleMenu: () => void; color: string }) => (
+    <TouchableOpacity onPress={toggleMenu} style={{ paddingHorizontal: theme.spacing.m }}>
+        <SettingsIcon size={24} color={color} />
+    </TouchableOpacity>
+);
 
 export default function HistoryScreen() {
     const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
     const notes = useStore((state) => state.notes);
     const deleteNote = useStore((state) => state.deleteNote);
-    const [isMenuVisible, setIsMenuVisible] = useState(false); // State for menu visibility
+    const [isMenuVisible, setIsMenuVisible] = useState(false);
+
+    // Toggle menu visibility
+    const toggleMenu = useCallback(() => {
+        setIsMenuVisible(prev => !prev);
+    }, []);
+
+    // Set header options
+    useEffect(() => {
+        navigation.setOptions({
+            headerRight: () => <HeaderSettingsButton toggleMenu={toggleMenu} color={theme.colors.text} />,
+            headerTitle: 'Notes', // Use the screen's title as the header title
+        });
+    }, [navigation, toggleMenu]);
+
 
     const handlePress = (note: Note) => {
         navigation.navigate('Editor', { title: note.title, content: note.content });
@@ -44,12 +65,7 @@ export default function HistoryScreen() {
     return (
         <SafeAreaView style={styles.safeArea}>
             <View style={styles.contentContainer}>
-                <View style={styles.headerContainer}>
-                    <Text style={styles.title}>Notes</Text>
-                    <TouchableOpacity onPress={() => setIsMenuVisible(true)} style={styles.settingsButton}>
-                        <SettingsIcon size={24} color={theme.colors.text} />
-                    </TouchableOpacity>
-                </View>
+                {/* Removed in-content headerContainer */}
                 <FlatList
                     data={notes}
                     keyExtractor={(item) => item.id}
@@ -98,22 +114,21 @@ const styles = StyleSheet.create({
         backgroundColor: theme.colors.background,
         padding: theme.spacing.m,
     },
-    headerContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        width: '100%',
-        marginBottom: theme.spacing.m,
-        paddingHorizontal: theme.spacing.m, // Added for spacing
-    },
-    title: {
-        fontSize: theme.textVariants.header.fontSize,
-        fontWeight: 'bold',
-        color: theme.colors.text,
-    },
-    settingsButton: {
-        padding: theme.spacing.s,
-    },
+    // Removed headerContainer and its contents
+    // headerContainer: {
+    //     flexDirection: 'row',
+    //     justifyContent: 'space-between',
+    //     alignItems: 'center',
+    //     width: '100%',
+    //     marginBottom: theme.spacing.m,
+    //     paddingHorizontal: theme.spacing.m, // Added for spacing
+    // },
+    // title: {
+    //     fontSize: theme.textVariants.header.fontSize,
+    //     fontWeight: 'bold',
+    //     color: theme.colors.text,
+    // },
+    // Removed settingsButton
     flatListContent: {
         flexGrow: 1,
         width: '100%',
