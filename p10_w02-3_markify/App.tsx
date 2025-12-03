@@ -3,10 +3,15 @@ import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import AppNavigator from './src/navigation/AppNavigator';
 import { useShareIntent } from 'expo-share-intent';
-import { Alert } from 'react-native';
+import { Alert, LogBox } from 'react-native';
 import * as Linking from 'expo-linking';
 import { convertToMarkdown } from './src/utils/converter';
 import { navigate } from './src/navigation/AppNavigator';
+
+// Suppress known warnings from react-native-markdown-display
+LogBox.ignoreLogs([
+  'A props object containing a "key" prop is being spread into JSX',
+]);
 
 export default function App() {
   const { hasShareIntent, shareIntent, resetShareIntent, error } = useShareIntent();

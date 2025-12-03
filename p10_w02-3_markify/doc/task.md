@@ -36,3 +36,19 @@
     - [x] Remove script/style tags from output <!-- id: 27 -->
     - [x] Fix Axios Network Error (Cleartext traffic / User-Agent) <!-- id: 28 -->
     - [x] Add HTML text input as alternative to URL <!-- id: 29 -->
+
+- [x] **Share Extension** <!-- id: 30 -->
+    - [x] Research Share Extension implementation in Expo <!-- id: 31 -->
+    - [x] Install and configure expo-share-intent <!-- id: 32 -->
+    - [x] Handle shared URL in app (basic implementation) <!-- id: 33 -->
+    - [ ] Complete navigation integration (requires EAS Build to test) <!-- id: 34 -->
+
+- [x] **Bookmarklet Feature** <!-- id: 35 -->
+    - [x] Implement deep link handling for HTML <!-- id: 36 -->
+    - [x] Create bookmarklet code <!-- id: 37 -->
+    - [x] Document bookmarklet usage <!-- id: 38 -->
+    - [x] Connect navigation to Editor screen <!-- id: 39 -->
+
+- [x] **Markdown Preview** <!-- id: 40 -->
+    - [x] Install react-native-markdown-display <!-- id: 41 -->
+    - [x] Add Edit/Preview toggle to EditorScreen <!-- id: 42 -->
