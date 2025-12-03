@@ -23,6 +23,14 @@ export const convertToMarkdown = (html: string): string => {
     try {
         const window = domino.createWindow(html);
         const document = window.document;
+
+        // Remove unwanted tags
+        const unwantedTags = ['script', 'style', 'noscript', 'iframe', 'svg'];
+        unwantedTags.forEach(tag => {
+            const elements = document.querySelectorAll(tag);
+            Array.from(elements).forEach((el: any) => el.parentNode.removeChild(el));
+        });
+
         return turndownService.turndown(document);
     } catch (error) {
         console.error('Error converting to Markdown:', error);

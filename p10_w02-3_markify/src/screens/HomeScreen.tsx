@@ -2,29 +2,50 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, Button, TextInput, ActivityIndicator, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { theme } from '../constants/theme';
-import { processUrl } from '../utils/converter';
+import { processUrl, convertToMarkdown } from '../utils/converter';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../types/navigation';
 
 export default function HomeScreen() {
     const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+    const [inputMode, setInputMode] = useState<'url' | 'html'>('url');
     const [url, setUrl] = useState('');
+    const [htmlText, setHtmlText] = useState('');
     const [loading, setLoading] = useState(false);
 
     const handleConvert = async () => {
-        if (!url) {
-            Alert.alert('Error', 'Please enter a URL');
-            return;
-        }
+        if (inputMode === 'url') {
+            if (!url) {
+                Alert.alert('Error', 'Please enter a URL');
+                return;
+            }
 
-        setLoading(true);
-        try {
-            const { title, content } = await processUrl(url);
-            navigation.navigate('Editor', { title, content });
-        } catch (error) {
-            Alert.alert('Error', 'Failed to convert URL');
-        } finally {
-            setLoading(false);
+            setLoading(true);
+            try {
+                const { title, content } = await processUrl(url);
+                navigation.navigate('Editor', { title, content });
+            } catch (error) {
+                Alert.alert('Error', 'Failed to convert URL. Try using HTML text mode instead.');
+            } finally {
+                setLoading(false);
+            }
+        } else {
+            if (!htmlText) {
+                Alert.alert('Error', 'Please paste HTML content');
+                return;
+            }
+
+            setLoading(true);
+            try {
+                const titleMatch = htmlText.match(/<title>(.*?)<\/title>/i);
+                const title = titleMatch ? titleMatch[1] : 'Pasted Content';
+                const content = convertToMarkdown(htmlText);
+                navigation.navigate('Editor', { title, content });
+            } catch (error) {
+                Alert.alert('Error', 'Failed to convert HTML');
+            } finally {
+                setLoading(false);
+            }
         }
     };
 
@@ -32,14 +53,39 @@ export default function HomeScreen() {
         <View style={styles.container}>
             <Text style={styles.title}>Markify</Text>
 
-            <TextInput
-                style={styles.input}
-                placeholder="Enter URL to convert"
-                value={url}
-                onChangeText={setUrl}
-                autoCapitalize="none"
-                autoCorrect={false}
-            />
+            <View style={styles.toggleContainer}>
+                <Button
+                    title="URL"
+                    onPress={() => setInputMode('url')}
+                    color={inputMode === 'url' ? theme.colors.primary : '#999'}
+                />
+                <Button
+                    title="HTML Text"
+                    onPress={() => setInputMode('html')}
+                    color={inputMode === 'html' ? theme.colors.primary : '#999'}
+                />
+            </View>
+
+            {inputMode === 'url' ? (
+                <TextInput
+                    style={styles.input}
+                    placeholder="Enter URL to convert"
+                    value={url}
+                    onChangeText={setUrl}
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                />
+            ) : (
+                <TextInput
+                    style={[styles.input, styles.htmlInput]}
+                    placeholder="Paste HTML content here"
+                    value={htmlText}
+                    onChangeText={setHtmlText}
+                    multiline
+                    numberOfLines={6}
+                    textAlignVertical="top"
+                />
+            )}
 
             {loading ? (
                 <ActivityIndicator size="large" color={theme.colors.primary} />
@@ -78,5 +124,14 @@ const styles = StyleSheet.create({
     },
     spacer: {
         height: theme.spacing.xl,
+    },
+    toggleContainer: {
+        flexDirection: 'row',
+        gap: theme.spacing.m,
+        marginBottom: theme.spacing.m,
+    },
+    htmlInput: {
+        height: 150,
+        paddingTop: theme.spacing.m,
     },
 });
