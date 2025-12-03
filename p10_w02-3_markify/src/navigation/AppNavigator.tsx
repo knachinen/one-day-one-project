@@ -20,8 +20,8 @@ export function navigate(name: keyof RootStackParamList, params?: any) {
 export default function AppNavigator() {
     return (
         <NavigationContainer ref={navigationRef}>
-            <Stack.Navigator initialRouteName="History">
-                <Stack.Screen name="History" component={HistoryScreen} />
+            <Stack.Navigator initialRouteName="Notes">
+                <Stack.Screen name="Notes" component={HistoryScreen} />
                 <Stack.Screen name="Editor" component={EditorScreen} />
                 <Stack.Screen name="Bookmarklet" component={BookmarkletScreen} options={{ title: '북마클릿 설정' }} />
             </Stack.Navigator>

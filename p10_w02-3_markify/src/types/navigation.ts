@@ -1,5 +1,5 @@
 export type RootStackParamList = {
-    History: undefined;
+    Notes: undefined;
     Editor: { title: string; content: string };
     Bookmarklet: undefined;
 };
