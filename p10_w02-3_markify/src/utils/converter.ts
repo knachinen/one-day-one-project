@@ -1,5 +1,6 @@
 import axios from 'axios';
 import TurndownService from 'turndown';
+const domino = require('domino');
 
 const turndownService = new TurndownService();
 
@@ -20,7 +21,9 @@ export const fetchHtml = async (url: string): Promise<string> => {
 
 export const convertToMarkdown = (html: string): string => {
     try {
-        return turndownService.turndown(html);
+        const window = domino.createWindow(html);
+        const document = window.document;
+        return turndownService.turndown(document);
     } catch (error) {
         console.error('Error converting to Markdown:', error);
         throw new Error('Failed to convert HTML to Markdown.');
