@@ -8,9 +8,42 @@ export const getMapHtml = (initialLat: number, initialLon: number) => `
     <style>
         body { margin: 0; padding: 0; }
         #map { width: 100%; height: 100vh; }
+        .crosshair {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 40px;
+            height: 40px;
+            margin-left: -20px;
+            margin-top: -20px;
+            pointer-events: none;
+            z-index: 1000;
+        }
+        .crosshair::before,
+        .crosshair::after {
+            content: '';
+            position: absolute;
+            background-color: #FF5722;
+        }
+        .crosshair::before {
+            left: 50%;
+            top: 0;
+            width: 2px;
+            height: 100%;
+            margin-left: -1px;
+        }
+        .crosshair::after {
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            margin-top: -1px;
+        }
+
     </style>
 </head>
 <body>
+    <div class="crosshair"></div>
     <div id="map"></div>
     <script>
         var map = L.map('map').setView([${initialLat}, ${initialLon}], 15);
@@ -68,6 +101,17 @@ function log(msg) {
         window.ReactNativeWebView.postMessage(JSON.stringify({ type: 'LOG', payload: msg }));
     }
 }
+
+// Send map center to React Native when map moves
+map.on('moveend', function() {
+    var center = map.getCenter();
+    if (window.ReactNativeWebView) {
+        window.ReactNativeWebView.postMessage(JSON.stringify({
+            type: 'MAP_CENTER_CHANGED',
+            payload: { lat: center.lat, lon: center.lng }
+        }));
+    }
+});
 
 function handleMessage(event) {
     try {

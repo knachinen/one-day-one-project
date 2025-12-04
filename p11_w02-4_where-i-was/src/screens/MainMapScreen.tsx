@@ -22,6 +22,7 @@ export default function MainMapScreen({ navigation }: Props) {
   console.log('[Map] Rendering MainMapScreen');
   const [location, setLocation] = useState<Location.LocationObject | null>(null);
   const [history, setHistory] = useState<LocationRecord[]>([]);
+  const [mapCenter, setMapCenter] = useState<{ lat: number; lon: number } | null>(null);
   const webViewRef = useRef<WebView>(null);
 
   const fetchHistory = async () => {
@@ -66,6 +67,7 @@ export default function MainMapScreen({ navigation }: Props) {
         let location = await Location.getCurrentPositionAsync({});
         console.log('[Map] Got location:', location.coords.latitude, location.coords.longitude);
         setLocation(location);
+        setMapCenter({ lat: location.coords.latitude, lon: location.coords.longitude });
       } catch (e) {
         console.error('[Map] Error in location setup:', e);
       }
@@ -113,14 +115,14 @@ export default function MainMapScreen({ navigation }: Props) {
   };
 
   const handleSaveLocation = async () => {
-    if (!location) {
-      Alert.alert('Location not found', 'Please wait for location to be detected.');
+    if (!mapCenter) {
+      Alert.alert('Location not found', 'Please wait for the map to load.');
       return;
     }
 
     try {
-      const lat = location.coords.latitude;
-      const lon = location.coords.longitude;
+      const lat = mapCenter.lat;
+      const lon = mapCenter.lon;
       const placeName = await getPlaceName(lat, lon);
       const id = Crypto.randomUUID();
 
@@ -159,6 +161,9 @@ export default function MainMapScreen({ navigation }: Props) {
             const data = JSON.parse(event.nativeEvent.data);
             if (data.type === 'LOG') {
               console.log('[WebView]', data.payload);
+            } else if (data.type === 'MAP_CENTER_CHANGED') {
+              setMapCenter(data.payload);
+              console.log('[Map] Center changed to:', data.payload.lat, data.payload.lon);
             }
           } catch (e) {
             console.log('[WebView] Raw message:', event.nativeEvent.data);
@@ -167,21 +172,14 @@ export default function MainMapScreen({ navigation }: Props) {
       />
 
       <View style={styles.buttonContainer}>
-        <Button title="Save" onPress={handleSaveLocation} />
+        <Button title="Save This Location" onPress={handleSaveLocation} />
         <Button title="History" onPress={() => navigation.navigate('LocationList')} />
-        <Button title="Resend" onPress={() => {
-          console.log('[Map] Resending data to WebView');
-          if (webViewRef.current) {
+        <Button title="My Location" onPress={() => {
+          if (location && webViewRef.current) {
             webViewRef.current.postMessage(JSON.stringify({
-              type: 'SET_HISTORY',
-              payload: history
+              type: 'CENTER_MAP',
+              payload: { lat: location.coords.latitude, lon: location.coords.longitude }
             }));
-            if (location) {
-              webViewRef.current.postMessage(JSON.stringify({
-                type: 'UPDATE_USER_LOCATION',
-                payload: { lat: location.coords.latitude, lon: location.coords.longitude }
-              }));
-            }
           }
         }} />
       </View>
