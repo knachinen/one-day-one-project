@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback, useRef, useLayoutEffect } from 'react';
-import { View, StyleSheet, Dimensions, Alert, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Dimensions, Alert, TouchableOpacity, TextInput, FlatList, Text, Keyboard } from 'react-native';
 import { WebView } from 'react-native-webview';
 import * as Location from 'expo-location';
 import * as Crypto from 'expo-crypto';
@@ -9,6 +9,7 @@ import { getLocations, insertLocation } from '../db/locations';
 import { LocationRecord } from '../types/location';
 import { getMapHtml } from '../utils/mapTemplate';
 import { getPlaceName } from '../utils/geocoding';
+import { searchLocation, SearchResult } from '../utils/search';
 
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../types/navigation';
@@ -24,6 +25,9 @@ export default function MainMapScreen({ navigation }: Props) {
   const [location, setLocation] = useState<Location.LocationObject | null>(null);
   const [history, setHistory] = useState<LocationRecord[]>([]);
   const [mapCenter, setMapCenter] = useState<{ lat: number; lon: number } | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
+  const [showSearchResults, setShowSearchResults] = useState(false);
   const webViewRef = useRef<WebView>(null);
 
   useLayoutEffect(() => {
@@ -171,12 +175,90 @@ export default function MainMapScreen({ navigation }: Props) {
     }
   };
 
+  const handleSearch = async () => {
+    if (!searchQuery.trim()) {
+      return;
+    }
+
+    try {
+      Keyboard.dismiss();
+      const results = await searchLocation(searchQuery);
+      setSearchResults(results);
+      setShowSearchResults(true);
+    } catch (error) {
+      console.error('Search failed:', error);
+      Alert.alert('Error', 'Failed to search location.');
+    }
+  };
+
+  const handleSelectSearchResult = (result: SearchResult) => {
+    const lat = parseFloat(result.lat);
+    const lon = parseFloat(result.lon);
+
+    setMapCenter({ lat, lon });
+    setShowSearchResults(false);
+    setSearchQuery('');
+
+    // Move map to selected location
+    if (webViewRef.current) {
+      webViewRef.current.postMessage(JSON.stringify({
+        type: 'CENTER_MAP',
+        payload: { lat, lon }
+      }));
+    }
+  };
+
   const initialLat = location?.coords.latitude || 37.5665;
   const initialLon = location?.coords.longitude || 126.9780;
 
   return (
     <View style={styles.container}>
       <View style={styles.statusBarSpacer} />
+
+      {/* Search Bar */}
+      <View style={styles.searchContainer}>
+        <View style={styles.searchBar}>
+          <Ionicons name="search" size={20} color="#666" style={styles.searchIcon} />
+          <TextInput
+            style={styles.searchInput}
+            placeholder="Search location..."
+            value={searchQuery}
+            onChangeText={setSearchQuery}
+            onSubmitEditing={handleSearch}
+            returnKeyType="search"
+          />
+          {searchQuery.length > 0 && (
+            <TouchableOpacity onPress={() => {
+              setSearchQuery('');
+              setShowSearchResults(false);
+            }}>
+              <Ionicons name="close-circle" size={20} color="#666" />
+            </TouchableOpacity>
+          )}
+        </View>
+
+        {/* Search Results */}
+        {showSearchResults && searchResults.length > 0 && (
+          <View style={styles.searchResults}>
+            <FlatList
+              data={searchResults}
+              keyExtractor={(item) => item.place_id}
+              renderItem={({ item }) => (
+                <TouchableOpacity
+                  style={styles.searchResultItem}
+                  onPress={() => handleSelectSearchResult(item)}
+                >
+                  <Ionicons name="location-outline" size={20} color="#007AFF" />
+                  <Text style={styles.searchResultText} numberOfLines={2}>
+                    {item.display_name}
+                  </Text>
+                </TouchableOpacity>
+              )}
+            />
+          </View>
+        )}
+      </View>
+
       <WebView
         ref={webViewRef}
         originWhitelist={['*']}
@@ -208,6 +290,55 @@ const styles = StyleSheet.create({
   },
   statusBarSpacer: {
     height: 88, // Approximate height for status bar + header
+  },
+  searchContainer: {
+    position: 'absolute',
+    top: 100,
+    left: 10,
+    right: 10,
+    zIndex: 1000,
+  },
+  searchBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'white',
+    borderRadius: 10,
+    padding: 10,
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+  },
+  searchIcon: {
+    marginRight: 10,
+  },
+  searchInput: {
+    flex: 1,
+    fontSize: 16,
+  },
+  searchResults: {
+    backgroundColor: 'white',
+    borderRadius: 10,
+    marginTop: 5,
+    maxHeight: 200,
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+  },
+  searchResultItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: '#eee',
+  },
+  searchResultText: {
+    flex: 1,
+    marginLeft: 10,
+    fontSize: 14,
   },
   map: {
     flex: 1,
