@@ -41,35 +41,55 @@ export const getMapHtml = (initialLat: number, initialLon: number) => `
             // map.setView([lat, lon]); 
         }
 
-        function setHistoryMarkers(locations) {
-            // Clear existing markers
-            historyMarkers.forEach(m => map.removeLayer(m));
-            historyMarkers = [];
-
-            locations.forEach(loc => {
-                var marker = L.marker([loc.lat, loc.lon])
-                    .bindPopup('<b>' + (loc.name || 'Unknown') + '</b><br>' + (loc.userNote || 'No note'));
-                marker.addTo(map);
-                historyMarkers.push(marker);
-            });
-        }
-
-        // Handle messages from React Native
-        window.addEventListener("message", function(event) {
-            try {
-                var data = JSON.parse(event.data);
-                if (data.type === 'UPDATE_USER_LOCATION') {
-                    updateUserLocation(data.payload.lat, data.payload.lon);
-                } else if (data.type === 'SET_HISTORY') {
-                    setHistoryMarkers(data.payload);
-                } else if (data.type === 'CENTER_MAP') {
-                    map.setView([data.payload.lat, data.payload.lon], 15);
-                }
-            } catch (e) {
-                console.error("Error parsing message", e);
-            }
+        // Custom icon for history markers (Flag)
+        var historyIcon = L.divIcon({
+            className: 'history-marker',
+            html: '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="#D32F2F" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path><line x1="4" y1="22" x2="4" y2="15"></line></svg>',
+            iconSize: [32, 32],
+            iconAnchor: [4, 32], // Anchor at the bottom of the pole
+            popupAnchor: [12, -20]
         });
-    </script>
-</body>
-</html>
-`;
+
+function setHistoryMarkers(locations) {
+    // Clear existing markers
+    historyMarkers.forEach(m => map.removeLayer(m));
+    historyMarkers = [];
+
+    locations.forEach(loc => {
+        var marker = L.marker([loc.lat, loc.lon], { icon: historyIcon })
+            .bindPopup('<b>' + (loc.name || 'Unknown') + '</b><br>' + (loc.userNote || 'No note') + '<br><small>' + new Date(loc.startTime).toLocaleString() + '</small>');
+        marker.addTo(map);
+        historyMarkers.push(marker);
+    });
+}
+
+function log(msg) {
+    if (window.ReactNativeWebView) {
+        window.ReactNativeWebView.postMessage(JSON.stringify({ type: 'LOG', payload: msg }));
+    }
+}
+
+function handleMessage(event) {
+    try {
+        log("Received message: " + event.data);
+        var data = JSON.parse(event.data);
+        if (data.type === 'UPDATE_USER_LOCATION') {
+            updateUserLocation(data.payload.lat, data.payload.lon);
+        } else if (data.type === 'SET_HISTORY') {
+            log("Setting history markers: " + data.payload.length);
+            setHistoryMarkers(data.payload);
+        } else if (data.type === 'CENTER_MAP') {
+            map.setView([data.payload.lat, data.payload.lon], 15);
+        }
+    } catch (e) {
+        log("Error parsing message: " + e.toString());
+    }
+}
+
+// Handle messages from React Native (support both iOS and Android)
+window.addEventListener("message", handleMessage);
+document.addEventListener("message", handleMessage);
+</script>
+    </body>
+    </html>
+        `;
