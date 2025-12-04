@@ -1,9 +1,10 @@
-import React, { useEffect, useState, useCallback, useRef } from 'react';
-import { View, StyleSheet, Button, Dimensions, Alert } from 'react-native';
+import React, { useEffect, useState, useCallback, useRef, useLayoutEffect } from 'react';
+import { View, StyleSheet, Dimensions, Alert, TouchableOpacity } from 'react-native';
 import { WebView } from 'react-native-webview';
 import * as Location from 'expo-location';
 import * as Crypto from 'expo-crypto';
 import { useFocusEffect } from '@react-navigation/native';
+import { Ionicons } from '@expo/vector-icons';
 import { getLocations, insertLocation } from '../db/locations';
 import { LocationRecord } from '../types/location';
 import { getMapHtml } from '../utils/mapTemplate';
@@ -24,6 +25,31 @@ export default function MainMapScreen({ navigation }: Props) {
   const [history, setHistory] = useState<LocationRecord[]>([]);
   const [mapCenter, setMapCenter] = useState<{ lat: number; lon: number } | null>(null);
   const webViewRef = useRef<WebView>(null);
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <View style={styles.headerButtons}>
+          <TouchableOpacity onPress={handleSaveLocation} style={styles.headerButton}>
+            <Ionicons name="bookmark" size={24} color="#007AFF" />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('LocationList')} style={styles.headerButton}>
+            <Ionicons name="list" size={24} color="#007AFF" />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => {
+            if (location && webViewRef.current) {
+              webViewRef.current.postMessage(JSON.stringify({
+                type: 'CENTER_MAP',
+                payload: { lat: location.coords.latitude, lon: location.coords.longitude }
+              }));
+            }
+          }} style={styles.headerButton}>
+            <Ionicons name="locate" size={24} color="#007AFF" />
+          </TouchableOpacity>
+        </View>
+      ),
+    });
+  }, [navigation, location, mapCenter, webViewRef]);
 
   const fetchHistory = async () => {
     console.log('[Map] fetchHistory started');
@@ -137,7 +163,7 @@ export default function MainMapScreen({ navigation }: Props) {
       };
 
       await insertLocation(newRecord);
-      Alert.alert('Saved', `Location saved: ${placeName || 'Unknown Place'}`);
+      Alert.alert('Saved', `Location saved: ${placeName || 'Unknown Place'} `);
       fetchHistory(); // Refresh map
     } catch (error) {
       console.error('Failed to save location:', error);
@@ -150,6 +176,7 @@ export default function MainMapScreen({ navigation }: Props) {
 
   return (
     <View style={styles.container}>
+      <View style={styles.statusBarSpacer} />
       <WebView
         ref={webViewRef}
         originWhitelist={['*']}
@@ -170,19 +197,6 @@ export default function MainMapScreen({ navigation }: Props) {
           }
         }}
       />
-
-      <View style={styles.buttonContainer}>
-        <Button title="Save This Location" onPress={handleSaveLocation} />
-        <Button title="History" onPress={() => navigation.navigate('LocationList')} />
-        <Button title="My Location" onPress={() => {
-          if (location && webViewRef.current) {
-            webViewRef.current.postMessage(JSON.stringify({
-              type: 'CENTER_MAP',
-              payload: { lat: location.coords.latitude, lon: location.coords.longitude }
-            }));
-          }
-        }} />
-      </View>
     </View>
   );
 }
@@ -192,22 +206,19 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
+  statusBarSpacer: {
+    height: 88, // Approximate height for status bar + header
+  },
   map: {
     flex: 1,
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height,
   },
-  buttonContainer: {
-    position: 'absolute',
-    bottom: 50,
-    left: 0,
-    right: 0,
+  headerButtons: {
     flexDirection: 'row',
-    justifyContent: 'center',
-    gap: 10,
-    backgroundColor: 'rgba(255,255,255,0.8)',
-    padding: 10,
-    marginHorizontal: 20,
-    borderRadius: 10,
+    marginRight: 10,
+  },
+  headerButton: {
+    marginLeft: 15,
   },
 });
