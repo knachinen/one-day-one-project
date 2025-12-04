@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useLayoutEffect } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, Modal, TextInput, Button, ScrollView, Alert } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, Modal, TextInput, ScrollView, Alert } from 'react-native';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import * as FileSystem from 'expo-file-system';
@@ -181,7 +181,14 @@ export default function LocationListScreen() {
                 <View style={styles.modalContainer}>
                     <View style={styles.modalContent}>
                         <ScrollView>
-                            <Text style={styles.modalTitle}>Edit Location</Text>
+                            <View style={styles.modalHeader}>
+                                <Text style={styles.modalTitle}>Edit Location</Text>
+                                <View style={styles.modalHeaderButtons}>
+                                    <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.iconButton}>
+                                        <Ionicons name="close-outline" size={28} color="#666" />
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
 
                             <Text style={styles.label}>Place Name</Text>
                             <TextInput
@@ -200,16 +207,25 @@ export default function LocationListScreen() {
                                 multiline
                             />
 
-                            <View style={styles.modalButtons}>
-                                <Button title="Cancel" onPress={() => setModalVisible(false)} />
-                                <Button title="Save" onPress={handleSave} />
+                            <View style={styles.modalFooter}>
+                                <TouchableOpacity onPress={handleSave} style={styles.saveButton}>
+                                    <Ionicons name="checkmark-circle" size={24} color="white" />
+                                    <Text style={styles.saveButtonText}>Save</Text>
+                                </TouchableOpacity>
+
+                                {selectedLocation && (
+                                    <TouchableOpacity
+                                        onPress={() => {
+                                            handleDelete(selectedLocation.id);
+                                            setModalVisible(false);
+                                        }}
+                                        style={styles.deleteButton}
+                                    >
+                                        <Ionicons name="trash-outline" size={24} color="white" />
+                                        <Text style={styles.deleteButtonText}>Delete</Text>
+                                    </TouchableOpacity>
+                                )}
                             </View>
-                            {selectedLocation && (
-                                <Button title="Delete Record" color="red" onPress={() => {
-                                    handleDelete(selectedLocation.id);
-                                    setModalVisible(false);
-                                }} />
-                            )}
                         </ScrollView>
                     </View>
                 </View>
@@ -280,10 +296,22 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         elevation: 5,
     },
+    modalHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 15,
+    },
     modalTitle: {
         fontSize: 18,
         fontWeight: 'bold',
-        marginBottom: 15,
+        flex: 1,
+    },
+    modalHeaderButtons: {
+        flexDirection: 'row',
+    },
+    iconButton: {
+        padding: 5,
     },
     label: {
         fontSize: 14,
@@ -303,10 +331,40 @@ const styles = StyleSheet.create({
         minHeight: 80,
         textAlignVertical: 'top',
     },
-    modalButtons: {
+    modalFooter: {
         flexDirection: 'row',
-        justifyContent: 'space-around',
-        marginBottom: 10,
-        marginTop: 10,
+        justifyContent: 'space-between',
+        marginTop: 20,
+        gap: 10,
+    },
+    saveButton: {
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#007AFF',
+        padding: 12,
+        borderRadius: 8,
+        gap: 8,
+    },
+    saveButtonText: {
+        color: 'white',
+        fontSize: 16,
+        fontWeight: '600',
+    },
+    deleteButton: {
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#FF3B30',
+        padding: 12,
+        borderRadius: 8,
+        gap: 8,
+    },
+    deleteButtonText: {
+        color: 'white',
+        fontSize: 16,
+        fontWeight: '600',
     },
 });
