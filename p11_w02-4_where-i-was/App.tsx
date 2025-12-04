@@ -1,3 +1,4 @@
+import './src/utils/disableConsole'; // Disable console logs (set ENABLE_LOGS to true to re-enable)
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
