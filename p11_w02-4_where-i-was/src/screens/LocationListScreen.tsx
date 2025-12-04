@@ -1,12 +1,22 @@
-import React, { useState, useCallback } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, Modal, TextInput, Button } from 'react-native';
-import { useFocusEffect } from '@react-navigation/native';
-import { getLocations, updateLocationNote, deleteLocation } from '../db/locations';
+import React, { useState, useCallback, useLayoutEffect } from 'react';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, Modal, TextInput, Button, ScrollView, Alert } from 'react-native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import * as FileSystem from 'expo-file-system';
+import * as Sharing from 'expo-sharing';
+import * as DocumentPicker from 'expo-document-picker';
+import { Ionicons } from '@expo/vector-icons';
+import { getLocations, updateLocationNote, updateLocationName, deleteLocation, insertLocation } from '../db/locations';
 import { LocationRecord } from '../types/location';
+import { RootStackParamList } from '../types/navigation';
+
+type LocationListScreenNavigationProp = StackNavigationProp<RootStackParamList, 'LocationList'>;
 
 export default function LocationListScreen() {
+    const navigation = useNavigation<LocationListScreenNavigationProp>();
     const [history, setHistory] = useState<LocationRecord[]>([]);
     const [selectedLocation, setSelectedLocation] = useState<LocationRecord | null>(null);
+    const [nameText, setNameText] = useState('');
     const [noteText, setNoteText] = useState('');
     const [isModalVisible, setModalVisible] = useState(false);
 
@@ -19,6 +29,106 @@ export default function LocationListScreen() {
         }
     };
 
+    const handleExport = async () => {
+        try {
+            if (history.length === 0) {
+                Alert.alert('No Data', 'There are no location records to export.');
+                return;
+            }
+
+            const jsonData = JSON.stringify(history, null, 2);
+            const fileName = `where-i-was-export-${new Date().toISOString().split('T')[0]}.json`;
+
+            // Use new FileSystem API with Paths
+            const cacheDir = new FileSystem.Directory(FileSystem.Paths.cache);
+            const file = new FileSystem.File(cacheDir, fileName);
+
+            // Write data to file
+            await file.write(jsonData);
+
+            // Verify file exists
+            if (!file.exists) {
+                throw new Error('File was not created successfully');
+            }
+
+            const canShare = await Sharing.isAvailableAsync();
+            if (canShare) {
+                await Sharing.shareAsync(file.uri);
+            } else {
+                Alert.alert('Success', `Data exported to ${fileName}`);
+            }
+        } catch (error) {
+            console.error('Export failed:', error);
+            Alert.alert('Error', `Failed to export data: ${error}`);
+        }
+    };
+
+    const handleImport = async () => {
+        try {
+            const result = await DocumentPicker.getDocumentAsync({
+                type: 'application/json',
+                copyToCacheDirectory: true,
+            });
+
+            if (result.canceled) {
+                return;
+            }
+
+            const fileUri = result.assets[0].uri;
+            const file = new FileSystem.File(fileUri);
+            const content = await file.text();
+            const importedData: LocationRecord[] = JSON.parse(content);
+
+            if (!Array.isArray(importedData)) {
+                throw new Error('Invalid file format');
+            }
+
+            // Get existing records to check for duplicates
+            const existingRecords = await getLocations();
+            const existingIds = new Set(existingRecords.map(r => r.id));
+
+            // Import each location record
+            let importCount = 0;
+            let skipCount = 0;
+            for (const record of importedData) {
+                try {
+                    // Skip if already exists
+                    if (existingIds.has(record.id)) {
+                        skipCount++;
+                        continue;
+                    }
+
+                    await insertLocation(record);
+                    importCount++;
+                } catch (error) {
+                    console.error('Failed to import record:', record.id, error);
+                }
+            }
+
+            const message = `Imported ${importCount} new records.${skipCount > 0 ? ` Skipped ${skipCount} duplicates.` : ''}`;
+            Alert.alert('Success', message);
+            fetchHistory();
+        } catch (error) {
+            console.error('Import failed:', error);
+            Alert.alert('Error', `Failed to import data: ${error}`);
+        }
+    };
+
+    useLayoutEffect(() => {
+        navigation.setOptions({
+            headerRight: () => (
+                <View style={{ flexDirection: 'row', marginRight: 10 }}>
+                    <TouchableOpacity onPress={handleImport} style={{ marginRight: 15 }}>
+                        <Ionicons name="download-outline" size={24} color="#007AFF" />
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={handleExport} style={{ marginRight: 5 }}>
+                        <Ionicons name="share-outline" size={24} color="#007AFF" />
+                    </TouchableOpacity>
+                </View>
+            ),
+        });
+    }, [navigation, history]);
+
     useFocusEffect(
         useCallback(() => {
             fetchHistory();
@@ -27,12 +137,14 @@ export default function LocationListScreen() {
 
     const handlePressItem = (item: LocationRecord) => {
         setSelectedLocation(item);
+        setNameText(item.name || '');
         setNoteText(item.userNote || '');
         setModalVisible(true);
     };
 
-    const handleSaveNote = async () => {
+    const handleSave = async () => {
         if (selectedLocation) {
+            await updateLocationName(selectedLocation.id, nameText);
             await updateLocationNote(selectedLocation.id, noteText);
             setModalVisible(false);
             fetchHistory();
@@ -68,24 +180,37 @@ export default function LocationListScreen() {
             <Modal visible={isModalVisible} animationType="slide" transparent>
                 <View style={styles.modalContainer}>
                     <View style={styles.modalContent}>
-                        <Text style={styles.modalTitle}>Edit Note</Text>
-                        <TextInput
-                            style={styles.input}
-                            value={noteText}
-                            onChangeText={setNoteText}
-                            placeholder="Add a note..."
-                            multiline
-                        />
-                        <View style={styles.modalButtons}>
-                            <Button title="Cancel" onPress={() => setModalVisible(false)} />
-                            <Button title="Save" onPress={handleSaveNote} />
-                        </View>
-                        {selectedLocation && (
-                            <Button title="Delete Record" color="red" onPress={() => {
-                                handleDelete(selectedLocation.id);
-                                setModalVisible(false);
-                            }} />
-                        )}
+                        <ScrollView>
+                            <Text style={styles.modalTitle}>Edit Location</Text>
+
+                            <Text style={styles.label}>Place Name</Text>
+                            <TextInput
+                                style={styles.input}
+                                value={nameText}
+                                onChangeText={setNameText}
+                                placeholder="Enter place name..."
+                            />
+
+                            <Text style={styles.label}>Note</Text>
+                            <TextInput
+                                style={[styles.input, styles.multilineInput]}
+                                value={noteText}
+                                onChangeText={setNoteText}
+                                placeholder="Add a note..."
+                                multiline
+                            />
+
+                            <View style={styles.modalButtons}>
+                                <Button title="Cancel" onPress={() => setModalVisible(false)} />
+                                <Button title="Save" onPress={handleSave} />
+                            </View>
+                            {selectedLocation && (
+                                <Button title="Delete Record" color="red" onPress={() => {
+                                    handleDelete(selectedLocation.id);
+                                    setModalVisible(false);
+                                }} />
+                            )}
+                        </ScrollView>
                     </View>
                 </View>
             </Modal>
@@ -120,6 +245,7 @@ const styles = StyleSheet.create({
     itemTitle: {
         fontWeight: 'bold',
         fontSize: 16,
+        flex: 1,
     },
     itemDate: {
         color: '#666',
@@ -147,7 +273,8 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(0,0,0,0.5)',
     },
     modalContent: {
-        width: '80%',
+        width: '85%',
+        maxHeight: '80%',
         backgroundColor: 'white',
         padding: 20,
         borderRadius: 10,
@@ -158,18 +285,28 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginBottom: 15,
     },
+    label: {
+        fontSize: 14,
+        fontWeight: '600',
+        marginTop: 10,
+        marginBottom: 5,
+        color: '#333',
+    },
     input: {
         borderWidth: 1,
         borderColor: '#ddd',
         borderRadius: 5,
         padding: 10,
+        marginBottom: 15,
+    },
+    multilineInput: {
         minHeight: 80,
-        marginBottom: 20,
         textAlignVertical: 'top',
     },
     modalButtons: {
         flexDirection: 'row',
         justifyContent: 'space-around',
         marginBottom: 10,
+        marginTop: 10,
     },
 });

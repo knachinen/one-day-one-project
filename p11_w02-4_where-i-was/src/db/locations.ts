@@ -35,6 +35,11 @@ export const updateLocationNote = async (id: string, note: string) => {
     await db.runAsync('UPDATE locations SET userNote = ? WHERE id = ?', [note, id]);
 };
 
+export const updateLocationName = async (id: string, name: string) => {
+    const db = await getDB();
+    await db.runAsync('UPDATE locations SET name = ? WHERE id = ?', [name, id]);
+};
+
 export const updateLocationDuration = async (id: string, duration: number) => {
     const db = await getDB();
     await db.runAsync('UPDATE locations SET duration = ? WHERE id = ?', [duration, id]);
