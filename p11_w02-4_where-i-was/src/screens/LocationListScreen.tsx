@@ -50,8 +50,8 @@ export default function LocationListScreen() {
                 <Text style={styles.itemTitle}>{item.name || 'Unknown Place'}</Text>
                 <Text style={styles.itemDate}>{new Date(item.startTime).toLocaleString()}</Text>
             </View>
-            <Text>Duration: {Math.floor((item.duration || 0) / 60)} mins</Text>
-            {item.userNote ? <Text style={styles.note}>Note: {item.userNote}</Text> : null}
+            <Text style={styles.coordinates}>📍 {item.lat.toFixed(5)}, {item.lon.toFixed(5)}</Text>
+            {item.userNote ? <Text style={styles.note}>📝 {item.userNote}</Text> : null}
         </TouchableOpacity>
     );
 
@@ -129,6 +129,11 @@ const styles = StyleSheet.create({
         marginTop: 8,
         fontStyle: 'italic',
         color: '#444',
+    },
+    coordinates: {
+        fontSize: 12,
+        color: '#666',
+        marginTop: 4,
     },
     emptyText: {
         textAlign: 'center',
