@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, ActivityIndicator } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -15,28 +16,49 @@ const Stack = createStackNavigator();
 
 export default function App() {
   const [isFirstLaunch, setIsFirstLaunch] = useState<boolean | null>(null);
+  const [dbInitialized, setDbInitialized] = useState<boolean>(false);
+  const [dbError, setDbError] = useState<string | null>(null);
 
   useEffect(() => {
     const initialize = async () => {
       try {
         await initDatabase();
+        setDbInitialized(true);
         const hasLaunched = await AsyncStorage.getItem('hasLaunched');
         setIsFirstLaunch(hasLaunched === null);
-      } catch (err) {
+      } catch (err: any) {
         console.error('Init Failed', err);
-        setIsFirstLaunch(false); // Fallback to main screen on error
+        setDbError(err.message || 'Failed to initialize database');
+        setIsFirstLaunch(false); // Fallback to main screen on error, but also show db error
       }
     };
     initialize();
   }, []);
 
-  if (isFirstLaunch === null) {
+  if (!dbInitialized) {
+    if (dbError) {
+      return (
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: COLORS.background }}>
+          <Ionicons name="warning-outline" size={50} color={COLORS.error} />
+          <Text style={{ color: COLORS.error, fontSize: 18, textAlign: 'center', marginTop: 10 }}>
+            Error: {dbError}
+          </Text>
+          <Text style={{ color: COLORS.textSecondary, fontSize: 14, textAlign: 'center', marginTop: 5 }}>
+            Please restart the app.
+          </Text>
+        </View>
+      );
+    }
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <ActivityIndicator size="large" color={COLORS.primary} />
       </View>
     );
   }
+
+  // Rest of the App component rendering logic follows
+  // ...
+
 
   return (
     <SafeAreaProvider>

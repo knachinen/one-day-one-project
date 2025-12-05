@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { Contact, addContactToDB, getContactsFromDB, deleteContactFromDB } from '../utils/db';
+import { Contact, addContactToDB, getContactsFromDB, deleteContactFromDB, updateContactToDB } from '../utils/db';
 
 interface ContactState {
     contacts: Contact[];
@@ -7,6 +7,7 @@ interface ContactState {
     loadContacts: () => Promise<void>;
     addContact: (name: string, phone: string) => Promise<void>;
     removeContact: (id: number) => Promise<void>;
+    updateContact: (id: number, name: string, phone: string) => Promise<void>;
 }
 
 export const useContactStore = create<ContactState>((set, get) => ({
@@ -39,6 +40,16 @@ export const useContactStore = create<ContactState>((set, get) => ({
             }));
         } catch (error) {
             console.error('Failed to remove contact', error);
+        }
+    },
+    updateContact: async (id: number, name: string, phone: string) => {
+        try {
+            await updateContactToDB(id, name, phone);
+            set((state) => ({
+                contacts: state.contacts.map((c) => (c.id === id ? { ...c, name, phone } : c)),
+            }));
+        } catch (error) {
+            console.error('Failed to update contact', error);
         }
     },
 }));

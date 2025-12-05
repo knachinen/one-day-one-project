@@ -52,6 +52,11 @@ export const deleteContactFromDB = async (id: number) => {
     await database.runAsync('DELETE FROM contacts WHERE id = ?', id);
 };
 
+export const updateContactToDB = async (id: number, name: string, phone: string) => {
+    const database = getDB();
+    await database.runAsync('UPDATE contacts SET name = ?, phone = ? WHERE id = ?', name, phone, id);
+};
+
 export const saveProfileToDB = async (medicalInfo: string) => {
     const database = getDB();
     await database.runAsync(
