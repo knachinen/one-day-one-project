@@ -3,6 +3,7 @@ import { View, ActivityIndicator } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { MainScreen } from './src/screens/MainScreen';
 import { ContactsScreen } from './src/screens/ContactsScreen';
 import { ProfileScreen } from './src/screens/ProfileScreen';
@@ -38,8 +39,9 @@ export default function App() {
   }
 
   return (
-    <NavigationContainer>
-      <Stack.Navigator
+    <SafeAreaProvider>
+      <NavigationContainer>
+        <Stack.Navigator
         initialRouteName={isFirstLaunch ? 'Onboarding' : 'Main'}
         screenOptions={{
           headerStyle: {
@@ -75,5 +77,6 @@ export default function App() {
         />
       </Stack.Navigator>
     </NavigationContainer>
+    </SafeAreaProvider>
   );
 }

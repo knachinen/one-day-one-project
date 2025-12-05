@@ -6,9 +6,9 @@ import {
     TextInput,
     Pressable,
     Alert,
-    SafeAreaView,
     ScrollView,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import * as Crypto from 'expo-crypto';
 import { saveProfileToDB, getProfileFromDB } from '../utils/db';
 import { COLORS, SPACING, FONT_SIZE } from '../constants/theme';

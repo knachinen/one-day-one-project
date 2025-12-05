@@ -1,6 +1,7 @@
 
 import React, { useEffect, useRef, useCallback } from 'react';
-import { StyleSheet, Text, View, Pressable, SafeAreaView, StatusBar, ActivityIndicator } from 'react-native';
+import { StyleSheet, Text, View, Pressable, StatusBar, ActivityIndicator } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { EmergencyButton } from '../components/EmergencyButton';
