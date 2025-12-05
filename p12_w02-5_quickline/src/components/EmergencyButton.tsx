@@ -13,16 +13,18 @@ import { COLORS, LAYOUT, FONT_SIZE } from "../constants/theme";
 
 interface EmergencyButtonProps {
   onActivate: () => void;
+  disabled?: boolean;
 }
 
 const ACTIVATION_TIME = 0; // 3 seconds
 
 export const EmergencyButton = React.memo<EmergencyButtonProps>(
-  ({ onActivate }) => {
+  ({ onActivate, disabled }) => {
     const [isPressing, setIsPressing] = useState(false);
     const progress = useRef(new Animated.Value(0)).current;
 
     const handlePressIn = () => {
+      if (disabled) return; // Prevent interaction when disabled
       setIsPressing(true);
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
 
@@ -38,6 +40,7 @@ export const EmergencyButton = React.memo<EmergencyButtonProps>(
     };
 
     const handlePressOut = () => {
+      if (disabled) return; // Prevent interaction when disabled
       setIsPressing(false);
       Animated.timing(progress, {
         toValue: 0,
@@ -47,6 +50,7 @@ export const EmergencyButton = React.memo<EmergencyButtonProps>(
     };
 
     const handleActivation = () => {
+      if (disabled) return; // Prevent activation when disabled
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       Vibration.vibrate([0, 500, 200, 500]); // Vibrate pattern
       onActivate();
@@ -62,7 +66,7 @@ export const EmergencyButton = React.memo<EmergencyButtonProps>(
 
     const backgroundColor = progress.interpolate({
       inputRange: [0, 1],
-      outputRange: [COLORS.primary, "#D32F2F"], // Darker red when pressing
+      outputRange: [disabled ? COLORS.textSecondary : COLORS.primary, disabled ? COLORS.textSecondary : "#D32F2F"], // Darker red when pressing
     });
 
     return (
@@ -74,7 +78,8 @@ export const EmergencyButton = React.memo<EmergencyButtonProps>(
           accessibilityLabel="Emergency SOS Button"
           accessibilityHint="Double tap and hold for 3 seconds to send emergency message"
           accessibilityRole="button"
-          accessibilityState={{ disabled: false, busy: isPressing }}
+          disabled={disabled} // Pass disabled prop to Pressable
+          accessibilityState={{ disabled: disabled || false, busy: isPressing }}
         >
           <Animated.View
             style={[

@@ -105,3 +105,25 @@ export const sendEmergencyWebhook = async (
     console.error("Failed to send emergency Discord webhook:", error);
   }
 };
+
+export const getCommunicationPreferences = async () => {
+    try {
+        const useCall = (await AsyncStorage.getItem("useCall")) === "true";
+        const useSms = (await AsyncStorage.getItem("useSms")) === "true";
+        const useDiscordWebhook = (await AsyncStorage.getItem("useDiscordWebhook")) === "true";
+
+        // Default values if not set
+        return {
+            useCall: useCall !== null ? useCall : true, // Default to true
+            useSms: useSms !== null ? useSms : true,   // Default to true
+            useDiscordWebhook: useDiscordWebhook !== null ? useDiscordWebhook : false, // Default to false
+        };
+    } catch (error) {
+        console.error("Failed to get communication preferences:", error);
+        return {
+            useCall: true,
+            useSms: true,
+            useDiscordWebhook: false,
+        };
+    }
+};

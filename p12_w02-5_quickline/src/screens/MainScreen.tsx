@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useCallback } from "react";
+import React, { useEffect, useRef, useCallback, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { EmergencyButton } from "../components/EmergencyButton";
 import { useLocation } from "../hooks/useLocation";
 import {
@@ -17,6 +17,7 @@ import {
   callEmergencyNumber,
   generateEmergencyMessage,
   sendEmergencyWebhook,
+  getCommunicationPreferences,
 } from "../utils/communication";
 import { useContactStore } from "../store/useContactStore";
 import { COLORS, SPACING, FONT_SIZE, LAYOUT } from "../constants/theme";
@@ -34,11 +35,33 @@ export const MainScreen = () => {
     locationRef.current = { coords, address };
   }, [coords, address]);
 
+  const [preferences, setPreferences] = useState({
+    useCall: true,
+    useSms: true,
+    useDiscordWebhook: false,
+  });
+
   useEffect(() => {
     loadContacts();
   }, []);
 
-  const handleEmergencyActivate = useCallback(() => {
+      const fetchPreferences = useCallback(async () => {
+        const currentPreferences = await getCommunicationPreferences();
+        setPreferences(currentPreferences);
+        console.log('MainScreen: Loaded preferences.', currentPreferences);
+      }, []);
+  useFocusEffect(
+    useCallback(() => {
+      fetchPreferences();
+    }, [fetchPreferences])
+  );
+
+  const handleCallContact = useCallback((phone: string) => {
+    callEmergencyNumber(phone);
+  }, []);
+
+  const handleEmergencyActivate = useCallback(async () => {
+    // Made async
     const { coords: currentCoords, address: currentAddress } =
       locationRef.current;
     console.log(
@@ -49,28 +72,36 @@ export const MainScreen = () => {
     );
     const message = generateEmergencyMessage(currentCoords, currentAddress);
 
-    // Send webhook notification (async, no need to await and block UI)
-    sendEmergencyWebhook(currentCoords, currentAddress);
-
-    // Send to all contacts (using contacts from closure is fine as it updates less frequently,
-    // or we could use a ref for contacts too if needed, but let's stick to location optimization first)
-    if (contacts.length === 0) {
-      // Fallback if no contacts
-      const TEST_NUMBER = "01000000000";
-      sendEmergencySMS(TEST_NUMBER, message);
-    } else {
-      // For MVP, let's send to the first contact
-      //   sendEmergencySMS(contacts[0].phone, message);
+    // Use preferences from state
+    if (preferences.useDiscordWebhook) {
+      sendEmergencyWebhook(currentCoords, currentAddress);
     }
-  }, [contacts]); // Re-create only if contacts change
 
-  const handleCallContact = (phone: string) => {
-    callEmergencyNumber(phone);
-  };
+    if (contacts.length === 0) {
+      const TEST_NUMBER = "01000000000"; // Fallback if no contacts
+      if (preferences.useSms) {
+        sendEmergencySMS(TEST_NUMBER, message);
+      }
+      if (preferences.useCall) {
+        // As noted before, we typically don't auto-call a test number.
+      }
+    } else {
+      const firstContactPhone = contacts[0].phone;
+      if (preferences.useSms) {
+        sendEmergencySMS(firstContactPhone, message);
+      }
+      if (preferences.useCall) {
+        handleCallContact(firstContactPhone); // Use existing call handler
+      }
+    }
+  }, [contacts, preferences, handleCallContact]); // Added preferences to dependencies
 
   const navigateToSettings = () => {
     navigation.navigate("Contacts"); // For now, settings icon goes to Contacts
   };
+
+  const isEmergencyButtonDisabled =
+    !preferences.useSms && !preferences.useDiscordWebhook;
 
   return (
     <SafeAreaView style={styles.container}>
@@ -121,7 +152,7 @@ export const MainScreen = () => {
 
       {/* Emergency Button */}
       <View style={styles.centerContainer}>
-        <EmergencyButton onActivate={handleEmergencyActivate} />
+        <EmergencyButton onActivate={handleEmergencyActivate} disabled={isEmergencyButtonDisabled} />
       </View>
 
       {/* Footer Actions */}
@@ -133,10 +164,15 @@ export const MainScreen = () => {
                 style={[
                   styles.actionButton,
                   {
-                    backgroundColor: index === 0 ? COLORS.police : COLORS.fire,
+                    backgroundColor: preferences.useCall
+                      ? index === 0
+                        ? COLORS.police
+                        : COLORS.fire
+                      : COLORS.textSecondary,
                   },
                 ]}
                 onPress={() => handleCallContact(contact.phone)}
+                disabled={!preferences.useCall}
                 accessibilityLabel={`Call ${contact.name}`}
                 accessibilityHint={`Double tap to call ${contact.name} at ${contact.phone}`}
                 accessibilityRole="button"

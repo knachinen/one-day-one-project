@@ -7,9 +7,10 @@ import {
   Pressable,
   Alert,
   ScrollView,
+  Switch, // Import Switch
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import AsyncStorage from "@react-native-async-storage/async-storage"; // Import AsyncStorage
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { saveProfileToDB, getProfileFromDB } from "../utils/db";
 import { COLORS, SPACING, FONT_SIZE } from "../constants/theme";
 import * as Crypto from "expo-crypto";
@@ -17,7 +18,11 @@ import * as Crypto from "expo-crypto";
 export const ProfileScreen = () => {
   const [medicalInfo, setMedicalInfo] = useState("");
   const [loading, setLoading] = useState(true);
-  const [discordWebhookUrl, setDiscordWebhookUrl] = useState(""); // New state for webhook URL
+  const [discordWebhookUrl, setDiscordWebhookUrl] = useState("");
+  // New states for communication preferences
+  const [useCall, setUseCall] = useState(true);
+  const [useSms, setUseSms] = useState(true);
+  const [useDiscordWebhook, setUseDiscordWebhook] = useState(false); // Default to false
 
   useEffect(() => {
     loadProfile();
@@ -32,8 +37,17 @@ export const ProfileScreen = () => {
       // Load Discord webhook URL
       const storedWebhookUrl = await AsyncStorage.getItem("discordWebhookUrl");
       if (storedWebhookUrl) setDiscordWebhookUrl(storedWebhookUrl);
+
+      // Load communication preferences
+      const storedUseCall = await AsyncStorage.getItem("useCall");
+      if (storedUseCall !== null) setUseCall(JSON.parse(storedUseCall));
+      const storedUseSms = await AsyncStorage.getItem("useSms");
+      if (storedUseSms !== null) setUseSms(JSON.parse(storedUseSms));
+      const storedUseDiscordWebhook = await AsyncStorage.getItem("useDiscordWebhook");
+      if (storedUseDiscordWebhook !== null) setUseDiscordWebhook(JSON.parse(storedUseDiscordWebhook));
+
     } catch (error) {
-      console.error("Failed to load profile or webhook URL", error);
+      console.error("Failed to load profile or settings", error);
     } finally {
       setLoading(false);
     }
@@ -44,9 +58,14 @@ export const ProfileScreen = () => {
       await saveProfileToDB(medicalInfo);
       // Save Discord webhook URL
       await AsyncStorage.setItem("discordWebhookUrl", discordWebhookUrl.trim());
-      Alert.alert("Success", "Medical profile and webhook URL saved.");
+      // Save communication preferences
+      await AsyncStorage.setItem("useCall", JSON.stringify(useCall));
+      await AsyncStorage.setItem("useSms", JSON.stringify(useSms));
+      await AsyncStorage.setItem("useDiscordWebhook", JSON.stringify(useDiscordWebhook));
+
+      Alert.alert("Success", "Profile and settings saved.");
     } catch (error) {
-      Alert.alert("Error", "Failed to save profile or webhook URL.");
+      Alert.alert("Error", "Failed to save profile or settings.");
     }
   };
 
@@ -96,7 +115,7 @@ export const ProfileScreen = () => {
           {/* Discord Webhook URL Input */}
           <Text style={styles.label}>Discord Webhook URL (Optional)</Text>
           <TextInput
-            style={styles.input} // Reusing input style
+            style={styles.input}
             placeholder="Enter Discord Webhook URL"
             value={discordWebhookUrl}
             onChangeText={setDiscordWebhookUrl}
@@ -109,6 +128,37 @@ export const ProfileScreen = () => {
           >
             <Text style={styles.clearWebhookButtonText}>Clear Webhook URL</Text>
           </Pressable>
+
+          {/* Communication Preferences */}
+          <Text style={[styles.label, styles.sectionTitle]}>Communication Preferences</Text>
+          <View style={styles.preferenceItem}>
+            <Text style={styles.preferenceText}>Use Emergency Call</Text>
+            <Switch
+              trackColor={{ false: COLORS.border, true: COLORS.primary }}
+              thumbColor={useCall ? COLORS.white : COLORS.white}
+              onValueChange={setUseCall}
+              value={useCall}
+            />
+          </View>
+          <View style={styles.preferenceItem}>
+            <Text style={styles.preferenceText}>Use SMS Message</Text>
+            <Switch
+              trackColor={{ false: COLORS.border, true: COLORS.primary }}
+              thumbColor={useSms ? COLORS.white : COLORS.white}
+              onValueChange={setUseSms}
+              value={useSms}
+            />
+          </View>
+          <View style={styles.preferenceItem}>
+            <Text style={styles.preferenceText}>Use Discord Webhook</Text>
+            <Switch
+              trackColor={{ false: COLORS.border, true: COLORS.primary }}
+              thumbColor={useDiscordWebhook ? COLORS.white : COLORS.white}
+              onValueChange={setUseDiscordWebhook}
+              value={useDiscordWebhook}
+            />
+          </View>
+
 
           <Pressable style={styles.saveButton} onPress={handleSave}>
             <Text style={styles.saveButtonText}>Save Profile</Text>
@@ -162,7 +212,6 @@ const styles = StyleSheet.create({
     height: 150,
   },
   input: {
-    // Added for webhook URL input
     borderWidth: 1,
     borderColor: COLORS.border,
     borderRadius: 8,
@@ -182,7 +231,6 @@ const styles = StyleSheet.create({
     fontSize: FONT_SIZE.m,
   },
   clearWebhookButton: {
-    // New style for clear button
     backgroundColor: COLORS.textSecondary,
     padding: SPACING.m,
     borderRadius: 8,
@@ -190,9 +238,25 @@ const styles = StyleSheet.create({
     marginBottom: SPACING.m,
   },
   clearWebhookButtonText: {
-    // New style for clear button text
     color: COLORS.white,
     fontWeight: "bold",
     fontSize: FONT_SIZE.m,
+  },
+  // New styles for communication preferences
+  sectionTitle: {
+    marginTop: SPACING.xl,
+    marginBottom: SPACING.m,
+    fontSize: FONT_SIZE.l,
+    fontWeight: 'bold',
+  },
+  preferenceItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: SPACING.m,
+  },
+  preferenceText: {
+    fontSize: FONT_SIZE.m,
+    color: COLORS.text,
   },
 });

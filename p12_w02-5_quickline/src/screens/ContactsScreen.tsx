@@ -22,11 +22,12 @@ export const ContactsScreen = () => {
   const [phone, setPhone] = useState("");
   const [editingContactId, setEditingContactId] = useState<number | null>(null);
   const [editingName, setEditingName] = useState("");
-      const [editingPhone, setEditingPhone] = useState("");
-  
-      useEffect(() => {
-          loadContacts();
-      }, []);  const handleSaveContact = async () => {
+  const [editingPhone, setEditingPhone] = useState("");
+
+  useEffect(() => {
+    loadContacts();
+  }, []);
+  const handleSaveContact = async () => {
     const contactName = editingContactId ? editingName : name;
     const contactPhone = editingContactId ? editingPhone : phone;
 
@@ -129,7 +130,7 @@ export const ContactsScreen = () => {
             onPress={() => navigation.navigate("Profile")}
             style={styles.profileLink}
           >
-            <Text style={styles.profileLinkText}>Medical Profile</Text>
+            <Text style={styles.profileLinkText}>Profile Settings</Text>
             <Ionicons name="chevron-forward" size={16} color={COLORS.primary} />
           </Pressable>
         </View>
