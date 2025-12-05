@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "p12_w02-5_quickline",
+    "name": "quickline",
     "slug": "p12_w02-5_quickline",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -28,8 +28,6 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "plugins": [
-      "expo-sqlite"
-    ]
+    "plugins": ["expo-sqlite"]
   }
 }
