@@ -129,7 +129,7 @@ export default function App() {
           <Stack.Screen
             name="Profile"
             component={ProfileScreen}
-            options={{ title: "Medical Profile" }}
+            options={{ title: "Profile" }}
           />
         </Stack.Navigator>
       </NavigationContainer>

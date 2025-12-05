@@ -16,6 +16,7 @@ import {
   sendEmergencySMS,
   callEmergencyNumber,
   generateEmergencyMessage,
+  sendEmergencyWebhook,
 } from "../utils/communication";
 import { useContactStore } from "../store/useContactStore";
 import { COLORS, SPACING, FONT_SIZE, LAYOUT } from "../constants/theme";
@@ -40,7 +41,16 @@ export const MainScreen = () => {
   const handleEmergencyActivate = useCallback(() => {
     const { coords: currentCoords, address: currentAddress } =
       locationRef.current;
+    console.log(
+      "Emergency Activate - Coords:",
+      currentCoords,
+      "Address:",
+      currentAddress
+    );
     const message = generateEmergencyMessage(currentCoords, currentAddress);
+
+    // Send webhook notification (async, no need to await and block UI)
+    sendEmergencyWebhook(currentCoords, currentAddress);
 
     // Send to all contacts (using contacts from closure is fine as it updates less frequently,
     // or we could use a ref for contacts too if needed, but let's stick to location optimization first)
@@ -50,7 +60,7 @@ export const MainScreen = () => {
       sendEmergencySMS(TEST_NUMBER, message);
     } else {
       // For MVP, let's send to the first contact
-      sendEmergencySMS(contacts[0].phone, message);
+      //   sendEmergencySMS(contacts[0].phone, message);
     }
   }, [contacts]); // Re-create only if contacts change
 
