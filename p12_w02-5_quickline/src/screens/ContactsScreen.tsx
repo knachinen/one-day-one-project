@@ -22,13 +22,11 @@ export const ContactsScreen = () => {
   const [phone, setPhone] = useState("");
   const [editingContactId, setEditingContactId] = useState<number | null>(null);
   const [editingName, setEditingName] = useState("");
-  const [editingPhone, setEditingPhone] = useState("");
-
-  useEffect(() => {
-    loadContacts();
-  }, []);
-
-  const handleSaveContact = async () => {
+      const [editingPhone, setEditingPhone] = useState("");
+  
+      useEffect(() => {
+          loadContacts();
+      }, []);  const handleSaveContact = async () => {
     const contactName = editingContactId ? editingName : name;
     const contactPhone = editingContactId ? editingPhone : phone;
 
@@ -139,7 +137,6 @@ export const ContactsScreen = () => {
           Add up to 3 contacts to call quickly.
         </Text>
       </View>
-
       <View style={styles.form}>
         <TextInput
           style={styles.input}

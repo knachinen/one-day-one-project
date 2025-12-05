@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, ActivityIndicator } from 'react-native';
+import { View, ActivityIndicator, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -90,7 +90,17 @@ export default function App() {
         <Stack.Screen
           name="Contacts"
           component={ContactsScreen}
-          options={{ title: 'Emergency Contacts' }}
+          options={({ navigation }) => ({
+            title: 'Emergency Contacts',
+            headerRight: () => (
+              <Pressable
+                onPress={() => navigation.navigate('Onboarding')}
+                style={{ marginRight: 15 }}
+              >
+                <Ionicons name="information-circle-outline" size={24} color={COLORS.text} />
+              </Pressable>
+            ),
+          })}
         />
         <Stack.Screen
           name="Profile"
