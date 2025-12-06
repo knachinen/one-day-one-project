@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   View,
   Text,
@@ -14,7 +14,17 @@ import { useLogStore } from "../store/useLogStore";
 import { LogEntry } from "../utils/logParser";
 import { useNavigation } from "@react-navigation/native";
 
-
+// Debounce function
+const debounce = <T extends any[]>(func: (...args: T) => any, delay: number) => {
+  let timeout: NodeJS.Timeout | null;
+  return function(this: any, ...args: T) {
+    const context = this;
+    if (timeout) {
+      clearTimeout(timeout);
+    }
+    timeout = setTimeout(() => func.apply(context, args), delay);
+  };
+};
 
 const LogItem = React.memo(
   ({
@@ -54,6 +64,42 @@ export const MainScreen = () => {
   const isCapturing = useLogStore((state) => state.isCapturing);
   const setCapturing = useLogStore((state) => state.setCapturing);
   const clearLogs = useLogStore((state) => state.clearLogs);
+  const filterText = useLogStore((state) => state.filterText);
+  const setFilterText = useLogStore((state) => state.setFilterText);
+
+  // Local state for immediate TextInput value
+  const [searchText, setSearchText] = useState(filterText);
+
+  // Debounced version of setFilterText
+  const debouncedSetFilterText = useCallback(
+    debounce((text: string) => {
+      setFilterText(text);
+    }, 300), // 300ms debounce delay
+    [setFilterText]
+  );
+
+  // Effect to update Zustand's filterText when local searchText changes
+  useEffect(() => {
+    debouncedSetFilterText(searchText);
+  }, [searchText, debouncedSetFilterText]);
+
+  // Effect to keep local searchText in sync if Zustand's filterText changes externally (e.g., clear button)
+  useEffect(() => {
+    setSearchText(filterText);
+  }, [filterText]);
+
+  const filteredLogs = useMemo(() => {
+    if (!filterText) {
+      return logs;
+    }
+    const lowerCaseFilterText = filterText.toLowerCase();
+    return logs.filter(
+      (log) =>
+        log.message.toLowerCase().includes(lowerCaseFilterText) ||
+        log.tag.toLowerCase().includes(lowerCaseFilterText) ||
+        log.level.toLowerCase().includes(lowerCaseFilterText)
+    );
+  }, [logs, filterText]);
 
   const listRef = useRef<FlashListRef<LogEntry>>(null);
   const scrollMetricsRef = useRef<{
@@ -131,7 +177,12 @@ export const MainScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <TextInput style={styles.search} placeholder="Search logs..." />
+        <TextInput
+          style={styles.search}
+          placeholder="Search logs..."
+          value={searchText}
+          onChangeText={setSearchText}
+        />
         <View style={styles.controls}>
           <TouchableOpacity
             style={[
@@ -161,7 +212,7 @@ export const MainScreen = () => {
       <View style={styles.listContainer}>
         <FlashList
           ref={listRef}
-          data={logs}
+          data={filteredLogs}
           renderItem={renderItem}
           keyExtractor={(item) => item.id}
           getItemType={(item) => "row"}
