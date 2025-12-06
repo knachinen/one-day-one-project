@@ -95,7 +95,6 @@ export const MainScreen = () => {
         <FlashList
           data={logs}
           renderItem={renderItem}
-          estimatedItemSize={20}
           keyExtractor={(item) => item.id}
           getItemType={(item) => "row"}
         />
