@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, PermissionsAndroid, Button } from 'react-native';
+import { View, Text, StyleSheet, PermissionsAndroid, Button, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 export const PermissionScreen = () => {
@@ -14,6 +14,10 @@ export const PermissionScreen = () => {
                 navigation.replace('Main');
             } else {
                 setHasPermission(false);
+                Alert.alert(
+                    "Permission Denied",
+                    "The 'READ_LOGS' permission is not granted. Please run the ADB command on your PC to grant the permission, then try again."
+                );
             }
         } catch (err) {
             console.warn(err);
