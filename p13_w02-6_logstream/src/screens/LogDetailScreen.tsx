@@ -84,25 +84,25 @@ const getLevelColor = (level: string) => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#1e1e1e", padding: 10 },
+  container: { flex: 1, backgroundColor: "#ffffff", padding: 10 },
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
     marginBottom: 20,
   },
-  title: { color: "#fff", fontSize: 20, fontWeight: "bold" },
-  shareBtn: { backgroundColor: "#333", padding: 8, borderRadius: 5 },
-  shareText: { color: "#448aff" },
+  title: { color: "#000", fontSize: 20, fontWeight: "bold" },
+  shareBtn: { backgroundColor: "#cccccc", padding: 8, borderRadius: 5 },
+  shareText: { color: "#0000ff" },
   content: { flex: 1 },
-  text: { color: "#fff" },
+  text: { color: "#000" },
   row: { flexDirection: "row", marginBottom: 10 },
-  label: { color: "#888", width: 60, fontWeight: "bold" },
-  value: { color: "#fff", flex: 1 },
+  label: { color: "#666666", width: 60, fontWeight: "bold" },
+  value: { color: "#000", flex: 1 },
   messageBox: {
-    backgroundColor: "#2d2d2d",
+    backgroundColor: "#e0e0e0",
     padding: 10,
     borderRadius: 5,
     marginTop: 5,
   },
-  message: { color: "#fff", fontFamily: "monospace" },
+  message: { color: "#000", fontFamily: "monospace" },
 });

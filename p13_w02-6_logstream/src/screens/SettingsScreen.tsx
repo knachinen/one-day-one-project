@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as FileSystem from "expo-file-system";
+import { File, Directory, Paths } from "expo-file-system";
 import * as Sharing from "expo-sharing";
 import { useLogStore } from "../store/useLogStore";
 
@@ -24,37 +25,62 @@ export const SettingsScreen = () => {
     loadFiles();
   }, []);
 
+  const getDocumentDirectory = () => {
+    // Paths.document provides the base URI for the document directory
+    return new Directory(Paths.document);
+  };
+
   const loadFiles = async () => {
     try {
-      const result = await FileSystem.readDirectoryAsync(
-        (FileSystem as any).documentDirectory!
-      );
-      const logFiles = result.filter((f) => f.endsWith(".txt"));
-      setFiles(logFiles);
+      const documentDir = getDocumentDirectory();
+
+      // Check if the directory exists before listing its contents
+      if (!documentDir.exists) {
+        setFiles([]); // Directory doesn't exist, so no files
+        return;
+      }
+
+      const filesAndFolders: string[] = [];
+      for await (const item of documentDir.list()) {
+        if (item instanceof File && item.name.endsWith(".txt")) {
+          filesAndFolders.push(item.name);
+        }
+      }
+      setFiles(filesAndFolders);
     } catch (e) {
       console.error(e);
+      setFiles([]);
     }
   };
 
   const saveLogs = async () => {
     if (!filename) return;
-    const uri = (FileSystem as any).documentDirectory + filename;
+    const documentDir = getDocumentDirectory();
+    const logFile = new File(documentDir, filename);
     const content = logs
       .map((l) => `${l.timestamp} ${l.level}/${l.tag}: ${l.message}`)
       .join("\n");
     try {
-      await FileSystem.writeAsStringAsync(uri, content);
+      // Ensure the directory exists (handled by getDocumentDirectory implicitly)
+      // Check if file exists, if so, delete it before creating to overwrite
+      if (logFile.exists) {
+        await logFile.delete();
+      }
+      await logFile.create();
+      await logFile.write(content);
       Alert.alert("Saved", "Logs saved to " + filename);
       loadFiles();
     } catch (e) {
+      console.error("Failed to save logs:", e);
       Alert.alert("Error", "Failed to save logs");
     }
   };
 
   const shareFile = async (name: string) => {
-    const uri = (FileSystem as any).documentDirectory + name;
+    const documentDir = getDocumentDirectory();
+    const logFile = new File(documentDir, name);
     if (await Sharing.isAvailableAsync()) {
-      await Sharing.shareAsync(uri);
+      await Sharing.shareAsync(logFile.uri);
     } else {
       Alert.alert("Error", "Sharing is not available");
     }

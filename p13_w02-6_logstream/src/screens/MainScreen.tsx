@@ -77,7 +77,11 @@ export const MainScreen = () => {
             ]}
             onPress={() => setCapturing(!isCapturing)}
           >
-            <Text style={styles.btnText}>{isCapturing ? "Stop" : "Start"}</Text>
+            <Text
+              style={isCapturing ? styles.btnStopText : styles.btnStartText}
+            >
+              {isCapturing ? "Stop" : "Start"}
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.button} onPress={clearLogs}>
             <Text style={styles.btnText}>Clear</Text>
@@ -104,17 +108,17 @@ export const MainScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#1e1e1e" },
+  container: { flex: 1, backgroundColor: "#ffffff" },
   header: {
     padding: 10,
-    backgroundColor: "#2d2d2d",
+    backgroundColor: "#f0f0f0",
     flexDirection: "row",
     alignItems: "center",
   },
   search: {
     flex: 1,
-    backgroundColor: "#3d3d3d",
-    color: "#fff",
+    backgroundColor: "#e0e0e0",
+    color: "#000",
     padding: 8,
     borderRadius: 5,
     marginRight: 10,
@@ -122,14 +126,16 @@ const styles = StyleSheet.create({
   controls: { flexDirection: "row" },
   button: {
     padding: 8,
-    backgroundColor: "#555",
+    backgroundColor: "#cccccc",
     borderRadius: 5,
     marginLeft: 5,
   },
-  btnStart: { backgroundColor: "#2e7d32" },
+  btnStart: { backgroundColor: "#1a1a1a" },
   btnStop: { backgroundColor: "#c62828" },
-  btnText: { color: "#fff", fontWeight: "bold" },
+  btnText: { color: "#000", fontWeight: "bold" },
+  btnStartText: { color: "#fff" },
+  btnStopText: { color: "#fff" },
   listContainer: { flex: 1, paddingHorizontal: 5 },
   logRow: { paddingVertical: 2 },
-  logText: { color: "#bbb", fontFamily: "monospace", fontSize: 12 },
+  logText: { color: "#333333", fontFamily: "monospace", fontSize: 12 },
 });
