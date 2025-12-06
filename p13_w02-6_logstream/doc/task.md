@@ -1,0 +1,31 @@
+# Task List for LogStream Documentation Update
+
+- [x] Update `p13_w02-6_feasibility.md`
+    - [x] Add explicit constraint about `Expo Go` incompatibility and requirement for Development Build.
+    - [x] Clarify distribution challenges regarding `READ_LOGS` permission.
+- [x] Update `p13_w02-6_prd.md`
+    - [x] Update Tech Stack to specify "Expo Prebuild / Development Build".
+    - [x] Refine Onboarding Flow to include instructions for PC connection (ADB).
+- [x] Update `p13_w02-6_prd.md`
+    - [x] Update Tech Stack to specify "Expo Prebuild / Development Build".
+    - [x] Refine Onboarding Flow to include instructions for PC connection (ADB).
+    - [x] Add specific performance requirements (e.g., `@shopify/flash-list`) for the log list.
+- [x] Create `p13_w02-6_design.md`
+    - [x] Analyze mockup image and document UI components for Permission, Stream, Detail, and Settings screens.
+- [ ] Phase 1: Project Setup & Native Foundations
+    - [/] Initialize Expo project with TypeScript.
+    - [x] Configure `app.json` (package name, permissions).
+    - [x] Implement `LogcatModule` (Android Native Module).
+    - [ ] Verify `READ_LOGS` permission and basic log streaming.
+- [ ] Phase 2: Core Logic & State Management
+    - [x] Setup Zustand store (`useLogStore`).
+    - [x] Implement `logParser` utility.
+    - [x] Integrate native event emitter with Zustand store.
+- [x] Phase 3: UI Implementation
+    - [x] Implement `PermissionScreen` with ADB instruction.
+    - [x] Implement `MainScreen` using `@shopify/flash-list`.
+    - [x] Implement `LogDetailScreen` and `SettingsScreen`.
+- [ ] Phase 4: Verification & Polish
+    - [x] Optimize list performance (memoization).
+    - [x] Verify file saving and sharing.
+    - [x] Create walkthrough documentation.
