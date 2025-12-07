@@ -13,7 +13,7 @@ export const AppDataSource = new DataSource({
     database: process.env.DB_NAME || "pictory",
     synchronize: true, // Be careful with this in production
     logging: false,
-    entities: ["src/entity/**/*.ts"],
+    entities: ["src/entity/**/*.ts"], // Use glob pattern for ts-node
     migrations: ["src/migration/**/*.ts"],
     subscribers: ["src/subscriber/**/*.ts"],
 })

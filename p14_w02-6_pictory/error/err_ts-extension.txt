@@ -1,0 +1,40 @@
+This error, `TypeError [ERR_UNKNOWN_FILE_EXTENSION]: Unknown file extension ".ts"`, occurs because **Node.js, by default, does not natively understand or execute TypeScript (`.ts`) files in an ECMAScript Module (ESM) context.**
+
+Here is a breakdown of why this happens and what the context suggests:
+
+-----
+
+## 🧐 Reason for the Error
+
+The error message points specifically to a file with the `.ts` extension (`/Users/salgu/Workspace/.../src/entity/User.ts`) being processed as a module, likely using the **ECMAScript Module (ESM) format** (indicated by the presence of `node:internal/modules/esm/get_format`, `defaultLoad`, etc. in the stack trace).
+
+1.  **Node.js Native Support:** Node.js natively supports **JavaScript** files, typically with the `.js` extension. It knows how to load and run these as CommonJS modules or, if configured, as ES Modules.
+2.  **TypeScript is a Superset:** **TypeScript** is a language that needs to be **transpiled** (converted) into plain JavaScript before Node.js can execute it.
+3.  **ESM Mode Conflict:** When Node.js is running in **ESM mode** (e.g., if you have `"type": "module"` in your `package.json`, or if you're using the `.mjs` extension), it strictly follows the module resolution rules. When it encounters an **unknown file extension** like `.ts`, it doesn't know what format it should use to load the module, leading to the `ERR_UNKNOWN_FILE_EXTENSION`.
+
+-----
+
+## 🛠️ The Implied Context
+
+The file path `/server/src/entity/User.ts` strongly suggests you are running a **TypeScript project** (likely an Express/TypeORM server) and attempting to execute it **directly** with the `node` command *without* properly configuring a runtime transpiler or a build step.
+
+### How to Fix This
+
+To resolve this issue, you need to ensure the TypeScript file is converted to JavaScript *before* or *during* execution. The two most common ways to run a TypeScript project are:
+
+1.  **Run with a Runtime Transpiler (Recommended for Development):**
+
+      * Use a tool like **`ts-node`** (or similar, like `tsx`). This tool hooks into the Node.js module loading system and transpiles `.ts` files on the fly when they are imported.
+      * **Example Command:** Instead of `node src/index.ts`, you would use `npx ts-node src/index.ts`.
+
+2.  **Transpile First (Recommended for Production/Deployment):**
+
+      * Use the **TypeScript compiler (`tsc`)** to build all your `.ts` files into a `.js` output directory (e.g., `dist` or `build`).
+      * Configure your `package.json` **start script** to first run the build and then execute the resulting JavaScript file.
+      * **Example Commands:**
+        ```bash
+        npx tsc # Compiles TypeScript to JavaScript
+        node dist/index.js # Executes the compiled JavaScript
+        ```
+
+Would you like me to help you configure your `package.json` to use **`ts-node`** for development?

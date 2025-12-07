@@ -1,24 +1,21 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = __importDefault(require("express"));
-const cors_1 = __importDefault(require("cors"));
-const dotenv_1 = __importDefault(require("dotenv"));
-const data_source_1 = require("./data-source");
-dotenv_1.default.config();
-const app = (0, express_1.default)();
+import express from 'express';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import { AppDataSource } from './data-source.js';
+import authRouter from './routes/auth.js'; // Import the auth router
+dotenv.config();
+const app = express();
 const port = process.env.PORT || 3000;
-app.use((0, cors_1.default)());
-app.use(express_1.default.json());
+app.use(cors());
+app.use(express.json());
+// Mount the auth router
+app.use('/api/auth', authRouter);
 app.get('/', (req, res) => {
     res.send('Pictory API Server');
 });
-data_source_1.AppDataSource.initialize().then(async () => {
+AppDataSource.initialize().then(async () => {
     console.log("Data Source has been initialized!");
     app.listen(port, () => {
         console.log(`Server is running at http://localhost:${port}`);
     });
-}).catch(error => console.log(error));
-//# sourceMappingURL=index.js.map
+}).catch((error) => console.log(error));
