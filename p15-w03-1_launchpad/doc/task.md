@@ -1,0 +1,68 @@
+# Task List
+
+- [/] **Phase 1: 기반 구축 (Setup & Foundation)**
+  - [x] **Project Setup**
+    - [x] Initialize Next.js 16+ project (`bun create next-app`)
+    - [x] Install & Config Shadcn/UI
+    - [x] Setup folder structure (`components`, `lib`, `features`, `types`)
+  - [x] **Database & Env**
+    - [x] Setup Neon PostgreSQL instance (Switched to SQLite)
+    - [x] Install Drizzle ORM & Kit
+    - [x] Configure `drizzle.config.ts` and DB connection
+  - [x] **Authentication**
+    - [x] Install Lucia Auth (or NextAuth) & Drizzle adapter
+    - [x] Create `User` schema
+    - [x] Implement Sign Up / Sign In pages
+    - [x] Setup Auth Guards (Middleware)
+  - [x] **Global UI**
+    - [x] Create `Header` (Logo, Nav, UserMenu)
+    - [x] Create `Footer`
+    - [ ] Implement Dark/Light Mode toggle
+
+- [/] **Phase 2: 아이디어 관리 (Idea Core)**
+  - [x] **Schema Design**
+    - [x] Define `ideas` table
+    - [x] Define `idea_images` table
+    - [x] Migrate DB
+  - [x] **Create Idea Feature**
+    - [x] Build `CreateIdeaForm` component
+    - [x] Create Server Action for `createIdea`
+    - [x] Implement image upload
+  - [x] **Idea Detail View**
+    - [x] Build `IdeaDetailHeader`
+    - [x] Build `IdeaContent` renderer
+    - [x] Fetch data via Server Components
+  - [ ] **Idea Feed**
+    - [ ] Create `IdeaCard` component
+    - [ ] Implement `IdeaList` with grid layout
+    - [ ] Create Server Action to fetch ideas
+
+- [ ] **Phase 3: 상호작용 (Interaction)**
+  - [ ] **Voting System**
+    - [ ] Define `votes` schema
+    - [ ] Add Vote buttons
+    - [ ] Implement `toggleVote` action
+  - [ ] **Comment System**
+    - [ ] Define `comments` schema
+    - [ ] Build `CommentList` & `CommentForm`
+    - [ ] Implement Nested Comments
+  - [ ] **Tags & Categories**
+    - [ ] Implement Tag selection
+    - [ ] Add Category filter
+
+- [ ] **Phase 4: 커뮤니티 & 마이페이지 (Community)**
+  - [ ] **User Profile**
+    - [ ] Create Profile Page
+    - [ ] Display User Stats & Idea History
+  - [ ] **Updates (DevLOG)**
+    - [ ] Define `updates` schema
+    - [ ] Allow updates on Idea Detail page
+
+- [ ] **Phase 5: 마무리 (Polish & Deploy)**
+  - [ ] **Refinement**
+    - [ ] Check responsive design
+    - [ ] Improve Loading States
+    - [ ] SEO Meta tags
+  - [ ] **Deployment**
+    - [ ] Check Build
+    - [ ] Deploy to Vercel
