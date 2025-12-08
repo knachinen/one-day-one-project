@@ -32,37 +32,38 @@
     - [x] Build `IdeaDetailHeader`
     - [x] Build `IdeaContent` renderer
     - [x] Fetch data via Server Components
-  - [ ] **Idea Feed**
-    - [ ] Create `IdeaCard` component
-    - [ ] Implement `IdeaList` with grid layout
-    - [ ] Create Server Action to fetch ideas
+  - [x] **Idea Feed**
+    - [x] Create `IdeaCard` component
+    - [x] Implement `IdeaList` with grid layout
+    - [x] Create Server Action to fetch ideas
 
 - [ ] **Phase 3: 상호작용 (Interaction)**
-  - [ ] **Voting System**
-    - [ ] Define `votes` schema
-    - [ ] Add Vote buttons
-    - [ ] Implement `toggleVote` action
-  - [ ] **Comment System**
-    - [ ] Define `comments` schema
-    - [ ] Build `CommentList` & `CommentForm`
-    - [ ] Implement Nested Comments
-  - [ ] **Tags & Categories**
-    - [ ] Implement Tag selection
+  - [x] **Voting System**
+    - [x] Define `votes` schema
+    - [x] Add Vote buttons
+    - [x] Implement `toggleVote` action
+    - [x] 낙관적 업데이트(Optimistic Updates)로 반응 속도 향상
+  - [x] **Comment System**
+    - [x] Define `comments` schema
+    - [x] Build `CommentList` & `CommentForm`
+    - [x] Implement Nested Comments
+  - [x] **Tags & Categories**
+    - [x] Implement Tag selection
     - [ ] Add Category filter
 
 - [ ] **Phase 4: 커뮤니티 & 마이페이지 (Community)**
-  - [ ] **User Profile**
-    - [ ] Create Profile Page
+  - [x] **User Profile**
+    - [x] Create Profile Page
     - [ ] Display User Stats & Idea History
-  - [ ] **Updates (DevLOG)**
-    - [ ] Define `updates` schema
-    - [ ] Allow updates on Idea Detail page
+  - [x] **Updates (DevLOG)**
+    - [x] Define `updates` schema
+    - [x] Allow updates on Idea Detail page
 
 - [ ] **Phase 5: 마무리 (Polish & Deploy)**
-  - [ ] **Refinement**
-    - [ ] Check responsive design
-    - [ ] Improve Loading States
-    - [ ] SEO Meta tags
-  - [ ] **Deployment**
-    - [ ] Check Build
-    - [ ] Deploy to Vercel
+  - [x] **Refinement**
+    - [x] Check responsive design
+    - [x] Improve Loading States
+    - [x] SEO Meta tags
+  - [x] **Deployment**
+    - [x] Check Build
+    - [x] Deploy to Vercel

@@ -1,21 +1,29 @@
+'use client';
+
 import Link from 'next/link';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
+import { toggleVote, IdeaWithAuthor } from '@/features/ideas/actions'; // Import IdeaWithAuthor
+import { useOptimistic } from 'react';
+import { useFormStatus } from 'react-dom';
 
-interface IdeaProps {
-    id: string;
-    title: string;
-    tagline: string;
-    category: string;
-    status: string;
-    upvotes: number | null;
-    commentsCount?: number;
-    author: string | null;
-}
+export function IdeaCard({ idea }: { idea: IdeaWithAuthor }) {
+    const [optimisticUpvotes, addOptimisticUpvote] = useOptimistic(
+        (idea.upvotes ?? 0) as number,
+        (currentUpvotes: number, amount: number) => currentUpvotes + amount
+    );
 
-export function IdeaCard({ idea }: { idea: IdeaProps }) {
+    function SubmitButton() { // Moved inside IdeaCard
+        const { pending } = useFormStatus();
+        return (
+            <Button variant="ghost" size="sm" className="h-auto px-2 py-1" type="submit" disabled={pending}>
+                <span role="img" aria-label="upvote">🔥</span>
+            </Button>
+        );
+    }
+
     return (
         <Card className="h-full flex flex-col hover:shadow-md transition-all">
             <CardHeader className="pb-3">
@@ -46,9 +54,13 @@ export function IdeaCard({ idea }: { idea: IdeaProps }) {
                     <span>{idea.author}</span>
                 </div>
                 <div className="flex items-center gap-4">
-                    <div className="flex items-center gap-1">
-                        <span>🔥 {idea.upvotes || 0}</span>
-                    </div>
+                    <form action={async (formData) => {
+                        addOptimisticUpvote(1); // Optimistically increment
+                        await toggleVote(formData);
+                    }}>
+                        <input type="hidden" name="ideaId" value={idea.id} />
+                        <SubmitButton /> {optimisticUpvotes}
+                    </form>
                     {/* Comments count future placeholder */}
                 </div>
             </CardFooter>

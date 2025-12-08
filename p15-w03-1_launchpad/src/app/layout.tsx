@@ -9,8 +9,31 @@ import "@/app/globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "LaunchPad MVP",
-  description: "Share your ideas and build together.",
+  title: "LaunchPad MVP - Share Your Ideas",
+  description: "LaunchPad MVP is a platform for sharing and collaborating on new ideas. Discover, vote, comment, and contribute to innovative projects.",
+  openGraph: {
+    title: "LaunchPad MVP - Share Your Ideas",
+    description: "LaunchPad MVP is a platform for sharing and collaborating on new ideas. Discover, vote, comment, and contribute to innovative projects.",
+    url: "https://launchpad-mvp.vercel.app", // Replace with your actual deployment URL
+    siteName: "LaunchPad MVP",
+    images: [
+      {
+        url: "https://launchpad-mvp.vercel.app/og-image.jpg", // Replace with your actual Open Graph image
+        width: 1200,
+        height: 630,
+        alt: "LaunchPad MVP",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "LaunchPad MVP - Share Your Ideas",
+    description: "LaunchPad MVP is a platform for sharing and collaborating on new ideas. Discover, vote, comment, and contribute to innovative projects.",
+    creator: "@yourtwitterhandle", // Replace with your Twitter handle
+    images: ["https://launchpad-mvp.vercel.app/og-image.jpg"], // Replace with your actual Twitter image
+  },
 };
 
 async function getSession() {

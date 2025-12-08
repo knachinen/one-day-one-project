@@ -4,7 +4,7 @@ import { useActionState } from 'react';
 import { createIdea } from '@/features/ideas/actions';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea'; // Need to create Textarea component or use raw
+import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import {
     Select,
@@ -12,10 +12,13 @@ import {
     SelectItem,
     SelectTrigger,
     SelectValue,
-} from '@/components/ui/select'; // Need to install Select
+} from '@/components/ui/select';
+import { TagSelector } from '@/components/features/ideas/tag-selector'; // Import TagSelector
+import { useState } from 'react'; // Import useState
 
 export function CreateIdeaForm() {
     const [state, formAction] = useActionState(createIdea, null);
+    const [selectedTags, setSelectedTags] = useState<string[]>([]); // State for selected tags
 
     return (
         <Card className="w-full max-w-2xl mx-auto">
@@ -49,6 +52,15 @@ export function CreateIdeaForm() {
                                 <SelectItem value="Other">Other</SelectItem>
                             </SelectContent>
                         </Select>
+                    </div>
+
+                    <div className="space-y-2">
+                        {/* Tag Selector */}
+                        <TagSelector selectedTags={selectedTags} onTagChange={setSelectedTags} />
+                        {/* Hidden inputs to pass selected tags to server action */}
+                        {selectedTags.map(tagId => (
+                            <input key={tagId} type="hidden" name="tags[]" value={tagId} />
+                        ))}
                     </div>
 
                     <div className="space-y-2">

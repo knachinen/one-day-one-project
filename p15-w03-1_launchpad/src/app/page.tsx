@@ -2,6 +2,7 @@ import { lucia } from "@/lib/auth";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { logout } from "@/features/auth/actions";
+import { IdeaList } from '@/components/features/idea-list'; // Import IdeaList
 
 async function getSession() {
   const sessionId = (await cookies()).get(lucia.sessionCookieName)?.value ?? null;
@@ -45,6 +46,10 @@ export default async function Home() {
           <button type="submit" className="px-4 py-2 bg-red-500 text-white rounded">Logout</button>
         </form>
       </div>
+      <section className="container mx-auto py-8">
+        <h2 className="text-2xl font-bold mb-6">Latest Ideas</h2>
+        <IdeaList />
+      </section>
     </main>
   );
 }

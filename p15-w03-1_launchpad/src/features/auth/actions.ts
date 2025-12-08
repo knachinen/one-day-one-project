@@ -84,3 +84,17 @@ export async function logout() {
     (await cookies()).set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
     return redirect("/login");
 }
+
+export async function getUserProfile() {
+    const sessionId = (await cookies()).get(lucia.sessionCookieName)?.value ?? null;
+    if (!sessionId) return null;
+    const { user } = await lucia.validateSession(sessionId);
+    if (!user) return null;
+
+    // Fetch user details including any other relevant profile information
+    const userProfile = await db.query.users.findFirst({
+        where: eq(users.id, user.id),
+    });
+
+    return userProfile;
+}

@@ -1,4 +1,4 @@
-import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core';
+import { sqliteTable, text, integer, AnySQLiteColumn } from 'drizzle-orm/sqlite-core';
 
 export const users = sqliteTable('users', {
     id: text('id').primaryKey(),
@@ -56,7 +56,18 @@ export const comments = sqliteTable('comments', {
     id: text('id').primaryKey().$defaultFn(() => crypto.randomUUID()),
     ideaId: text('idea_id').notNull().references(() => ideas.id),
     userId: text('user_id').notNull().references(() => users.id),
+    parentId: text('parent_id').references((): AnySQLiteColumn => comments.id), // For nested comments
     content: text('content').notNull(),
     createdAt: integer('created_at', { mode: 'timestamp' }).notNull().default(new Date()),
+});
+
+export const updates = sqliteTable('updates', {
+    id: text('id').primaryKey().$defaultFn(() => crypto.randomUUID()),
+    ideaId: text('idea_id').notNull().references(() => ideas.id),
+    userId: text('user_id').notNull().references(() => users.id),
+    title: text('title').notNull(),
+    content: text('content').notNull(),
+    createdAt: integer('created_at', { mode: 'timestamp' }).notNull().default(new Date()),
+    updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull().default(new Date()),
 });
 
