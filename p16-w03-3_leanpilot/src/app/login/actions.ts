@@ -41,9 +41,9 @@ export async function login(formData: FormData) {
 		};
 	}
 
-	const session = await lucia.createSession(existingUser.id, {});
+	const session = await lucia.createSession(existingUser.id, { expiresAt: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000) });
 	const sessionCookie = lucia.createSessionCookie(session.id);
-	cookies().set(
+	(await cookies()).set(
 		sessionCookie.name,
 		sessionCookie.value,
 		sessionCookie.attributes,
