@@ -23,6 +23,7 @@
 # misc
 .DS_Store
 *.pem
+/sqlite.db # Exclude SQLite database file
 
 # debug
 npm-debug.log*
