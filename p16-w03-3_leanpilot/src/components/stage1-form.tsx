@@ -15,12 +15,12 @@ import { useProjectStore } from "@/store/project-store";
 const stage1Schema = z.object({
 	problem: z
 		.string()
-		.min(50, "Problem description must be at least 50 characters."),
+		.min(20, "Problem description must be at least 20 characters."),
 	frequency: z.enum(["daily", "weekly", "monthly", "sometimes"]),
 	cost: z.string().optional(),
 	targetCustomer: z
 		.string()
-		.min(30, "Target customer description must be at least 30 characters."),
+		.min(20, "Target customer description must be at least 20 characters."),
 	marketSize: z.string().optional(),
 	currentAlternatives: z.string().optional(),
 	alternativesLimitations: z.string().optional(),

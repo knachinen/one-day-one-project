@@ -15,22 +15,22 @@ import { useProjectStore } from "@/store/project-store";
 const stage2Schema = z.object({
 	solutionOverview: z
 		.string()
-		.min(50, "Solution overview must be at least 50 characters."),
-	usp: z.string().min(30, "USP must be at least 30 characters."),
+		.min(20, "Solution overview must be at least 20 characters."),
+	usp: z.string().min(30, "USP must be at least 20 characters."),
 	tagline: z.string().min(10, "Tagline must be at least 10 characters."),
 	valueProposition: z
 		.string()
-		.min(30, "Value proposition must be at least 30 characters."),
+		.min(20, "Value proposition must be at least 20 characters."),
 	paymentValue: z.enum(["free", "premium", "professional", "enterprise"]),
 	hypothesis1: z
 		.string()
-		.min(30, "Hypothesis 1 must be at least 30 characters."),
+		.min(20, "Hypothesis 1 must be at least 20 characters."),
 	hypothesis2: z
 		.string()
-		.min(30, "Hypothesis 2 must be at least 30 characters."),
+		.min(20, "Hypothesis 2 must be at least 20 characters."),
 	hypothesis3: z
 		.string()
-		.min(30, "Hypothesis 3 must be at least 30 characters."),
+		.min(20, "Hypothesis 3 must be at least 20 characters."),
 });
 
 type Stage2FormData = z.infer<typeof stage2Schema>;
