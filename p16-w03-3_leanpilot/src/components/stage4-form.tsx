@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { MinusCircle, PlusCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useFieldArray, useForm } from "react-hook-form";
+import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -102,13 +102,27 @@ export default function Stage4Form({ projectId }: Stage4FormProps) {
 				const data = await response.json();
 				const formattedData: Partial<Stage4FormData> = {};
 				for (const key in data) {
-					if (data[key] && typeof data[key] === "string") {
-						try {
-							formattedData[key as keyof Stage4FormData] = JSON.parse(
-								data[key],
-							);
-						} catch {
-							formattedData[key as keyof Stage4FormData] = data[key];
+					if (data[key]) { // Check if data[key] exists
+						let valueToAssign = data[key];
+						if (typeof data[key] === "string") {
+							try {
+								const parsedValue = JSON.parse(data[key]);
+								valueToAssign = parsedValue;
+							} catch {
+								// If JSON.parse fails, the value remains the original string
+							}
+						}
+
+						// Specific handling for fields expected to be arrays
+						if (key === "preMvpValidation" || key === "feedbackMethods") {
+							if (!Array.isArray(valueToAssign)) {
+								// If it's not an array, default to an empty array
+								formattedData[key as keyof Stage4FormData] = [];
+							} else {
+								formattedData[key as keyof Stage4FormData] = valueToAssign;
+							}
+						} else {
+							formattedData[key as keyof Stage4FormData] = valueToAssign;
 						}
 					}
 				}
@@ -162,11 +176,25 @@ export default function Stage4Form({ projectId }: Stage4FormProps) {
 				<div className="grid gap-2">
 					{preMvpOptions.map((option, index) => (
 						<div key={option} className="flex items-center space-x-2">
-							<Checkbox
-								id={`preMvpValidation.${index}`}
-								value={option}
-								{...register("preMvpValidation")}
-								disabled={loading}
+							<Controller
+								name="preMvpValidation"
+								control={control}
+								render={({ field }) => (
+									<Checkbox
+										id={`preMvpValidation.${index}`}
+										checked={field.value.includes(option)}
+										onCheckedChange={(checked) => {
+											if (checked) {
+												field.onChange([...field.value, option]);
+											} else {
+												field.onChange(
+													field.value.filter((val: string) => val !== option),
+												);
+											}
+										}}
+										disabled={loading}
+									/>
+								)}
 							/>
 							<label
 								htmlFor={`preMvpValidation.${index}`}
@@ -328,11 +356,25 @@ export default function Stage4Form({ projectId }: Stage4FormProps) {
 				<div className="grid gap-2">
 					{feedbackOptions.map((option, index) => (
 						<div key={option} className="flex items-center space-x-2">
-							<Checkbox
-								id={`feedbackMethods.${index}`}
-								value={option}
-								{...register("feedbackMethods")}
-								disabled={loading}
+							<Controller
+								name="feedbackMethods"
+								control={control}
+								render={({ field }) => (
+									<Checkbox
+										id={`feedbackMethods.${index}`}
+										checked={field.value.includes(option)}
+										onCheckedChange={(checked) => {
+											if (checked) {
+												field.onChange([...field.value, option]);
+											} else {
+												field.onChange(
+													field.value.filter((val: string) => val !== option),
+												);
+											}
+										}}
+										disabled={loading}
+									/>
+								)}
 							/>
 							<label
 								htmlFor={`feedbackMethods.${index}`}

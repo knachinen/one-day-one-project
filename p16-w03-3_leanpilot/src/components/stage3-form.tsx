@@ -64,6 +64,7 @@ export default function Stage3Form({ projectId }: Stage3FormProps) {
 		reset,
 		control,
 		watch,
+		setValue,
 		formState: { errors, isDirty },
 	} = useForm<Stage3FormData>({
 		resolver: zodResolver(stage3Schema),
@@ -232,16 +233,10 @@ export default function Stage3Form({ projectId }: Stage3FormProps) {
 								Priority
 							</label>
 							<Select
-								onValueChange={(value) => {
-									if (value) {
-										// Manually set value for Select component
-										// This is a common workaround for react-hook-form + shadcn Select
-										(control._fields.mustHaveFeatures as any)[
-											index
-										].priority._f.value = value;
-									}
-								}}
-								defaultValue={field.priority}
+								onValueChange={(value) =>
+									value && setValue(`mustHaveFeatures.${index}.priority`, value)
+								}
+								value={watch(`mustHaveFeatures.${index}.priority`) || undefined} // Use watch for controlled component
 								disabled={isSaving}
 							>
 								<SelectTrigger className="w-[180px]">
@@ -338,14 +333,10 @@ export default function Stage3Form({ projectId }: Stage3FormProps) {
 								Priority
 							</label>
 							<Select
-								onValueChange={(value) => {
-									if (value) {
-										(control._fields.niceToHaveFeatures as any)[
-											index
-										].priority._f.value = value;
-									}
-								}}
-								defaultValue={field.priority}
+								onValueChange={(value) =>
+									value && setValue(`niceToHaveFeatures.${index}.priority`, value)
+								}
+								value={watch(`niceToHaveFeatures.${index}.priority`) || undefined} // Use watch for controlled component
 								disabled={isSaving}
 							>
 								<SelectTrigger className="w-[180px]">
