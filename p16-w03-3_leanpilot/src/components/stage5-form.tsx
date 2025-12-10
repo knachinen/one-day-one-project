@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { MinusCircle, PlusCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useFieldArray, useForm } from "react-hook-form";
+import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -65,6 +65,7 @@ export default function Stage5Form({ projectId }: Stage5FormProps) {
 		handleSubmit,
 		reset,
 		control,
+		watch,
 		formState: { errors },
 	} = useForm<Stage5FormData>({
 		resolver: zodResolver(stage5Schema),
@@ -297,11 +298,25 @@ export default function Stage5Form({ projectId }: Stage5FormProps) {
 				<div className="grid gap-2">
 					{launchChannelOptions.map((option, index) => (
 						<div key={option} className="flex items-center space-x-2">
-							<Checkbox
-								id={`launchChannels.${index}`}
-								value={option}
-								{...register("launchChannels")}
-								disabled={loading}
+							<Controller
+								name="launchChannels"
+								control={control}
+								render={({ field }) => (
+									<Checkbox
+										id={`launchChannels.${index}`}
+										checked={field.value.includes(option)}
+										onCheckedChange={(checked) => {
+											if (checked) {
+												field.onChange([...field.value, option]);
+											} else {
+												field.onChange(
+													field.value.filter((val: string) => val !== option),
+												);
+											}
+										}}
+										disabled={loading}
+									/>
+								)}
 							/>
 							<label
 								htmlFor={`launchChannels.${index}`}
