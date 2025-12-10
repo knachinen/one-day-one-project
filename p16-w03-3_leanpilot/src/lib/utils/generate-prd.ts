@@ -3,17 +3,30 @@ import { db } from "@/lib/db";
 import { ProjectTable, StageResponseTable } from "@/lib/db/schema";
 
 export async function generatePrdMarkdown(projectId: string): Promise<string> {
-	const project = await db.query.ProjectTable.findFirst({
-		where: eq(ProjectTable.id, projectId),
-	});
+    console.error("DEBUG: generatePrdMarkdown started for projectId:", projectId); // Debug log
 
-	if (!project) {
-		throw new Error("Project not found.");
-	}
+    let project;
+    let stageResponses;
 
-	const stageResponses = await db.query.StageResponseTable.findMany({
-		where: eq(StageResponseTable.projectId, projectId),
-	});
+    try {
+        project = await db.query.ProjectTable.findFirst({
+            where: eq(ProjectTable.id, projectId),
+        });
+
+        if (!project) {
+            console.error("ERROR: Project not found for projectId:", projectId); // Debug log
+            throw new Error('Project not found.');
+        }
+        console.error("DEBUG: Project found:", project.title); // Debug log
+
+        stageResponses = await db.query.StageResponseTable.findMany({
+            where: eq(StageResponseTable.projectId, projectId),
+        });
+        console.error("DEBUG: Stage responses fetched:", stageResponses.length); // Debug log
+    } catch (err) {
+        console.error("ERROR: generatePrdMarkdown caught an error during DB operations:", err); // Debug log
+        throw err; // Re-throw the error
+    }
 
 	const formattedResponses: Record<number, Record<string, any>> = {};
 	stageResponses.forEach((response) => {

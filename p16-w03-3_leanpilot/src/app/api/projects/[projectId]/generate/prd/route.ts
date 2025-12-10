@@ -4,7 +4,7 @@ import { generatePrdMarkdown } from "@/lib/utils/generate-prd";
 
 export async function GET(
 	_request: Request,
-	{ params }: { params: { id: string } },
+	{ params }: { params: { projectId: string } },
 ) {
 	const { user } = await validateRequest();
 
@@ -12,7 +12,8 @@ export async function GET(
 		return new NextResponse("Unauthorized", { status: 401 });
 	}
 
-	const projectId = params.id;
+	const resolvedParams = await params; // Assume params is the Promise-like object
+	const projectId = resolvedParams.projectId;
 
 	try {
 		const markdownContent = await generatePrdMarkdown(projectId);
@@ -24,6 +25,7 @@ export async function GET(
 			},
 		});
 	} catch (error: any) {
-		return new NextResponse(error.message, { status: 500 });
+        console.error("PRD generation API error:", error);
+		return new NextResponse(JSON.stringify({ error: error.message || String(error) }), { status: 500 });
 	}
 }

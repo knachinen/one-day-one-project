@@ -6,7 +6,7 @@ import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
 import MermaidChart from "@/components/mermaid-chart";
 import { Button } from "@/components/ui/button";
-import { validateRequest } from "@/lib/auth";
+import { validateRequest, lucia } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { ProjectTable } from "@/lib/db/schema";
 
@@ -17,13 +17,14 @@ interface PreviewPageProps {
 }
 
 export default async function PreviewPage({ params }: PreviewPageProps) {
-	const { user } = await validateRequest();
+	const { user, session } = await validateRequest();
 
 	if (!user) {
 		return redirect("/login");
 	}
 
-	const projectId = params.projectId;
+	const resolvedParams = await params; // Assume params is the Promise-like object
+	const projectId = resolvedParams.projectId;
 
 	const project = await db.query.ProjectTable.findFirst({
 		where: eq(ProjectTable.id, projectId),
@@ -39,18 +40,21 @@ export default async function PreviewPage({ params }: PreviewPageProps) {
 			`${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/api/projects/${projectId}/generate/prd`,
 			{
 				headers: {
-					Cookie: `lucia_session=${user.id}`, // Pass session cookie for authorization
+					Cookie: `${lucia.sessionCookieName}=${session.id}`,
 				},
 			},
 		);
 		if (!response.ok) {
-			throw new Error("Failed to fetch PRD content.");
+			// Read the response body for a more detailed error message
+			const errorBody = await response.json().catch(() => ({ error: "Unknown error from API" }));
+			const errorMessage = errorBody.error || errorBody.message || "Failed to fetch PRD content.";
+			throw new Error(errorMessage);
 		}
 		markdownContent = await response.text();
-	} catch (error) {
+	} catch (error: any) { // Catching any type for now
 		console.error("Error fetching PRD content:", error);
 		markdownContent =
-			"## Error loading PRD\nAn error occurred while loading the PRD content.";
+			`## Error loading PRD\nAn error occurred while loading the PRD content: ${error.message || String(error)}.`;
 	}
 
 	const components = {

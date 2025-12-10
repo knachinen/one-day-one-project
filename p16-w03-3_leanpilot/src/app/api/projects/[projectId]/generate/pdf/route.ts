@@ -4,7 +4,7 @@ import { validateRequest } from "@/lib/auth";
 
 export async function GET(
 	_request: Request,
-	{ params }: { params: { id: string } },
+	{ params }: { params: { projectId: string } },
 ) {
 	const { user } = await validateRequest();
 
@@ -12,7 +12,7 @@ export async function GET(
 		return new NextResponse("Unauthorized", { status: 401 });
 	}
 
-	const projectId = params.id;
+	const projectId = params.projectId;
 	const url = `${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/projects/${projectId}/preview`;
 
 	try {

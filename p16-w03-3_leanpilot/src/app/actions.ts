@@ -36,12 +36,13 @@ export async function signup(formData: FormData) {
 				email,
 				name,
 				hashedPassword,
+				createdAt: new Date().toISOString(),
 			})
 			.returning();
 
-		const session = await lucia.createSession(userId, {});
+		const session = await lucia.createSession(userId, { expiresAt: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000) }); // Set expiration 1 year from now
 		const sessionCookie = lucia.createSessionCookie(session.id);
-		cookies().set(
+		(await cookies()).set(
 			sessionCookie.name,
 			sessionCookie.value,
 			sessionCookie.attributes,
@@ -49,7 +50,8 @@ export async function signup(formData: FormData) {
 		return {
 			success: true,
 		};
-	} catch (_error) {
+	} catch (error) {
+        console.error("Signup error:", error);
 		return {
 			error: "Failed to create user",
 		};

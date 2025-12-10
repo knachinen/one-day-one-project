@@ -55,7 +55,7 @@ export default async function DashboardPage() {
 										Status: {project.status} (Stage {project.currentStage})
 									</p>
 									<Button asChild className="mt-4 w-full">
-										<Link href={`/projects/${project.id}`}>View Project</Link>
+										<Link href={`/projects/${project.id}/preview`}>View Project</Link>
 									</Button>
 								</CardContent>
 							</Card>

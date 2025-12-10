@@ -54,6 +54,33 @@ async function main() {
         );
       `);
 			console.log('Table "projects" ensured.');
+
+			// Create StageResponseTable
+			await tx.run(sql`
+        CREATE TABLE IF NOT EXISTS stage_responses (
+          id TEXT PRIMARY KEY NOT NULL,
+          project_id TEXT NOT NULL,
+          stage_number INTEGER NOT NULL,
+          question_id TEXT NOT NULL,
+          answer TEXT NOT NULL,
+          created_at TEXT NOT NULL,
+          FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE
+        );
+      `);
+			console.log('Table "stage_responses" ensured.');
+
+			// Create GeneratedDocumentTable
+			await tx.run(sql`
+        CREATE TABLE IF NOT EXISTS generated_documents (
+          id TEXT PRIMARY KEY NOT NULL,
+          project_id TEXT NOT NULL,
+          type TEXT NOT NULL,
+          content TEXT NOT NULL,
+          created_at TEXT NOT NULL,
+          FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE
+        );
+      `);
+			console.log('Table "generated_documents" ensured.');
 		});
 
 		console.log("Schema synchronization completed successfully.");

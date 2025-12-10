@@ -6,7 +6,7 @@ import { ProjectTable } from "@/lib/db/schema";
 
 export async function GET(
 	_request: Request,
-	{ params }: { params: { id: string } },
+	{ params }: { params: { projectId: string } },
 ) {
 	const { user } = await validateRequest();
 
@@ -14,7 +14,7 @@ export async function GET(
 		return new NextResponse("Unauthorized", { status: 401 });
 	}
 
-	const projectId = params.id;
+	const projectId = params.projectId;
 	const project = await db.query.ProjectTable.findFirst({
 		where: eq(ProjectTable.id, projectId),
 	});
@@ -30,7 +30,7 @@ export async function GET(
 
 export async function PUT(
 	request: Request,
-	{ params }: { params: { id: string } },
+	{ params }: { params: { projectId: string } },
 ) {
 	const { user } = await validateRequest();
 
@@ -38,7 +38,7 @@ export async function PUT(
 		return new NextResponse("Unauthorized", { status: 401 });
 	}
 
-	const projectId = params.id;
+	const projectId = params.projectId;
 	const existingProject = await db.query.ProjectTable.findFirst({
 		where: eq(ProjectTable.id, projectId),
 	});
@@ -70,7 +70,7 @@ export async function PUT(
 
 export async function DELETE(
 	_request: Request,
-	{ params }: { params: { id: string } },
+	{ params }: { params: { projectId: string } },
 ) {
 	const { user } = await validateRequest();
 
@@ -78,7 +78,7 @@ export async function DELETE(
 		return new NextResponse("Unauthorized", { status: 401 });
 	}
 
-	const projectId = params.id;
+	const projectId = params.projectId;
 	const existingProject = await db.query.ProjectTable.findFirst({
 		where: eq(ProjectTable.id, projectId),
 	});
