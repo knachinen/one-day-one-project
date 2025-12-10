@@ -57,6 +57,10 @@ export default async function DashboardPage() {
 									<Button asChild className="mt-4 w-full">
 										<Link href={`/projects/${project.id}/preview`}>View Project</Link>
 									</Button>
+                                    {/* Add this new button */}
+									<Button asChild className="mt-2 w-full" variant="outline">
+										<Link href={`/projects/${project.id}/stage/${project.currentStage}`}>Continue Project</Link>
+									</Button>
 								</CardContent>
 							</Card>
 						))

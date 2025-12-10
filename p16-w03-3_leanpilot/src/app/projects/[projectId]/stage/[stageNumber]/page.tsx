@@ -25,7 +25,8 @@ export default async function StagePage({ params }: StagePageProps) {
 		return redirect("/login");
 	}
 
-	const { projectId, stageNumber } = params;
+	const resolvedParams = await params; // Assume params is the Promise-like object
+	const { projectId, stageNumber } = resolvedParams;
 	const currentStage = parseInt(stageNumber, 10);
 
 	if (Number.isNaN(currentStage) || currentStage < 1 || currentStage > 5) {
