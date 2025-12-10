@@ -92,7 +92,7 @@ export default function Stage2Form({ projectId }: Stage2FormProps) {
 		} finally {
 			setIsSaving(false);
 		}
-	}, 1000);
+	}, 5000); // Debounce for 3 seconds
 
 	useEffect(() => {
 		const subscription = watch((value) => {

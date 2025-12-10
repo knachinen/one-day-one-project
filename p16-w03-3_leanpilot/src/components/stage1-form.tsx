@@ -84,7 +84,7 @@ export default function Stage1Form({ projectId }: Stage1FormProps) {
 		} finally {
 			setIsSaving(false);
 		}
-	}, 1000); // Debounce for 1 second
+	}, 5000); // Debounce for 3 seconds
 
 	useEffect(() => {
 		const subscription = watch((value) => {

@@ -124,7 +124,7 @@ export default function Stage3Form({ projectId }: Stage3FormProps) {
 		} finally {
 			setIsSaving(false);
 		}
-	}, 1000);
+	}, 5000);
 
 	useEffect(() => {
 		const subscription = watch((value) => {
