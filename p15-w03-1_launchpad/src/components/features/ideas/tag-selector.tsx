@@ -1,15 +1,18 @@
-import { getAllTags } from '@/features/ideas/actions';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 
+interface Tag {
+    id: string;
+    name: string;
+}
+
 interface TagSelectorProps {
+    allTags: Tag[]; // New: Accept allTags as prop
     selectedTags: string[];
     onTagChange: (tags: string[]) => void;
 }
 
-export async function TagSelector({ selectedTags, onTagChange }: TagSelectorProps) {
-    const allTags = await getAllTags();
-
+export function TagSelector({ allTags, selectedTags, onTagChange }: TagSelectorProps) { // Removed async
     const handleCheckedChange = (tagId: string, checked: boolean) => {
         if (checked) {
             onTagChange([...selectedTags, tagId]);

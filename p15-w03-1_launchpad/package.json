@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "seed": "rm -rf dist-scripts && tsc --outDir dist-scripts scripts/seed.ts && node dist-scripts/seed.js && rm -rf dist-scripts"
   },
   "dependencies": {
     "@lucia-auth/adapter-drizzle": "^1.1.0",

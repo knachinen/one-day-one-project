@@ -16,7 +16,16 @@ import {
 import { TagSelector } from '@/components/features/ideas/tag-selector'; // Import TagSelector
 import { useState } from 'react'; // Import useState
 
-export function CreateIdeaForm() {
+interface Tag {
+    id: string;
+    name: string;
+}
+
+interface CreateIdeaFormProps {
+    allTags: Tag[];
+}
+
+export function CreateIdeaForm({ allTags }: CreateIdeaFormProps) {
     const [state, formAction] = useActionState(createIdea, null);
     const [selectedTags, setSelectedTags] = useState<string[]>([]); // State for selected tags
 
@@ -56,7 +65,7 @@ export function CreateIdeaForm() {
 
                     <div className="space-y-2">
                         {/* Tag Selector */}
-                        <TagSelector selectedTags={selectedTags} onTagChange={setSelectedTags} />
+                        <TagSelector allTags={allTags} selectedTags={selectedTags} onTagChange={setSelectedTags} />
                         {/* Hidden inputs to pass selected tags to server action */}
                         {selectedTags.map(tagId => (
                             <input key={tagId} type="hidden" name="tags[]" value={tagId} />

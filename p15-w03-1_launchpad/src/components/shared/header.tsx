@@ -54,36 +54,41 @@ export function Header({ user }: HeaderProps) {
                     </div>
                     <nav className="flex items-center">
                         {user ? (
-                            <DropdownMenu>
-                                <DropdownMenuTrigger asChild>
-                                    <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-                                        <Avatar className="h-8 w-8">
-                                            <AvatarImage src={user.avatar_url || ''} alt={user.username} />
-                                            <AvatarFallback>{user.username.slice(0, 2).toUpperCase()}</AvatarFallback>
-                                        </Avatar>
-                                    </Button>
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent className="w-56" align="end" forceMount>
-                                    <DropdownMenuItem className="font-normal">
-                                        <div className="flex flex-col space-y-1">
-                                            <p className="text-sm font-medium leading-none">{user.username}</p>
-                                        </div>
-                                    </DropdownMenuItem>
-                                    <DropdownMenuSeparator />
-                                    <DropdownMenuItem asChild>
-                                        <Link href={`/u/${user.username}`}>Profile</Link>
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem asChild>
-                                        <Link href="/settings">Settings</Link>
-                                    </DropdownMenuItem>
-                                    <DropdownMenuSeparator />
-                                    <DropdownMenuItem asChild>
-                                        <form action={logout} className="w-full">
-                                            <button type="submit" className="w-full text-left">Log out</button>
-                                        </form>
-                                    </DropdownMenuItem>
-                                </DropdownMenuContent>
-                            </DropdownMenu>
+                            <>
+                                <Button variant="ghost" asChild>
+                                    <Link href="/ideas/new">Create Idea</Link>
+                                </Button>
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger asChild>
+                                        <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                                            <Avatar className="h-8 w-8">
+                                                <AvatarImage src={user.avatar_url || ''} alt={user.username} />
+                                                <AvatarFallback>{user.username.slice(0, 2).toUpperCase()}</AvatarFallback>
+                                            </Avatar>
+                                        </Button>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent className="w-56" align="end" forceMount>
+                                        <DropdownMenuItem className="font-normal">
+                                            <div className="flex flex-col space-y-1">
+                                                <p className="text-sm font-medium leading-none">{user.username}</p>
+                                            </div>
+                                        </DropdownMenuItem>
+                                        <DropdownMenuSeparator />
+                                        <DropdownMenuItem asChild>
+                                            <Link href={`/u/${user.username}`}>Profile</Link>
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem asChild>
+                                            <Link href="/settings">Settings</Link>
+                                        </DropdownMenuItem>
+                                        <DropdownMenuSeparator />
+                                        <DropdownMenuItem asChild>
+                                            <form action={logout} className="w-full">
+                                                <button type="submit" className="w-full text-left">Log out</button>
+                                            </form>
+                                        </DropdownMenuItem>
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
+                            </>
                         ) : (
                             <div className="flex gap-2">
                                 <Button variant="ghost" asChild>

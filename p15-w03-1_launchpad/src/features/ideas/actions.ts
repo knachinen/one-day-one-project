@@ -58,6 +58,7 @@ export async function createIdea(prevState: any, formData: FormData) {
                 }));
                 await tx.insert(ideasToTags).values(ideaTags);
             }
+            return; // Explicitly return void
         });
     } catch (e) {
         console.error("Failed to create idea:", e);
