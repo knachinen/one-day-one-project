@@ -124,10 +124,10 @@ export default function GroupsPage() {
       ) : (
         <ul className="space-y-4">
           {groups.map((group) => (
-            <li key={group.id} className="p-4 border rounded shadow-sm bg-white dark:bg-gray-800">
-              <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100">{group.name}</h3>
-              {group.type && <p className="text-gray-700 dark:text-gray-300">Type: {group.type}</p>}
-              <p className="text-sm text-gray-500 dark:text-gray-400">ID: {group.id}</p>
+            <li key={group.id} className="p-4 border rounded shadow-sm bg-white">
+              <h3 className="text-lg font-bold text-gray-900">{group.name}</h3>
+              {group.type && <p className="text-gray-700">Type: {group.type}</p>}
+              <p className="text-sm text-gray-500">ID: {group.id}</p>
             </li>
           ))}
         </ul>
