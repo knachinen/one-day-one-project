@@ -1,0 +1,116 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model User {
+  id            String      @id @default(uuid())
+  email         String      @unique
+  password_hash String
+  name          String?
+  profileUrl    String?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  groups        GroupMember[]
+  tasks         Task[]
+}
+
+model Group {
+  id        String        @id @default(uuid())
+  name      String
+  type      GroupType? // e.g., "COUPLE", "STUDY", "TRAVEL", "ETC"
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+  members   GroupMember[]
+  projects  Project[]
+  events    CalendarEvent[]
+}
+
+enum GroupType {
+  COUPLE
+  STUDY
+  TRAVEL
+  ETC
+}
+
+model GroupMember {
+  id        String    @id @default(uuid())
+  groupId   String
+  userId    String
+  group     Group     @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role      MemberRole @default(MEMBER) // ADMIN or MEMBER
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@unique([groupId, userId])
+}
+
+enum MemberRole {
+  ADMIN
+  MEMBER
+}
+
+model Project {
+  id          String      @id @default(uuid())
+  groupId     String
+  title       String
+  description String?
+  dueDate     DateTime?
+  status      ProjectStatus @default(ACTIVE) // ACTIVE or ARCHIVED
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  group       Group       @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  tasks       Task[]
+}
+
+enum ProjectStatus {
+  ACTIVE
+  ARCHIVED
+}
+
+model Task {
+  id          String      @id @default(uuid())
+  projectId   String
+  title       String
+  description String?
+  status      TaskStatus  @default(TODO) // TODO, IN_PROGRESS, DONE
+  dueDate     DateTime?
+  assignedToId String?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  project     Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  assignedTo  User?       @relation(fields: [assignedToId], references: [id])
+}
+
+enum TaskStatus {
+  TODO
+  IN_PROGRESS
+  DONE
+}
+
+model CalendarEvent {
+  id          String    @id @default(uuid())
+  groupId     String
+  title       String
+  description String?
+  startTime   DateTime
+  endTime     DateTime?
+  type        EventType? // MEETING, REMINDER, DEADLINE, ETC
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  group       Group     @relation(fields: [groupId], references: [id], onDelete: Cascade)
+}
+
+enum EventType {
+  MEETING
+  REMINDER
+  DEADLINE
+  ETC
+}

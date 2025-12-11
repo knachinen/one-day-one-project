@@ -83,6 +83,9 @@ export default async function PreviewPage({ params }: PreviewPageProps) {
 					</p>
 				</div>
 				<div className="flex gap-4">
+					<Button asChild variant="outline">
+						<Link href="/dashboard">Back to Dashboard</Link>
+					</Button>
 					<Button asChild>
 						<Link
 							href={`/api/projects/${projectId}/generate/prd`}
