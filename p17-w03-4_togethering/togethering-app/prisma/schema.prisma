@@ -7,6 +7,7 @@ generator client {
 
 datasource db {
   provider = "sqlite"
+  url      = env("DATABASE_URL")
 }
 
 model User {
@@ -24,19 +25,12 @@ model User {
 model Group {
   id        String        @id @default(uuid())
   name      String
-  type      GroupType? // e.g., "COUPLE", "STUDY", "TRAVEL", "ETC"
+  type      String? // e.g., "COUPLE", "STUDY", "TRAVEL", "ETC"
   createdAt DateTime      @default(now())
   updatedAt DateTime      @updatedAt
   members   GroupMember[]
   projects  Project[]
   events    CalendarEvent[]
-}
-
-enum GroupType {
-  COUPLE
-  STUDY
-  TRAVEL
-  ETC
 }
 
 model GroupMember {
@@ -45,16 +39,11 @@ model GroupMember {
   userId    String
   group     Group     @relation(fields: [groupId], references: [id], onDelete: Cascade)
   user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  role      MemberRole @default(MEMBER) // ADMIN or MEMBER
+  role      String @default("MEMBER") // ADMIN or MEMBER
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
 
   @@unique([groupId, userId])
-}
-
-enum MemberRole {
-  ADMIN
-  MEMBER
 }
 
 model Project {
@@ -63,16 +52,11 @@ model Project {
   title       String
   description String?
   dueDate     DateTime?
-  status      ProjectStatus @default(ACTIVE) // ACTIVE or ARCHIVED
+  status      String @default("ACTIVE") // ACTIVE or ARCHIVED
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
   group       Group       @relation(fields: [groupId], references: [id], onDelete: Cascade)
   tasks       Task[]
-}
-
-enum ProjectStatus {
-  ACTIVE
-  ARCHIVED
 }
 
 model Task {
@@ -80,19 +64,13 @@ model Task {
   projectId   String
   title       String
   description String?
-  status      TaskStatus  @default(TODO) // TODO, IN_PROGRESS, DONE
+  status      String  @default("TODO") // TODO, IN_PROGRESS, DONE
   dueDate     DateTime?
   assignedToId String?
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
   project     Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
   assignedTo  User?       @relation(fields: [assignedToId], references: [id])
-}
-
-enum TaskStatus {
-  TODO
-  IN_PROGRESS
-  DONE
 }
 
 model CalendarEvent {
@@ -102,15 +80,8 @@ model CalendarEvent {
   description String?
   startTime   DateTime
   endTime     DateTime?
-  type        EventType? // MEETING, REMINDER, DEADLINE, ETC
+  type        String? // MEETING, REMINDER, DEADLINE, ETC
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   group       Group     @relation(fields: [groupId], references: [id], onDelete: Cascade)
-}
-
-enum EventType {
-  MEETING
-  REMINDER
-  DEADLINE
-  ETC
 }

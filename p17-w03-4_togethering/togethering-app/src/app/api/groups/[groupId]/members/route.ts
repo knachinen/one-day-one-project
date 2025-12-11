@@ -1,8 +1,7 @@
 import { NextResponse } from 'next/server';
-import { PrismaClient, MemberRole } from '@prisma/client';
+import prisma from '@/lib/prisma';
+import { MemberRole } from '@prisma/client';
 import { getUserIdFromToken } from '@/utils/auth';
-
-const prisma = new PrismaClient();
 
 // Helper to get token from request
 function getTokenFromRequest(request: Request): string | null {

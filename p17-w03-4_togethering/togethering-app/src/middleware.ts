@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken';
 const JWT_SECRET = process.env.JWT_SECRET || 'supersecretkey';
 
 // Define public paths that do not require authentication
-const publicPaths = ['/api/auth/register', '/api/auth/login'];
+const publicPaths = ['/api/auth/register', '/api/auth/login', '/login', '/register'];
 
 export async function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
