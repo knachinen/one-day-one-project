@@ -75,7 +75,7 @@ export async function GET(request: Request) {
     if (!token) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
-    const userId = getUserIdFromToken(token);
+    const userId = await getUserIdFromToken(token);
 
     const { searchParams } = new URL(request.url);
     const projectId = searchParams.get('projectId');

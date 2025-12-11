@@ -17,13 +17,14 @@ function getTokenFromRequest(request: Request): string | null {
 
 export async function GET(request: Request, { params }: { params: { projectId: string } }) {
   try {
+    const resolvedParams = await params;
+    const { projectId } = resolvedParams;
+
     const token = getTokenFromRequest(request);
     if (!token) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
-    const userId = getUserIdFromToken(token);
-
-    const { projectId } = params;
+    const userId = await getUserIdFromToken(token);
 
     const project = await prisma.project.findUnique({
       where: { id: projectId },
@@ -59,7 +60,7 @@ export async function PUT(request: Request, { params }: { params: { projectId: s
     if (!token) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
-    const userId = getUserIdFromToken(token);
+    const userId = await getUserIdFromToken(token);
 
     const { projectId } = params;
     const { title, description, dueDate, status } = await request.json();

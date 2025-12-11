@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, use } from 'react';
 import { useRouter } from 'next/navigation';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd'; // Using the maintained fork
 import { Prisma } from '@prisma/client';
@@ -39,7 +39,7 @@ type Column = {
 };
 
 export default function ProjectDetailPage({ params }: { params: { projectId: string } }) {
-  const { projectId } = params;
+  const { projectId } = use(params);
   const router = useRouter();
   const [project, setProject] = useState<Project | null>(null);
   const [columns, setColumns] = useState<Record<string, Column>>({});

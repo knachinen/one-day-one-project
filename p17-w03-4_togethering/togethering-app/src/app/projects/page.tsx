@@ -2,6 +2,7 @@
 'use client'; // This directive is necessary for client-side components in Next.js 13+ App Router
 
 import React, { useEffect, useState } from 'react';
+import Link from 'next/link';
 
 interface Project {
   id: string;
@@ -211,10 +212,12 @@ export default function ProjectsPage() {
         <ul className="space-y-4">
           {projects.map((project) => (
             <li key={project.id} className="p-4 border rounded shadow-sm bg-white dark:bg-gray-800">
-              <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100">{project.title}</h3>
-              {project.description && <p className="text-gray-700 dark:text-gray-300">{project.description}</p>}
-              {project.dueDate && <p className="text-sm text-gray-500 dark:text-gray-400">Due: {new Date(project.dueDate).toLocaleDateString()}</p>}
-              <p className="text-sm text-gray-500 dark:text-gray-400">Group ID: {project.groupId}</p>
+              <Link href={`/projects/${project.id}`} className="block">
+                <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer">{project.title}</h3>
+                {project.description && <p className="text-gray-700 dark:text-gray-300">{project.description}</p>}
+                {project.dueDate && <p className="text-sm text-gray-500 dark:text-gray-400">Due: {new Date(project.dueDate).toLocaleDateString()}</p>}
+                <p className="text-sm text-gray-500 dark:text-gray-400">Group ID: {project.groupId}</p>
+              </Link>
             </li>
           ))}
         </ul>
