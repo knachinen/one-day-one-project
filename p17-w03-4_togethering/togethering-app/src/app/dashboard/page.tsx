@@ -84,9 +84,8 @@ export default function DashboardPage() {
       <h2 className="text-3xl font-bold mb-6 text-gray-900">Dashboard</h2>
 
       {/* My Tasks Widget */}
-      <div class="bg-white p-6 rounded-lg shadow-md mb-6">
-        <h3 class="text-xl font-semibold mb-4 text-gray-900">My Pending Tasks</h3>
-        {myTasks.length === 0 ? (
+             <div className="bg-white p-6 rounded-lg shadow-md mb-6">
+              <h3 className="text-xl font-semibold mb-4 text-gray-900">My Pending Tasks</h3>        {myTasks.length === 0 ? (
           <p className="text-gray-700">No pending tasks assigned to you.</p>
         ) : (
           <ul>
