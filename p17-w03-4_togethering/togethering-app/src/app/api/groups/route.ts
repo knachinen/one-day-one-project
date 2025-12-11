@@ -23,7 +23,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
 
-    const userId = getUserIdFromToken(token);
+    const userId = await getUserIdFromToken(token);
     if (!userId) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
@@ -41,7 +41,7 @@ export async function POST(request: Request) {
         members: {
           create: {
             userId,
-            role: MemberRole.ADMIN, // Creator is automatically ADMIN
+            role: 'ADMIN', // Creator is automatically ADMIN
           },
         },
       },
@@ -64,7 +64,7 @@ export async function GET(request: Request) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
 
-    const userId = getUserIdFromToken(token);
+    const userId = await getUserIdFromToken(token);
     if (!userId) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
