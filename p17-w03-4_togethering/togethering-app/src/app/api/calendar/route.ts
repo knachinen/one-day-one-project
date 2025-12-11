@@ -24,6 +24,8 @@ export async function POST(request: Request) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
     const userId = getUserIdFromToken(token);
+    console.log('User ID from token (POST):', userId); // Debugging line
+    console.log('User ID from token:', userId); // Debugging line
 
     const { groupId, title, description, startTime, endTime, type } = await request.json();
 
