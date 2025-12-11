@@ -2,10 +2,11 @@
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { useGroup } from '../context/GroupContext';
 
 export default function Header() {
   const [userName, setUserName] = useState('Guest'); // Default to Guest
-  const [currentGroup, setCurrentGroup] = useState('My Awesome Group'); // Will be dynamic later
+  const { currentGroup, loading } = useGroup();
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -34,7 +35,9 @@ export default function Header() {
       {/* Group Switcher and User Menu will go here later */}
       <div>
         {/* Placeholder for Group Switcher */}
-        <span className="mr-4">Current Group: {currentGroup}</span>
+        <span className="mr-4">
+          Current Group: {loading ? 'Loading...' : currentGroup ? currentGroup.name : 'No Group Selected'}
+        </span>
         {/* User Name */}
         <span>{userName}</span>
       </div>

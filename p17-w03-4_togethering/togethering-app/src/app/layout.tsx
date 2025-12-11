@@ -4,6 +4,7 @@ import "./globals.css";
 import Header from '@/components/Header';
 import Sidebar from '@/components/Sidebar';
 import MobileNav from '@/components/MobileNav';
+import { GroupProvider } from '@/context/GroupContext';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,17 +28,17 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}
-      >
-        <Header />
+      <body>
+        <GroupProvider>
+          <Header />
 
-        <div className="flex flex-1">
-          <Sidebar />
-          <main className="flex-1 p-4 pb-16">{children}</main> {/* Added pb-16 for mobile nav */}
-        </div>
+          <div className="flex flex-1">
+            <Sidebar />
+            <main className="flex-1 p-4 pb-16">{children}</main> {/* Added pb-16 for mobile nav */}
+          </div>
 
-        <MobileNav />
+          <MobileNav />
+        </GroupProvider>
       </body>
     </html>
   );
