@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd'; // Using the maintained fork
 import { Prisma } from '@prisma/client';
+import TaskDetailModal from '@/components/TaskDetailModal'; // Import the modal component
 
 // Reusing helper to get token, but client-side needs to read cookies from browser
 // For simplicity, we'll assume the cookie is sent automatically with fetch requests
@@ -45,50 +46,54 @@ export default function ProjectDetailPage({ params }: { params: { projectId: str
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchProjectAndTasks = async () => {
-      try {
-        // Fetch project details
-        const projectRes = await fetch(`/api/projects/${projectId}`);
-        if (!projectRes.ok) {
-          if (projectRes.status === 401 || projectRes.status === 403) {
-            router.push('/login');
-          }
-          throw new Error('Failed to fetch project');
+  // State for TaskDetailModal
+  const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
+  const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null);
+
+  const fetchProjectAndTasks = useCallback(async () => {
+    try {
+      // Fetch project details
+      const projectRes = await fetch(`/api/projects/${projectId}`);
+      if (!projectRes.ok) {
+        if (projectRes.status === 401 || projectRes.status === 403) {
+          router.push('/login');
         }
-        const projectData: Project = await projectRes.json();
-        setProject(projectData);
-
-        // Fetch tasks for the project
-        const tasksRes = await fetch(`/api/tasks?projectId=${projectId}`);
-        if (!tasksRes.ok) {
-          throw new Error('Failed to fetch tasks');
-        }
-        const tasksData: Task[] = await tasksRes.json();
-
-        // Initialize columns
-        const initialColumns: Record<string, Column> = {
-          'TODO': { id: 'TODO', title: 'To Do', tasks: [] },
-          'IN_PROGRESS': { id: 'IN_PROGRESS', title: 'In Progress', tasks: [] },
-          'DONE': { id: 'DONE', title: 'Done', tasks: [] },
-        };
-
-        tasksData.forEach(task => {
-          if (task.status && initialColumns[task.status]) {
-            initialColumns[task.status].tasks.push(task);
-          }
-        });
-        setColumns(initialColumns);
-
-      } catch (err: any) {
-        setError(err.message || 'Error loading project details.');
-      } finally {
-        setLoading(false);
+        throw new Error('Failed to fetch project');
       }
-    };
+      const projectData: Project = await projectRes.json();
+      setProject(projectData);
 
-    fetchProjectAndTasks();
+      // Fetch tasks for the project
+      const tasksRes = await fetch(`/api/tasks?projectId=${projectId}`);
+      if (!tasksRes.ok) {
+        throw new Error('Failed to fetch tasks');
+      }
+      const tasksData: Task[] = await tasksRes.json();
+
+      // Initialize columns
+      const initialColumns: Record<string, Column> = {
+        'TODO': { id: 'TODO', title: 'To Do', tasks: [] },
+        'IN_PROGRESS': { id: 'IN_PROGRESS', title: 'In Progress', tasks: [] },
+        'DONE': { id: 'DONE', title: 'Done', tasks: [] },
+      };
+
+      tasksData.forEach(task => {
+        if (task.status && initialColumns[task.status]) {
+          initialColumns[task.status].tasks.push(task);
+        }
+      });
+      setColumns(initialColumns);
+
+    } catch (err: any) {
+      setError(err.message || 'Error loading project details.');
+    } finally {
+      setLoading(false);
+    }
   }, [projectId, router]);
+
+  useEffect(() => {
+    fetchProjectAndTasks();
+  }, [fetchProjectAndTasks]);
 
   const onDragEnd = async (result: any) => {
     const { source, destination, draggableId } = result;
@@ -131,6 +136,34 @@ export default function ProjectDetailPage({ params }: { params: { projectId: str
     }
   };
 
+  const handleTaskClick = (taskId: string) => {
+    setSelectedTaskId(taskId);
+    setIsTaskModalOpen(true);
+  };
+
+  const handleTaskUpdate = (updatedTask: Task) => {
+    // Find the task in its current column and replace it with the updated task
+    const updatedColumns = { ...columns };
+    Object.keys(updatedColumns).forEach(columnId => {
+      updatedColumns[columnId].tasks = updatedColumns[columnId].tasks.map(task =>
+        task.id === updatedTask.id ? updatedTask : task
+      );
+    });
+    setColumns(updatedColumns);
+    fetchProjectAndTasks(); // Re-fetch to ensure all state is consistent, especially if status changed
+  };
+
+  const handleTaskDelete = (deletedTaskId: string) => {
+    // Remove the task from the columns
+    const updatedColumns = { ...columns };
+    Object.keys(updatedColumns).forEach(columnId => {
+      updatedColumns[columnId].tasks = updatedColumns[columnId].tasks.filter(task => task.id !== deletedTaskId);
+    });
+    setColumns(updatedColumns);
+    setIsTaskModalOpen(false); // Close modal after deletion
+    fetchProjectAndTasks(); // Re-fetch to ensure all state is consistent
+  };
+
   if (loading) return <div className="text-center mt-8">Loading project...</div>;
   if (error) return <div className="text-center mt-8 text-red-500">Error: {error}</div>;
   if (!project) return <div className="text-center mt-8">Project not found.</div>;
@@ -159,6 +192,7 @@ export default function ProjectDetailPage({ params }: { params: { projectId: str
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
                           className="bg-white p-3 mb-3 rounded shadow cursor-pointer border border-gray-200"
+                          onClick={() => handleTaskClick(task.id)} // Open modal on task click
                         >
                           <h4 className="font-medium">{task.title}</h4>
                           {task.assignedTo && (
@@ -172,7 +206,6 @@ export default function ProjectDetailPage({ params }: { params: { projectId: str
                           {task.dueDate && (
                             <p className="text-xs text-gray-500 mt-1">Due: {new Date(task.dueDate).toLocaleDateString()}</p>
                           )}
-                          {/* Task Detail Modal trigger */}
                         </div>
                       )}
                     </Draggable>
@@ -184,6 +217,16 @@ export default function ProjectDetailPage({ params }: { params: { projectId: str
           ))}
         </div>
       </DragDropContext>
+
+      {/* Task Detail Modal */}
+      <TaskDetailModal
+        isOpen={isTaskModalOpen}
+        onClose={() => setIsTaskModalOpen(false)}
+        taskId={selectedTaskId}
+        onUpdateTask={handleTaskUpdate}
+        onDeleteTask={handleTaskDelete}
+      />
     </div>
   );
 }
+

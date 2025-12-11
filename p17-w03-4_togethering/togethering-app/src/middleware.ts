@@ -9,6 +9,7 @@ const publicPaths = ['/api/auth/register', '/api/auth/login', '/login', '/regist
 
 export async function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
+  console.log('Middleware Path:', path, 'Is Public:', publicPaths.includes(path));
 
   // If the path is public, allow the request to proceed
   if (publicPaths.includes(path)) {

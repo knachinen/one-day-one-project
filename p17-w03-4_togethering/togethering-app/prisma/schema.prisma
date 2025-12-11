@@ -20,6 +20,8 @@ model User {
   updatedAt     DateTime    @updatedAt
   groups        GroupMember[]
   tasks         Task[]
+  comments      Comment[] // Added for Comment model
+  notes         Note[]    // Added for Note model
 }
 
 model Group {
@@ -31,6 +33,7 @@ model Group {
   members   GroupMember[]
   projects  Project[]
   events    CalendarEvent[]
+  notes     Note[]    // Added for Note model
 }
 
 model GroupMember {
@@ -71,6 +74,7 @@ model Task {
   updatedAt   DateTime    @updatedAt
   project     Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
   assignedTo  User?       @relation(fields: [assignedToId], references: [id])
+  comments    Comment[] // Added for Comment model
 }
 
 model CalendarEvent {
@@ -84,4 +88,27 @@ model CalendarEvent {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   group       Group     @relation(fields: [groupId], references: [id], onDelete: Cascade)
+}
+
+model Comment {
+  id        String    @id @default(uuid())
+  content   String
+  taskId    String
+  authorId  String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  task      Task      @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  author    User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+}
+
+model Note {
+  id        String    @id @default(uuid())
+  groupId   String
+  title     String
+  content   String
+  authorId  String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  group     Group     @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  author    User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
 }
