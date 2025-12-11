@@ -23,14 +23,18 @@ export default function LoginPage() {
         body: JSON.stringify({ email, password }),
       });
 
+      console.log('Login API Response:', response); // Log the full response
+
       if (response.ok) {
         // Login successful, redirect to dashboard
         router.push('/dashboard');
       } else {
         const data = await response.json();
+        console.error('Login API Error Data:', data); // Log error data
         setError(data.message || 'Login failed');
       }
     } catch (err) {
+      console.error('Login API Fetch Error:', err); // Log fetch errors
       setError('An unexpected error occurred');
     }
   };

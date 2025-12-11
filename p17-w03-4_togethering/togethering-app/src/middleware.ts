@@ -1,11 +1,12 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import jwt from 'jsonwebtoken';
+import { jwtVerify } from 'jose';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'supersecretkey';
+const JWT_SECRET_KEY = new TextEncoder().encode(process.env.JWT_SECRET || 'supersecretkey');
+console.log('Middleware JWT_SECRET (key generated):', new TextDecoder().decode(JWT_SECRET_KEY)); // Log the key for debugging
 
 // Define public paths that do not require authentication
-const publicPaths = ['/api/auth/register', '/api/auth/login', '/login', '/register'];
+const publicPaths = ['/', '/dashboard', '/api/auth/register', '/api/auth/login', '/login', '/register'];
 
 export async function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
@@ -17,7 +18,10 @@ export async function middleware(request: NextRequest) {
   }
 
   // Get the token from the cookie
+  const cookieHeader = request.headers.get('Cookie');
+  console.log('Middleware - Cookie Header:', cookieHeader);
   const token = request.cookies.get('token')?.value;
+  console.log('Middleware - Extracted Token:', token);
 
   if (!token) {
     // If no token, redirect to login or return unauthorized
@@ -32,10 +36,11 @@ export async function middleware(request: NextRequest) {
 
   try {
     // Verify the token
-    jwt.verify(token, JWT_SECRET);
+    await jwtVerify(token, JWT_SECRET_KEY); // Use await with jwtVerify from jose
     // Token is valid, allow the request to proceed
     return NextResponse.next();
   } catch (error) {
+    console.error('Middleware - JWT Verification Error:', error); // Log the JWT verification error
     // Token is invalid
     if (path.startsWith('/api')) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });

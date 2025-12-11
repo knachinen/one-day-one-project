@@ -1,11 +1,14 @@
-import jwt from 'jsonwebtoken';
+import { jwtVerify } from 'jose';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'supersecretkey';
+const JWT_SECRET_KEY = new TextEncoder().encode(process.env.JWT_SECRET || 'supersecretkey');
 
-export function getUserIdFromToken(token: string): string {
+export async function getUserIdFromToken(token: string): Promise<string> {
   try {
-    const decoded = jwt.verify(token, JWT_SECRET) as { userId: string };
-    return decoded.userId;
+    const { payload } = await jwtVerify(token, JWT_SECRET_KEY);
+    if (typeof payload.userId === 'string') {
+      return payload.userId;
+    }
+    throw new Error('Invalid token payload');
   } catch (error) {
     throw new Error('Invalid or expired token');
   }
