@@ -17,11 +17,26 @@ export default function GroupsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const getAuthHeaders = () => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      return {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      };
+    }
+    return {
+      'Content-Type': 'application/json',
+    };
+  };
+
   const fetchGroups = async () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch('/api/groups');
+      const response = await fetch('/api/groups', {
+        headers: getAuthHeaders(),
+      });
       if (!response.ok) {
         throw new Error(`Failed to fetch groups: ${response.statusText}`);
       }
@@ -44,9 +59,7 @@ export default function GroupsPage() {
     try {
       const response = await fetch('/api/groups', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: getAuthHeaders(),
         body: JSON.stringify({
           name: newGroupName,
           type: newGroupType || null, // Send null if type is empty

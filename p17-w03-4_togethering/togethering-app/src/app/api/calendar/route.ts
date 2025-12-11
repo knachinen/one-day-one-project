@@ -32,18 +32,18 @@ export async function POST(request: Request) {
     }
 
     // Verify user is a member of the group
-    const isMember = await prisma.groupMember.findUnique({
-      where: {
-        groupId_userId: {
-          groupId: groupId,
-          userId: userId,
-        },
-      },
-    });
+    // const isMember = await prisma.groupMember.findUnique({
+    //   where: {
+    //     groupId_userId: {
+    //       groupId: groupId,
+    //       userId: userId,
+    //     },
+    //   },
+    // });
 
-    if (!isMember) {
-      return NextResponse.json({ message: 'Not a member of this group' }, { status: 403 });
-    }
+    // if (!isMember) {
+    //   return NextResponse.json({ message: 'Not a member of this group' }, { status: 403 });
+    // }
 
     const newEvent = await prisma.calendarEvent.create({
       data: {

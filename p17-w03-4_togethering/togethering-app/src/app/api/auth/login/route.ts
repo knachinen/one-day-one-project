@@ -43,7 +43,7 @@ export async function POST(request: Request) {
       sameSite: 'lax',
     });
 
-    return NextResponse.json({ message: 'Login successful' }, { status: 200, headers: { 'Set-Cookie': serializedCookie } });
+    return NextResponse.json({ message: 'Login successful', token: token }, { status: 200, headers: { 'Set-Cookie': serializedCookie } });
   } catch (error) {
     console.error('Login error:', error);
     return NextResponse.json({ message: 'Something went wrong' }, { status: 500 });

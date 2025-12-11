@@ -20,12 +20,15 @@ export default function LoginPage() {
         headers: {
           'Content-Type': 'application/json',
         },
+        credentials: 'include', // Ensure cookies are sent
         body: JSON.stringify({ email, password }),
       });
 
       console.log('Login API Response:', response); // Log the full response
 
       if (response.ok) {
+        const data = await response.json();
+        localStorage.setItem('token', data.token); // Store the token in localStorage
         // Login successful, redirect to dashboard
         router.push('/dashboard');
       } else {
