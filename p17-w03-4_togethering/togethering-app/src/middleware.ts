@@ -3,7 +3,7 @@ import type { NextRequest } from 'next/server';
 import { jwtVerify } from 'jose';
 
 const JWT_SECRET_KEY = new TextEncoder().encode(process.env.JWT_SECRET || 'supersecretkey');
-console.log('Middleware JWT_SECRET (key generated):', new TextDecoder().decode(JWT_SECRET_KEY)); // Log the key for debugging
+console.log('Middleware JWT_SECRET (key generated):', new TextDecoder().decode(JWT_SECRET_KEY).substring(0, 15)); // Log the key for debugging
 
 // Define public paths that do not require authentication
 const publicPaths = ['/', '/dashboard', '/api/auth/register', '/api/auth/login', '/login', '/register'];
@@ -19,9 +19,25 @@ export async function middleware(request: NextRequest) {
 
   // Get the token from the cookie
   const cookieHeader = request.headers.get('Cookie');
-  console.log('Middleware - Cookie Header:', cookieHeader);
+  
+  // --- Cutting the cookieHeader (e.g., to 50 characters) ---
+  const truncatedCookieHeader = cookieHeader 
+      ? cookieHeader.substring(0, 20) + (cookieHeader.length > 20 ? '...' : '')
+      : 'No Cookie Header';
+  
+  // Log the truncated header
+  console.log('Middleware - Cookie Header:', truncatedCookieHeader);
+  // console.log('Middleware - Cookie Header:', cookieHeader);
+  // 
   const token = request.cookies.get('token')?.value;
-  console.log('Middleware - Extracted Token:', token);
+  
+  // --- Cutting the token (e.g., to 15 characters) ---
+  const truncatedToken = token
+      ? token.substring(0, 15) + (token.length > 15 ? '...' : '')
+      : 'No Token Extracted';
+  
+  // Log the truncated token
+  console.log('Middleware - Extracted Token:', truncatedToken);
 
   if (!token) {
     // If no token, redirect to login or return unauthorized
