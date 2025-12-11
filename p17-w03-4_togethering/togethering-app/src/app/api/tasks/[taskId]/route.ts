@@ -67,9 +67,10 @@ export async function PUT(request: Request, { params }: { params: { taskId: stri
     if (!token) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
-    const userId = getUserIdFromToken(token);
+    const userId = await getUserIdFromToken(token);
 
-    const { taskId } = params;
+    const resolvedParams = await params;
+    const { taskId } = resolvedParams;
     const { title, description, dueDate, status, assignedToId } = await request.json();
 
     const existingTask = await prisma.task.findUnique({

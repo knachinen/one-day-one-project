@@ -21,7 +21,7 @@ export async function POST(request: Request) {
     if (!token) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
-    const userId = getUserIdFromToken(token);
+    const userId = await getUserIdFromToken(token);
 
     const { projectId, title, description, dueDate, assignedToId } = await request.json();
 

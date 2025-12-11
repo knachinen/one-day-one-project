@@ -49,6 +49,29 @@ export default function ProjectDetailPage({ params }: { params: { projectId: str
   // State for TaskDetailModal
   const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
   const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null);
+  const [isNewTaskModalOpen, setIsNewTaskModalOpen] = useState(false); // State for new task modal
+
+  const handleAddTask = async (columnId: string, title: string) => {
+    try {
+      const res = await fetch('/api/tasks', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ projectId, title, status: columnId }),
+      });
+
+      if (!res.ok) {
+        throw new Error('Failed to create task');
+      }
+
+      fetchProjectAndTasks(); // Re-fetch to update the board
+      setIsNewTaskModalOpen(false); // Close modal if using one
+    } catch (err: any) {
+      setError(err.message || 'Error creating task.');
+    }
+  };
+
 
   const fetchProjectAndTasks = useCallback(async () => {
     try {
@@ -184,6 +207,17 @@ export default function ProjectDetailPage({ params }: { params: { projectId: str
                   className="bg-gray-50 rounded-lg shadow-md p-4 w-80 flex-shrink-0"
                 >
                   <h3 className="text-xl font-semibold mb-4 capitalize">{column.title.replace('_', ' ').toLowerCase()}</h3>
+                  <button
+                    onClick={() => {
+                      const title = prompt('Enter task title:');
+                      if (title) {
+                        handleAddTask(column.id, title);
+                      }
+                    }}
+                    className="mb-4 w-full p-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                  >
+                    + Add Task
+                  </button>
                   {column.tasks.map((task, index) => (
                     <Draggable draggableId={task.id} index={index} key={task.id}>
                       {(provided) => (
