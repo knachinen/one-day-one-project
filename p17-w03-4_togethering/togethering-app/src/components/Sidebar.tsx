@@ -9,12 +9,12 @@ export default function Sidebar() {
   ];
 
   return (
-    <aside className="w-64 bg-gray-100 dark:bg-gray-900 p-4 hidden md:block border-r border-gray-200 dark:border-gray-700">
+    <aside className="w-64 bg-gray-100 p-4 hidden md:block border-r border-gray-200">
       <nav>
         <ul>
           {navItems.map((item) => (
             <li key={item.name} className="mb-2">
-              <Link href={item.href} className="block p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700">
+              <Link href={item.href} className="block p-2 rounded hover:bg-gray-200">
                 {item.name}
               </Link>
             </li>

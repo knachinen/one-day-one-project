@@ -3,3 +3,10 @@
 
 .obsidian/
 p16-w03-3_leanpilot/sqlite.db
+
+# Exclude any directory named 'error' at any level
+**/error/
+
+# Optional: If you also want to exclude files named 'error' at any level
+**/error
+**/err*
