@@ -81,19 +81,19 @@ export default function DashboardPage() {
 
   return (
     <div className="p-4">
-      <h2 className="text-3xl font-bold mb-6">Dashboard</h2>
+      <h2 className="text-3xl font-bold mb-6 text-gray-900 dark:text-gray-100">Dashboard</h2>
 
       {/* My Tasks Widget */}
-      <div className="bg-white p-6 rounded-lg shadow-md mb-6">
-        <h3 className="text-xl font-semibold mb-4">My Pending Tasks</h3>
+      <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md mb-6">
+        <h3 className="text-xl font-semibold mb-4 text-gray-900 dark:text-gray-100">My Pending Tasks</h3>
         {myTasks.length === 0 ? (
-          <p>No pending tasks assigned to you.</p>
+          <p className="text-gray-700 dark:text-gray-300">No pending tasks assigned to you.</p>
         ) : (
           <ul>
             {myTasks.map(task => (
-              <li key={task.id} className="mb-2 p-2 border-b last:border-b-0">
-                <span className="font-medium">{task.title}</span> - <span className="text-sm text-gray-500">{task.project.title}</span>
-                {task.dueDate && <span className="ml-2 text-sm text-red-500">Due: {new Date(task.dueDate).toLocaleDateString()}</span>}
+              <li key={task.id} className="mb-2 p-2 border-b last:border-b-0 border-gray-200 dark:border-gray-700">
+                <span className="font-medium text-gray-800 dark:text-gray-200">{task.title}</span> - <span className="text-sm text-gray-500 dark:text-gray-400">{task.project.title}</span>
+                {task.dueDate && <span className="ml-2 text-sm text-red-500 dark:text-red-400">Due: {new Date(task.dueDate).toLocaleDateString()}</span>}
               </li>
             ))}
           </ul>
@@ -101,31 +101,31 @@ export default function DashboardPage() {
       </div>
 
       {/* Group Progress Widget */}
-      <div className="bg-white p-6 rounded-lg shadow-md mb-6">
-        <h3 className="text-xl font-semibold mb-4">Group Progress</h3>
+      <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md mb-6">
+        <h3 className="text-xl font-semibold mb-4 text-gray-900 dark:text-gray-100">Group Progress</h3>
         {groupProgress && (
           <div className="text-center">
-            <p className="text-4xl font-bold text-blue-600">{groupProgress.percentage.toFixed(0)}%</p>
-            <p className="text-gray-600">{groupProgress.completedTasks} of {groupProgress.totalTasks} tasks completed</p>
+            <p className="text-4xl font-bold text-blue-600 dark:text-blue-400">{groupProgress.percentage.toFixed(0)}%</p>
+            <p className="text-gray-600 dark:text-gray-300">{groupProgress.completedTasks} of {groupProgress.totalTasks} tasks completed</p>
             {/* Placeholder for actual graph */}
-            <div className="mt-4 h-24 bg-gray-200 rounded-full flex items-center justify-center">
-              <span className="text-gray-500">Graph Placeholder</span>
+            <div className="mt-4 h-24 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center">
+              <span className="text-gray-500 dark:text-gray-400">Graph Placeholder</span>
             </div>
           </div>
         )}
       </div>
 
       {/* Upcoming Events Widget */}
-      <div className="bg-white p-6 rounded-lg shadow-md mb-6">
-        <h3 className="text-xl font-semibold mb-4">Upcoming Events (Next 3 Days)</h3>
+      <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md mb-6">
+        <h3 className="text-xl font-semibold mb-4 text-gray-900 dark:text-gray-100">Upcoming Events (Next 3 Days)</h3>
         {upcomingEvents.length === 0 ? (
-          <p>No upcoming events.</p>
+          <p className="text-gray-700 dark:text-gray-300">No upcoming events.</p>
         ) : (
           <ul>
             {upcomingEvents.map(event => (
-              <li key={event.id} className="mb-2 p-2 border-b last:border-b-0">
-                <span className="font-medium">{event.title}</span> - <span className="text-sm text-gray-500">{new Date(event.startTime).toLocaleString()}</span>
-                {event.isTask && <span className="ml-2 text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full">Task Due</span>}
+              <li key={event.id} className="mb-2 p-2 border-b last:border-b-0 border-gray-200 dark:border-gray-700">
+                <span className="font-medium text-gray-800 dark:text-gray-200">{event.title}</span> - <span className="text-sm text-gray-500 dark:text-gray-400">{new Date(event.startTime).toLocaleString()}</span>
+                {event.isTask && <span className="ml-2 text-xs bg-yellow-100 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-200 px-2 py-1 rounded-full">Task Due</span>}
               </li>
             ))}
           </ul>

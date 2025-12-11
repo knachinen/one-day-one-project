@@ -210,11 +210,11 @@ export default function ProjectsPage() {
       ) : (
         <ul className="space-y-4">
           {projects.map((project) => (
-            <li key={project.id} className="p-4 border rounded shadow-sm bg-gray-50">
-              <h3 className="text-lg font-bold">{project.title}</h3>
-              {project.description && <p className="text-gray-700">{project.description}</p>}
-              {project.dueDate && <p className="text-sm text-gray-500">Due: {new Date(project.dueDate).toLocaleDateString()}</p>}
-              <p className="text-sm text-gray-500">Group ID: {project.groupId}</p>
+            <li key={project.id} className="p-4 border rounded shadow-sm bg-white dark:bg-gray-800">
+              <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100">{project.title}</h3>
+              {project.description && <p className="text-gray-700 dark:text-gray-300">{project.description}</p>}
+              {project.dueDate && <p className="text-sm text-gray-500 dark:text-gray-400">Due: {new Date(project.dueDate).toLocaleDateString()}</p>}
+              <p className="text-sm text-gray-500 dark:text-gray-400">Group ID: {project.groupId}</p>
             </li>
           ))}
         </ul>
