@@ -3,6 +3,9 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ProjectCard from './ProjectCard'; // Import the ProjectCard component
+import { Button } from '@/components/ui/button'; // Import shadcn/ui Button
+
+const MotionButton = motion(Button); // Declare MotionButton here
 
 // Dummy data for projects
 const projects = [
@@ -11,42 +14,42 @@ const projects = [
     title: '금융 관리 대시보드',
     description: '사용자 친화적인 인터페이스로 복잡한 금융 데이터를 시각화합니다.',
     category: ['UX/UI 디자인', '웹 앱'],
-    image: 'https://via.placeholder.com/400x300?text=Project+1',
+    image: 'https://placehold.co/400x300?text=Project+1',
   },
   {
     id: 2,
     title: '동네 카페 브랜딩',
     description: '따뜻하고 친근한 카페 경험을 위한 통합 브랜딩 전략 및 디자인.',
     category: ['브랜딩', '그래픽 디자인'],
-    image: 'https://via.placeholder.com/400x300?text=Project+2',
+    image: 'https://placehold.co/400x300?text=Project+2',
   },
   {
     id: 3,
     title: '모바일 건강 관리 앱',
     description: '개인화된 건강 목표 설정 및 추적 기능으로 사용자 건강 증진.',
     category: ['UX/UI 디자인', '모바일 앱'],
-    image: 'https://via.placeholder.com/400x300?text=Project+3',
+    image: 'https://placehold.co/400x300?text=Project+3',
   },
   {
     id: 4,
     title: 'AI 기반 학습 플랫폼',
     description: '개개인에게 최적화된 학습 경로를 제공하는 지능형 교육 솔루션.',
     category: ['웹 앱', 'UX/UI 디자인'],
-    image: 'https://via.placeholder.com/400x300?text=Project+4',
+    image: 'https://placehold.co/400x300?text=Project+4',
   },
   {
     id: 5,
     title: '스타트업 로고 디자인',
     description: '혁신적인 스타트업의 비전을 담은 간결하고 강력한 로고 디자인.',
     category: ['브랜딩', '그래픽 디자인'],
-    image: 'https://via.placeholder.com/400x300?text=Project+5',
+    image: 'https://placehold.co/400x300?text=Project+5',
   },
   {
     id: 6,
     title: '이커머스 웹사이트 리뉴얼',
     description: '매출 증대와 사용자 경험 개선을 위한 반응형 이커머스 웹사이트 개편.',
     category: ['웹 디자인', '웹 앱'],
-    image: 'https://via.placeholder.com/400x300?text=Project+6',
+    image: 'https://placehold.co/400x300?text=Project+6',
   },
 ];
 
@@ -87,6 +90,8 @@ const PortfolioSection = () => {
     ? projects
     : projects.filter(project => project.category.includes(filter));
 
+
+
   return (
     <motion.section
       className="relative py-16 md:py-24 bg-white text-foreground overflow-hidden"
@@ -110,17 +115,14 @@ const PortfolioSection = () => {
         {/* Filter Buttons */}
         <motion.div variants={itemVariants} className="flex flex-wrap justify-center gap-3 mb-12">
           {categories.map((cat) => (
-            <button
+            <Button
               key={cat}
               onClick={() => setFilter(cat)}
-              className={`px-5 py-2 rounded-full text-sm font-medium transition-colors duration-300
-                ${filter === cat
-                  ? 'bg-primary text-white'
-                  : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-100'
-                }`}
+              variant={filter === cat ? "filterChipActive" : "filterChip"}
+              size="chip"
             >
               {cat}
-            </button>
+            </Button>
           ))}
         </motion.div>
 
@@ -152,13 +154,14 @@ const PortfolioSection = () => {
 
         {/* Bottom CTA Button */}
         <motion.div variants={itemVariants} className="text-center mt-16">
-          <motion.button
-            className="border border-primary text-primary font-bold py-3 px-8 rounded-full hover:bg-primary hover:text-white transition-colors duration-300"
+          <MotionButton
+            variant="outlineCta"
+            size="lg"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
             더 많은 작품 보기
-          </motion.button>
+          </MotionButton>
         </motion.div>
       </div>
     </motion.section>

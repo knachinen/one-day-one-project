@@ -52,7 +52,7 @@ const AboutSection = () => {
           <div className="relative w-full lg:w-5/12 flex flex-col items-center lg:items-start">
             <motion.div variants={itemVariants} className="relative w-full max-w-sm lg:max-w-none lg:w-full h-96 rounded-2xl overflow-hidden shadow-xl">
               <Image
-                src="https://via.placeholder.com/400x500?text=Your+Photo" // Placeholder image
+                src="https://placehold.co/400x500?text=Your+Photo" // Placeholder image
                 alt="Profile Picture"
                 fill
                 className="rounded-2xl object-cover"

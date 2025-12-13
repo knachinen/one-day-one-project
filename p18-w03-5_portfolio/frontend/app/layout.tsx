@@ -23,6 +23,29 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Person",
+              "name": "알렉스 (Alex)",
+              "url": "https://yourportfolio.com", // Replace with actual portfolio URL
+              "sameAs": [
+                "https://github.com/yourusername", // Replace with actual GitHub profile
+                "https://linkedin.com/in/yourprofile", // Replace with actual LinkedIn profile
+                "https://yourblog.com" // Replace with actual blog/other social
+              ],
+              "jobTitle": "Creative Developer & Designer",
+              "worksFor": {
+                "@type": "Organization",
+                "name": "Freelance"
+              }
+            })
+          }}
+        />
+      </head>
       <body className={`${notoSansKr.variable} antialiased`}>
         <Header />
         {children}

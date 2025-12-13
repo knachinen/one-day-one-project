@@ -3,6 +3,11 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
+import { Input } from '@/components/ui/input'; // Import shadcn/ui Input
+import { Textarea } from '@/components/ui/textarea'; // Import shadcn/ui Textarea
+import { Button } from '@/components/ui/button'; // Import shadcn/ui Button
+
+const MotionButton = motion(Button); // Declare MotionButton here
 
 const sectionVariants = {
   hidden: { opacity: 0, y: 50 },
@@ -63,6 +68,8 @@ const ContactSection = () => {
     // }, 1000);
   };
 
+
+
   return (
     <motion.section
       className="py-16 md:py-24 bg-background-accent text-foreground overflow-hidden"
@@ -88,15 +95,15 @@ const ContactSection = () => {
                 <label htmlFor="name" className="block text-md font-medium text-foreground mb-1">
                   어떻게 불러드릴까요?
                 </label>
-                <input
+                <Input
                   type="text"
                   id="name"
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
                   placeholder="소중한 이름을 알려주세요"
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-primary transition-colors duration-200"
                   required
+                  className="focus:border-primary transition-colors duration-200" // Custom styles
                 />
               </motion.div>
 
@@ -104,15 +111,15 @@ const ContactSection = () => {
                 <label htmlFor="email" className="block text-md font-medium text-foreground mb-1">
                   답장 받을 이메일 주소 <span className="text-red-500">*</span>
                 </label>
-                <input
+                <Input
                   type="email"
                   id="email"
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
                   placeholder="contact@example.com"
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-primary transition-colors duration-200"
                   required
+                  className="focus:border-primary transition-colors duration-200" // Custom styles
                 />
               </motion.div>
 
@@ -120,16 +127,16 @@ const ContactSection = () => {
                 <label htmlFor="message" className="block text-md font-medium text-foreground mb-1">
                   어떤 이야기를 나누고 싶으세요?
                 </label>
-                <textarea
+                <Textarea
                   id="message"
                   name="message"
                   value={formData.message}
                   onChange={handleChange}
                   placeholder="자세한 이야기를 들려주세요. 아이디어, 일정, 예산 등 무엇이든 좋아요!"
                   rows={5}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-primary transition-colors duration-200"
                   required
-                ></textarea>
+                  className="focus:border-primary transition-colors duration-200" // Custom styles
+                ></Textarea>
               </motion.div>
 
               {submitError && (
@@ -151,15 +158,16 @@ const ContactSection = () => {
                 </motion.p>
               )}
 
-              <motion.button
+              <MotionButton
                 type="submit"
-                className="w-full bg-primary text-white font-bold py-3 px-8 rounded-lg shadow-lg hover:bg-opacity-90 transition-colors duration-300"
+                variant="primaryCta"
+                size="lg"
+                className="w-full" // Ensure full width
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
                 마음을 담아 보내기
-              </motion.button>
-              <motion.p variants={itemVariants} className="text-xs text-muted-foreground flex items-center justify-center gap-1">
+              </MotionButton>              <motion.p variants={itemVariants} className="text-xs text-muted-foreground flex items-center justify-center gap-1">
                 <span role="img" aria-label="lock">🔒</span> 개인정보는 안전하게 보호되니 안심하세요.
               </motion.p>
             </form>
@@ -170,7 +178,7 @@ const ContactSection = () => {
             <div>
               <motion.div variants={itemVariants} className="relative w-full h-48 rounded-lg overflow-hidden mb-8">
                 <Image
-                  src="https://via.placeholder.com/600x200?text=Map+Placeholder" // Map placeholder
+                  src="https://placehold.co/600x200?text=Map+Placeholder" // Map placeholder
                   alt="서울 작업실 위치 지도"
                   fill
                   className="object-cover"

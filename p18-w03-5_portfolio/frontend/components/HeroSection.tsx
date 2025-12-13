@@ -3,6 +3,9 @@
 import React, { useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import gsap from 'gsap';
+import { Button } from '@/components/ui/button'; // Import shadcn/ui Button
+
+const MotionButton = motion(Button); // Declare MotionButton here
 
 const HeroSection = () => {
   const containerVariants = {
@@ -75,6 +78,8 @@ const HeroSection = () => {
     };
   }, []);
 
+
+
   return (
     <section className="relative h-screen flex flex-col items-center justify-center text-center overflow-hidden">
       {/* Dynamic Background Element */}
@@ -121,20 +126,22 @@ const HeroSection = () => {
           className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 justify-center"
           variants={itemVariants}
         >
-          <motion.button
-            className="bg-primary text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-secondary transition-colors duration-300"
+          <MotionButton
+            variant="primaryCta"
+            size="lg"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
             프로젝트 구경하기 👆
-          </motion.button>
-          <motion.button
-            className="bg-white text-secondary-cta-text border border-gray-300 font-bold py-3 px-8 rounded-full shadow-lg hover:bg-gray-100 transition-colors duration-300"
+          </MotionButton>
+          <MotionButton
+            variant="secondaryCta"
+            size="lg"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
             미팅 요청하기 📝
-          </motion.button>
+          </MotionButton>
         </motion.div>
       </motion.div>
 

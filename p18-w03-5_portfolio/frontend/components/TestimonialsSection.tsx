@@ -5,6 +5,9 @@ import { motion, AnimatePresence } from 'framer-motion'; // Import AnimatePresen
 import Image from 'next/image';
 import TestimonialCard from './TestimonialCard';
 import PartnerLogo from './PartnerLogo';
+import { Button } from '@/components/ui/button'; // Import shadcn/ui Button
+
+const MotionButton = motion(Button); // Declare MotionButton here
 
 // Dummy data for testimonials
 const testimonials = [
@@ -13,7 +16,7 @@ const testimonials = [
     quote: "프로젝트 시작부터 마무리까지, 항상 기대를 뛰어넘는 결과물을 만들어주셨어요. 진심으로 감사합니다!",
     author: "김민지",
     title: "스타트업 대표",
-    avatar: "https://via.placeholder.com/50x50?text=KMJ",
+    avatar: "https://placehold.co/50x50?text=KMJ",
     bgColor: "#FFFCE5" // Light Yellow
   },
   {
@@ -21,7 +24,7 @@ const testimonials = [
     quote: "저희의 복잡한 요구사항을 명확하게 이해하고, 사용자 중심적인 디자인으로 완벽하게 구현해주셨습니다. 최고의 파트너입니다.",
     author: "박진수",
     title: "IT 기업 팀장",
-    avatar: "https://via.placeholder.com/50x50?text=PJS",
+    avatar: "https://placehold.co/50x50?text=PJS",
     bgColor: "#E5F5FF" // Light Blue
   },
   {
@@ -29,21 +32,21 @@ const testimonials = [
     quote: "커뮤니케이션 능력이 뛰어나고, 매번 놀라운 창의성으로 프로젝트에 활력을 불어넣어 주십니다. 다음 프로젝트도 함께하고 싶어요!",
     author: "최수연",
     title: "콘텐츠 마케터",
-    avatar: "https://via.placeholder.com/50x50?text=CSY",
+    avatar: "https://placehold.co/50x50?text=CSY",
     bgColor: "#FFF0E5" // Light Orange
   },
 ];
 
 // Dummy data for partner logos
 const partnerLogos = [
-  { id: 1, name: 'Brand A', logo: 'https://via.placeholder.com/100x50?text=BrandA', bgColor: '#FFFCE5' },
-  { id: 2, name: 'Brand B', logo: 'https://via.placeholder.com/100x50?text=BrandB', bgColor: '#E5F5FF' },
-  { id: 3, name: 'Brand C', logo: 'https://via.placeholder.com/100x50?text=BrandC', bgColor: '#FFF0E5' },
-  { id: 4, name: 'Brand D', logo: 'https://via.placeholder.com/100x50?text=BrandD', bgColor: '#F7E5FF' },
-  { id: 5, name: 'Brand E', logo: 'https://via.placeholder.com/100x50?text=BrandE', bgColor: '#FFFCE5' },
-  { id: 6, name: 'Brand F', logo: 'https://via.placeholder.com/100x50?text=BrandF', bgColor: '#E5F5FF' },
-  { id: 7, name: 'Brand G', logo: 'https://via.placeholder.com/100x50?text=BrandG', bgColor: '#FFF0E5' },
-  { id: 8, name: 'Brand H', logo: 'https://via.placeholder.com/100x50?text=BrandH', bgColor: '#F7E5FF' },
+  { id: 1, name: 'Brand A', logo: 'https://placehold.co/100x50?text=BrandA', bgColor: '#FFFCE5' },
+  { id: 2, name: 'Brand B', logo: 'https://placehold.co/100x50?text=BrandB', bgColor: '#E5F5FF' },
+  { id: 3, name: 'Brand C', logo: 'https://placehold.co/100x50?text=BrandC', bgColor: '#FFF0E5' },
+  { id: 4, name: 'Brand D', logo: 'https://placehold.co/100x50?text=BrandD', bgColor: '#F7E5FF' },
+  { id: 5, name: 'Brand E', logo: 'https://placehold.co/100x50?text=BrandE', bgColor: '#FFFCE5' },
+  { id: 6, name: 'Brand F', logo: 'https://placehold.co/100x50?text=BrandF', bgColor: '#E5F5FF' },
+  { id: 7, name: 'Brand G', logo: 'https://placehold.co/100x50?text=BrandG', bgColor: '#FFF0E5' },
+  { id: 8, name: 'Brand H', logo: 'https://placehold.co/100x50?text=BrandH', bgColor: '#F7E5FF' },
 ];
 
 const sectionVariants = {
@@ -97,6 +100,8 @@ const TestimonialsSection = () => {
     }),
   };
 
+
+
   return (
     <motion.section
       className="py-16 md:py-24 bg-white text-foreground overflow-hidden"
@@ -118,8 +123,9 @@ const TestimonialsSection = () => {
 
         {/* Testimonial Cards Carousel */}
         <div className="relative flex items-center justify-center mb-16">
-          <motion.button
-            className="absolute left-0 z-10 p-3 rounded-full bg-primary text-white shadow-lg hover:bg-secondary transition-colors duration-300"
+          <MotionButton
+            variant="primaryCta"
+            size="icon-md"
             onClick={prevTestimonial}
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
@@ -127,7 +133,7 @@ const TestimonialsSection = () => {
             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
-          </motion.button>
+          </MotionButton>
 
           <div className="relative w-full md:w-2/3 lg:w-1/2 flex justify-center h-[300px]"> {/* Adjusted width for single card display and fixed height */}
             <AnimatePresence initial={false} custom={direction}>
@@ -149,8 +155,9 @@ const TestimonialsSection = () => {
             </AnimatePresence>
           </div>
 
-          <motion.button
-            className="absolute right-0 z-10 p-3 rounded-full bg-primary text-white shadow-lg hover:bg-secondary transition-colors duration-300"
+          <MotionButton
+            variant="primaryCta"
+            size="icon-md"
             onClick={nextTestimonial}
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
@@ -158,7 +165,7 @@ const TestimonialsSection = () => {
             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
             </svg>
-          </motion.button>
+          </MotionButton>
         </div>
 
         {/* Divider */}

@@ -4,6 +4,9 @@ import React, { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 import ServiceCard from './ServiceCard';
 import ProcessStep from './ProcessStep'; // Import the ProcessStep component
+import { Button } from '@/components/ui/button'; // Import shadcn/ui Button
+
+const MotionButton = motion(Button); // Declare MotionButton here
 
 // Dummy data for services
 const services = [
@@ -112,6 +115,8 @@ const ServicesSection = () => {
   const processStepsRef = useRef(null);
   const processStepsInView = useInView(processStepsRef, { once: true, amount: 0.3 });
 
+
+
   return (
     <motion.section
       className="py-16 md:py-24 bg-white text-foreground overflow-hidden"
@@ -146,13 +151,14 @@ const ServicesSection = () => {
           <motion.p variants={itemVariants} className="text-lg text-muted-foreground max-w-2xl mx-auto mb-8">
             첫 만남부터 프로젝트 업로드까지, 투명하고 즐거운 소통으로 여러분과 합을 맞춰갈게요.
           </motion.p>
-          <motion.button
-            className="bg-primary text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-secondary transition-colors duration-300"
+          <MotionButton
+            variant="primaryCta"
+            size="lg"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
             프로젝트를 시작하기
-          </motion.button>
+          </MotionButton>
         </div>
 
         {/* Process Steps */}
