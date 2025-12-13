@@ -4,8 +4,8 @@
 @custom-variant dark (&:is(.dark *));
 
 :root { /* Main Text Color */
-  --primary: oklch(0.205 0 0); /* Primary Color (Gold Orange) */
-  --secondary: oklch(0.97 0 0); /* Secondary Color */
+  --primary: #FFC759; /* Primary Color (Gold Orange) */
+  --secondary: #F7941D; /* Secondary Color */
   --muted-foreground: oklch(0.556 0 0); /* Sub Text Color */
   --secondary-cta-text: #1f1f1f; /* Secondary CTA button text color */
   --background-gradient-start: #fffcf4;
@@ -17,8 +17,8 @@
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
+  --primary-foreground: #1F1F1F; /* Matching Main Text Color for better contrast on light primary */
+  --secondary-foreground: #1F1F1F; /* Matching Main Text Color for better contrast on light secondary */
   --muted: oklch(0.97 0 0);
   --accent: oklch(0.97 0 0);
   --accent-foreground: oklch(0.205 0 0);
