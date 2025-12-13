@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input'; // Import shadcn/ui Input
 import { Textarea } from '@/components/ui/textarea'; // Import shadcn/ui Textarea
 import { Button } from '@/components/ui/button'; // Import shadcn/ui Button
 
-const MotionButton = motion(Button); // Declare MotionButton here
+const MotionButton = motion.create(Button); // Declare MotionButton here
 
 const sectionVariants = {
   hidden: { opacity: 0, y: 50 },
@@ -182,6 +182,7 @@ const ContactSection = () => {
                   alt="서울 작업실 위치 지도"
                   fill
                   className="object-cover"
+                  unoptimized // Add unoptimized prop
                 />
                 <div className="absolute bottom-4 left-4 flex items-center bg-white px-3 py-1 rounded-full shadow-md text-foreground text-sm font-medium">
                   📍 서울 작업실에서 활동 중

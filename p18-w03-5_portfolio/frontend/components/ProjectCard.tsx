@@ -28,6 +28,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
           width={400}
           height={300}
           className="object-cover w-full h-full"
+          unoptimized // Add unoptimized prop
         />
       </div>
       <div className="p-4">

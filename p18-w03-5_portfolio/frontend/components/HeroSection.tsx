@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import gsap from 'gsap';
 import { Button } from '@/components/ui/button'; // Import shadcn/ui Button
 
-const MotionButton = motion(Button); // Declare MotionButton here
+const MotionButton = motion.create(Button); // Declare MotionButton here
 
 const HeroSection = () => {
   const containerVariants = {

@@ -56,6 +56,7 @@ const AboutSection = () => {
                 alt="Profile Picture"
                 fill
                 className="rounded-2xl object-cover"
+                unoptimized // Add unoptimized prop
               />
             </motion.div>
             <motion.div variants={itemVariants} className="absolute -bottom-4 lg:-bottom-8 px-6 py-3 bg-primary text-white font-bold rounded-lg shadow-lg">

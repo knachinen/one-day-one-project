@@ -6,7 +6,7 @@ import ServiceCard from './ServiceCard';
 import ProcessStep from './ProcessStep'; // Import the ProcessStep component
 import { Button } from '@/components/ui/button'; // Import shadcn/ui Button
 
-const MotionButton = motion(Button); // Declare MotionButton here
+const MotionButton = motion.create(Button); // Declare MotionButton here
 
 // Dummy data for services
 const services = [

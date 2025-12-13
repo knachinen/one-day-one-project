@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import ProjectCard from './ProjectCard'; // Import the ProjectCard component
 import { Button } from '@/components/ui/button'; // Import shadcn/ui Button
 
-const MotionButton = motion(Button); // Declare MotionButton here
+const MotionButton = motion.create(Button); // Declare MotionButton here
 
 // Dummy data for projects
 const projects = [

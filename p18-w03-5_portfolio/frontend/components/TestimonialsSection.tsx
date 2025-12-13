@@ -7,7 +7,7 @@ import TestimonialCard from './TestimonialCard';
 import PartnerLogo from './PartnerLogo';
 import { Button } from '@/components/ui/button'; // Import shadcn/ui Button
 
-const MotionButton = motion(Button); // Declare MotionButton here
+const MotionButton = motion.create(Button); // Declare MotionButton here
 
 // Dummy data for testimonials
 const testimonials = [

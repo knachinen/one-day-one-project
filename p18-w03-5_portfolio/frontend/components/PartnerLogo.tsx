@@ -21,7 +21,7 @@ const PartnerLogo: React.FC<PartnerLogoProps> = ({ partner }) => {
       transition={{ duration: 0.2 }}
       style={{ backgroundColor: partner.bgColor }}
     >
-      <Image src={partner.logo} alt={partner.name} width={100} height={50} className="object-contain" />
+      <Image src={partner.logo} alt={partner.name} width={100} height={50} className="object-contain" unoptimized />
     </motion.div>
   );
 };

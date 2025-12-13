@@ -32,6 +32,7 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({ testimonial }) => {
           width={50}
           height={50}
           className="rounded-full mr-4 object-cover"
+          unoptimized // Add unoptimized prop
         />
         <div>
           <h4 className="font-bold text-foreground">{testimonial.author}</h4>
