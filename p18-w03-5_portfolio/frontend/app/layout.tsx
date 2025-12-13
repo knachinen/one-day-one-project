@@ -3,6 +3,7 @@ import { Noto_Sans_KR } from 'next/font/google';
 import './globals.css';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { Providers } from '@/components/Providers';
 
 const notoSansKr = Noto_Sans_KR({
   weight: ['400', '500', '700', '800'],
@@ -22,7 +23,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${notoSansKr.variable} antialiased`}>
       <head>
         <script
           type="application/ld+json"
@@ -46,10 +47,12 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className={`${notoSansKr.variable} antialiased`}>
-        <Header />
-        {children}
-        <Footer />
+      <body>
+        <Providers>
+          <Header />
+          {children}
+          <Footer />
+        </Providers>
       </body>
     </html>
   );

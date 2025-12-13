@@ -1,13 +1,25 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState } from 'react'; // Keep useState for isSubmitted, but remove formData and submitError
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { Input } from '@/components/ui/input'; // Import shadcn/ui Input
 import { Textarea } from '@/components/ui/textarea'; // Import shadcn/ui Textarea
 import { Button } from '@/components/ui/button'; // Import shadcn/ui Button
+import { useForm } from 'react-hook-form'; // Import useForm
+import { zodResolver } from '@hookform/resolvers/zod'; // Import zodResolver
+import * as z from 'zod'; // Import zod
 
 const MotionButton = motion.create(Button); // Declare MotionButton here
+
+// Define schema for contact form validation
+const contactFormSchema = z.object({
+  name: z.string().min(1, { message: '이름을 입력해주세요.' }),
+  email: z.string().email({ message: '유효한 이메일 주소를 입력해주세요.' }),
+  message: z.string().min(10, { message: '메시지를 10자 이상 입력해주세요.' }),
+});
+
+type ContactFormInputs = z.infer<typeof contactFormSchema>;
 
 const sectionVariants = {
   hidden: { opacity: 0, y: 50 },
@@ -28,47 +40,28 @@ const itemVariants = {
 };
 
 const ContactSection = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    message: '',
-  });
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [submitError, setSubmitError] = useState('');
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({ ...prevData, [name]: value }));
-  };
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    reset,
+  } = useForm<ContactFormInputs>({
+    resolver: zodResolver(contactFormSchema),
+  });
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setSubmitError('');
-    setIsSubmitted(false);
-
-    // Basic validation
-    if (!formData.name || !formData.email || !formData.message) {
-      setSubmitError('모든 필수 항목을 입력해주세요.');
-      return;
-    }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      setSubmitError('유효한 이메일 주소를 입력해주세요.');
-      return;
-    }
-
-    // Placeholder for actual submission logic
-    console.log('Form submitted:', formData);
-    setIsSubmitted(true);
-    setFormData({ name: '', email: '', message: '' }); // Clear form
+  const onSubmit = async (data: ContactFormInputs) => {
+    setIsSubmitted(false); // Reset submission status
+    console.log('Form data:', data);
 
     // Simulate API call
-    // setTimeout(() => {
-    //   setIsSubmitted(true);
-    //   setFormData({ name: '', email: '', message: '' });
-    // }, 1000);
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    // After successful submission
+    setIsSubmitted(true);
+    reset(); // Clear form fields
   };
-
-
 
   return (
     <motion.section
@@ -90,7 +83,7 @@ const ContactSection = () => {
               보통 하루 안에 꼼꼼히 읽고 답장 드려요. 부담 갖지 말고 편하게 말을 걸어 주세요!
             </motion.p>
 
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               <motion.div variants={itemVariants}>
                 <label htmlFor="name" className="block text-md font-medium text-foreground mb-1">
                   어떻게 불러드릴까요?
@@ -98,13 +91,11 @@ const ContactSection = () => {
                 <Input
                   type="text"
                   id="name"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
                   placeholder="소중한 이름을 알려주세요"
-                  required
-                  className="focus:border-primary transition-colors duration-200" // Custom styles
+                  {...register('name')} // Register name input
+                  className={`focus:border-primary transition-colors duration-200 ${errors.name ? 'border-red-500' : ''}`}
                 />
+                {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>}
               </motion.div>
 
               <motion.div variants={itemVariants}>
@@ -114,13 +105,11 @@ const ContactSection = () => {
                 <Input
                   type="email"
                   id="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
                   placeholder="contact@example.com"
-                  required
-                  className="focus:border-primary transition-colors duration-200" // Custom styles
+                  {...register('email')} // Register email input
+                  className={`focus:border-primary transition-colors duration-200 ${errors.email ? 'border-red-500' : ''}`}
                 />
+                {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>}
               </motion.div>
 
               <motion.div variants={itemVariants}>
@@ -129,25 +118,14 @@ const ContactSection = () => {
                 </label>
                 <Textarea
                   id="message"
-                  name="message"
-                  value={formData.message}
-                  onChange={handleChange}
                   placeholder="자세한 이야기를 들려주세요. 아이디어, 일정, 예산 등 무엇이든 좋아요!"
                   rows={5}
-                  required
-                  className="focus:border-primary transition-colors duration-200" // Custom styles
+                  {...register('message')} // Register message textarea
+                  className={`focus:border-primary transition-colors duration-200 ${errors.message ? 'border-red-500' : ''}`}
                 ></Textarea>
+                {errors.message && <p className="text-red-500 text-sm mt-1">{errors.message.message}</p>}
               </motion.div>
 
-              {submitError && (
-                <motion.p
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="text-red-500 text-sm"
-                >
-                  {submitError}
-                </motion.p>
-              )}
               {isSubmitted && (
                 <motion.p
                   initial={{ opacity: 0, y: -10 }}
@@ -165,6 +143,7 @@ const ContactSection = () => {
                 className="w-full" // Ensure full width
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
+                disabled={isSubmitting} // Disable button during submission
               >
                 마음을 담아 보내기
               </MotionButton>              <motion.p variants={itemVariants} className="text-xs text-muted-foreground flex items-center justify-center gap-1">
