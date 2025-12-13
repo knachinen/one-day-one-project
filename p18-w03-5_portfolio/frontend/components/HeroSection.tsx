@@ -144,38 +144,37 @@ const HeroSection = () => {
         <motion.h1
           className="text-4xl md:text-7xl font-extrabold leading-tight text-foreground mb-4"
         >
-          <motion.span variants={containerVariants} initial="hidden" animate="visible">
-            {"안녕하세요, 저는 ".split(" ").map((word, i) => (
-              <motion.span
-                key={i}
-                variants={itemVariants}
-                className="inline-block" // Ensure words don't collapse whitespace
-              >
-                {word}{" "}
-              </motion.span>
-            ))}
-            <motion.span className="text-primary inline-block">
-              {"행복을 코딩하는 알렉스".split(" ").map((word, i) => (
-                <motion.span
-                  key={i}
-                  variants={itemVariants}
-                  className="inline-block"
-                >
-                  {word}{" "}
-                </motion.span>
-              ))}
-            </motion.span>
-            {"입니다.".split(" ").map((word, i) => (
-              <motion.span
-                key={i}
-                variants={itemVariants}
-                className="inline-block"
-              >
-                {word}{" "}
-              </motion.span>
-            ))}
-          </motion.span>
-        </motion.h1>
+                      <motion.span variants={containerVariants} initial="hidden" animate="visible">
+                      {"안녕하세요, 저는 ".split(" ").map((word, i) => (
+                        <motion.span
+                          key={i}
+                          variants={itemVariants}
+                          className="inline-block" // Ensure words don't collapse whitespace
+                        >
+                          {word}&nbsp;
+                        </motion.span>
+                      ))}
+                      <motion.span className="text-primary inline-block">
+                        {"행복을 코딩하는 알렉스".split(" ").map((word, i) => (
+                          <motion.span
+                            key={i}
+                            variants={itemVariants}
+                            className="inline-block"
+                          >
+                            {word}&nbsp;
+                          </motion.span>
+                        ))}
+                      </motion.span>
+                      {"입니다.".split(" ").map((word, i) => (
+                        <motion.span
+                          key={i}
+                          variants={itemVariants}
+                          className="inline-block"
+                        >
+                          {word}&nbsp;
+                        </motion.span>
+                      ))}
+                    </motion.span>        </motion.h1>
 
         {/* Subtext */}
         <motion.p
