@@ -1,0 +1,8 @@
+# Ignore common OS generated files
+.DS_Store
+
+# Geminim temporary directory
+.gemini/tmp/
+
+# node modules for the root if any
+node_modules/

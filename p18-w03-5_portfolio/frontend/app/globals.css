@@ -1,0 +1,40 @@
+@import 'tailwindcss';
+
+:root {
+  --background: #ffffff;
+  --foreground: #1f1f1f; /* Main Text Color */
+  --primary: #ffc759; /* Primary Color (Gold Orange) */
+  --secondary: #f7941d; /* Secondary Color */
+  --muted-foreground: #6a6a6a; /* Sub Text Color */
+  --secondary-cta-text: #1f1f1f; /* Secondary CTA button text color */
+  --background-gradient-start: #fffcf4;
+  --background-gradient-end: #fff3e0;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-secondary-cta-text: var(--secondary-cta-text);
+  --color-background-gradient-start: var(--background-gradient-start);
+  --color-background-gradient-end: var(--background-gradient-end);
+
+  --font-noto-sans-kr: var(--font-noto-sans-kr); /* Use the CSS variable from next/font */
+  --font-geist-mono: monospace; /* Keep existing mono font */
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+    /* Add dark mode specific colors here later if needed */
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-noto-sans-kr); /* Apply the font variable */
+}
