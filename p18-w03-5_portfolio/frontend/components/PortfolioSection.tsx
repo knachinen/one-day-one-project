@@ -94,6 +94,7 @@ const PortfolioSection = () => {
 
   return (
     <motion.section
+      id="portfolio"
       className="relative py-16 md:py-24 bg-white text-foreground overflow-hidden"
       variants={sectionVariants}
       initial="hidden"

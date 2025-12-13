@@ -37,6 +37,7 @@ const AboutSection = () => {
 
   return (
     <motion.section
+      id="about"
       className="relative py-16 md:py-24 bg-white text-foreground overflow-hidden"
       variants={sectionVariants}
       initial="hidden"

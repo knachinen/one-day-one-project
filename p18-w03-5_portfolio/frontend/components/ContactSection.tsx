@@ -65,6 +65,7 @@ const ContactSection = () => {
 
   return (
     <motion.section
+      id="contact"
       className="py-16 md:py-24 bg-background-accent text-foreground overflow-hidden"
       variants={sectionVariants}
       initial="hidden"
