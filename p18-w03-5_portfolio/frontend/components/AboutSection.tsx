@@ -117,11 +117,11 @@ const AboutSection = () => {
                     <span className="text-lg text-muted-foreground">{skill.name}</span>
                     <span className="text-lg font-bold text-foreground">{skill.percentage}%</span>
                   </div>
-                  <div className="w-full bg-gray-200 rounded-full h-3">
+                  <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
                     <motion.div
-                      className="bg-primary h-3 rounded-full"
-                      initial={{ width: 0 }}
-                      animate={inView ? { width: `${skill.percentage}%` } : { width: 0 }}
+                      className="bg-primary h-3 rounded-full transform-origin-left"
+                      initial={{ scaleX: 0 }}
+                      animate={inView ? { scaleX: skill.percentage / 100 } : { scaleX: 0 }}
                       transition={{ duration: 1.5, ease: 'easeOut' }}
                     ></motion.div>
                   </div>

@@ -3,6 +3,7 @@
 import React, { useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger'; // Import ScrollTrigger
 import { Button } from '@/components/ui/button'; // Import shadcn/ui Button
 
 const MotionButton = motion.create(Button); // Declare MotionButton here
@@ -31,6 +32,8 @@ const HeroSection = () => {
 
 
   useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger); // Register ScrollTrigger
+
     const handleMouseMove = (event: MouseEvent) => {
       const { clientX, clientY } = event;
       const centerX = window.innerWidth / 2;
@@ -73,8 +76,40 @@ const HeroSection = () => {
 
     window.addEventListener('mousemove', handleMouseMove);
 
+    // Scroll-based parallax
+    const elementsToParallax = [
+      { ref: backgroundRef, speed: -0.1 },
+      { ref: rocketRef, speed: -0.3 },
+      { ref: laptopRef, speed: -0.2 },
+      { ref: checkRef, speed: -0.15 },
+      { ref: videoRef, speed: -0.05 },
+    ];
+
+    const scrollTriggers: ScrollTrigger[] = [];
+
+    elementsToParallax.forEach(({ ref, speed }) => {
+      if (ref.current) {
+        const trigger = ScrollTrigger.create({
+          trigger: 'body', // Trigger on body scroll
+          start: 'top top',
+          end: 'bottom top',
+          scrub: true, // Link animation to scroll position
+          onUpdate: (self) => {
+            gsap.to(ref.current, {
+              y: self.progress * window.innerHeight * speed, // Adjust y based on scroll progress and speed
+              ease: 'none',
+              duration: 0.1, // Small duration for smooth updates
+            });
+          },
+        });
+        scrollTriggers.push(trigger);
+      }
+    });
+
+
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
+      scrollTriggers.forEach(trigger => trigger.kill()); // Clean up ScrollTriggers
     };
   }, []);
 
@@ -108,9 +143,38 @@ const HeroSection = () => {
         {/* Main Heading */}
         <motion.h1
           className="text-4xl md:text-7xl font-extrabold leading-tight text-foreground mb-4"
-          variants={itemVariants}
         >
-          안녕하세요, 저는 <span className="text-primary">행복을 코딩하는 알렉스</span>입니다.
+          <motion.span variants={containerVariants} initial="hidden" animate="visible">
+            {"안녕하세요, 저는 ".split(" ").map((word, i) => (
+              <motion.span
+                key={i}
+                variants={itemVariants}
+                className="inline-block" // Ensure words don't collapse whitespace
+              >
+                {word}{" "}
+              </motion.span>
+            ))}
+            <motion.span className="text-primary inline-block">
+              {"행복을 코딩하는 알렉스".split(" ").map((word, i) => (
+                <motion.span
+                  key={i}
+                  variants={itemVariants}
+                  className="inline-block"
+                >
+                  {word}{" "}
+                </motion.span>
+              ))}
+            </motion.span>
+            {"입니다.".split(" ").map((word, i) => (
+              <motion.span
+                key={i}
+                variants={itemVariants}
+                className="inline-block"
+              >
+                {word}{" "}
+              </motion.span>
+            ))}
+          </motion.span>
         </motion.h1>
 
         {/* Subtext */}
