@@ -164,9 +164,7 @@ const ServicesSection = () => {
         {/* Process Steps */}
         <div ref={processStepsRef} className="relative max-w-xl mx-auto">
           {processSteps.map((process, index) => (
-            <motion.div key={process.step} variants={itemVariants}>
-              <ProcessStep {...process} isLast={index === processSteps.length - 1} isInView={processStepsInView} />
-            </motion.div>
+            <ProcessStep key={process.step} {...process} isLast={index === processSteps.length - 1} isInView={processStepsInView} />
           ))}
         </div>
       </div>
