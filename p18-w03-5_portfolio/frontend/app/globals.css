@@ -159,7 +159,7 @@ body::before {
     background: var(--gradient-primary-accent);
     -webkit-background-clip: text;
     background-clip: text;
-    color: transparent;
+    color: var(--primary); /* Fallback for browsers that don't support background-clip: text or for better visibility */
   }
 }
 

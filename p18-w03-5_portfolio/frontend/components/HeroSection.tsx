@@ -9,20 +9,6 @@ import { Button } from '@/components/ui/button'; // Import shadcn/ui Button
 const MotionButton = motion.create(Button); // Declare MotionButton here
 
 const HeroSection = () => {
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 },
-  };
 
   const backgroundRef = useRef(null);
   const rocketRef = useRef(null);
@@ -39,6 +25,13 @@ const HeroSection = () => {
 
     // Set initial 3D transform origin for words
     gsap.set(heroWords, { transformOrigin: 'center center', perspective: 1000 }); // Add perspective for 3D effect
+
+    // Initial animation for words using GSAP
+    gsap.fromTo(
+      heroWords,
+      { opacity: 0, y: 20 }, // From state
+      { opacity: 1, y: 0, stagger: 0.1, delay: 0.5, ease: 'power3.out' } // To state
+    );
 
     // Set initial random positions and sizes for particles on client-side
     particles.forEach((particle: any) => {
@@ -228,19 +221,15 @@ const HeroSection = () => {
       {/* Main Content */}
       <motion.div
         className="relative z-10 p-4 max-w-4xl"
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
       >
         {/* Main Heading */}
         <motion.h1
           className="text-4xl md:text-7xl font-extrabold leading-tight text-foreground mb-4"
         >
-                      <motion.span variants={containerVariants} initial="hidden" animate="visible">
+                      <motion.span>
                       {"안녕하세요, 저는 ".split(" ").map((word, i) => (
                         <motion.span
                           key={i}
-                          variants={itemVariants}
                           className="inline-block animated-word" // Ensure words don't collapse whitespace
                         >
                           {word}&nbsp;
@@ -250,7 +239,6 @@ const HeroSection = () => {
                         {"행복을 코딩하는 알렉스".split(" ").map((word, i) => (
                           <motion.span
                             key={i}
-                            variants={itemVariants}
                             className="inline-block animated-word"
                           >
                             {word}&nbsp;
@@ -260,7 +248,6 @@ const HeroSection = () => {
                       {"입니다.".split(" ").map((word, i) => (
                         <motion.span
                           key={i}
-                          variants={itemVariants}
                           className="inline-block animated-word"
                         >
                           {word}&nbsp;
@@ -271,7 +258,6 @@ const HeroSection = () => {
         {/* Subtext */}
         <motion.p
           className="text-lg md:text-xl text-muted-foreground mb-8"
-          variants={itemVariants}
         >
           따뜻한 감성과 기술을 더해 당신만의 이야기를 웹사이트에 담아드립니다. 사용자에게 친근하게 다가가는 인터랙티브 경험을 만들어보세요.
         </motion.p>
@@ -279,7 +265,6 @@ const HeroSection = () => {
         {/* CTA Buttons */}
         <motion.div
           className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 justify-center"
-          variants={itemVariants}
         >
           <MotionButton
             variant="primaryCta"
