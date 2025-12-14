@@ -11,7 +11,7 @@ import { sectionThemes } from '@/constants/themeConfig'; // Import sectionThemes
 const PageTransitionProvider = ({ children }: { children: React.ReactNode }) => {
 
   const pathname = usePathname();
-  const { isModalOpen, modalContent, closeModal } = useUIStore(); // Get isModalOpen and modalContent from store
+  const { isModalOpen, modalContent, closeModal, setActiveSection } = useUIStore(); // Get isModalOpen, modalContent, closeModal, and setActiveSection from store
 
   // Register GSAP plugins
   useEffect(() => {
