@@ -27,7 +27,7 @@ const ProcessStep: React.FC<ProcessStepProps> = ({ step, title, description, isL
   };
 
   return (
-    <div className="relative flex items-start gap-4 group">
+    <div className="relative flex items-start gap-9 group">
       <div className="flex flex-col items-start pr-4">
         {/* Step number/icon */}
         <motion.div
