@@ -3,11 +3,14 @@
 import React, { useRef, useEffect } from 'react';
 import { motion, useInView } from 'framer-motion';
 import Image from 'next/image';
+import gsap from 'gsap'; // Import gsap
 import CountUpNumber from './CountUpNumber'; // Import the new component
+import SkillCube from './SkillCube'; // Import SkillCube
 
 
 const AboutSection = () => {
   const statsRef = useRef(null);
+  const magneticTagsRef = useRef(null); // Add this ref
   const inView = useInView(statsRef, { once: true, amount: 0.5 }); // Trigger when 50% of the element is in view
 
   const sectionVariants = {
@@ -35,6 +38,68 @@ const AboutSection = () => {
     { name: '모션 & 인터랙션', percentage: 90 },
   ];
 
+  useEffect(() => {
+    const magneticTagsContainer = magneticTagsRef.current;
+    if (!magneticTagsContainer) return;
+
+    const magneticTags = gsap.utils.toArray(magneticTagsContainer.children);
+
+    const handleMouseMove = (e: MouseEvent) => {
+      magneticTags.forEach((tag: any) => {
+        const rect = tag.getBoundingClientRect();
+        const tagCenterX = rect.left + rect.width / 2;
+        const tagCenterY = rect.top + rect.height / 2;
+
+        const distanceX = e.clientX - tagCenterX;
+        const distanceY = e.clientY - tagCenterY;
+        const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+
+        const magnetRadius = 80; // Radius within which tags react
+        const pullForce = 0.3; // How strongly tags are pulled
+
+        if (distance < magnetRadius) {
+          const angle = Math.atan2(distanceY, distanceX);
+          const pullAmount = (1 - (distance / magnetRadius)) * pullForce * 20; // More force when closer
+
+          gsap.to(tag, {
+            x: Math.cos(angle) * pullAmount,
+            y: Math.sin(angle) * pullAmount,
+            duration: 0.3,
+            ease: 'power1.out',
+          });
+        } else {
+          gsap.to(tag, {
+            x: 0,
+            y: 0,
+            duration: 0.5,
+            ease: 'elastic.out(1, 0.5)',
+          });
+        }
+      });
+    };
+
+    const handleMouseLeave = () => {
+      magneticTags.forEach((tag: any) => {
+        gsap.to(tag, {
+          x: 0,
+          y: 0,
+          duration: 0.5,
+          ease: 'elastic.out(1, 0.5)',
+        });
+      });
+    };
+
+    magneticTagsContainer.addEventListener('mousemove', handleMouseMove);
+    magneticTagsContainer.addEventListener('mouseleave', handleMouseLeave);
+
+    // Cleanup event listeners
+    return () => {
+      magneticTagsContainer.removeEventListener('mousemove', handleMouseMove);
+      magneticTagsContainer.removeEventListener('mouseleave', handleMouseLeave);
+    };
+
+  }, []); // Empty dependency array, runs once on mount
+
   return (
     <motion.section
       id="about"
@@ -45,28 +110,41 @@ const AboutSection = () => {
       viewport={{ once: true, amount: 0.3 }}
     >
       {/* Background Graphic Element */}
-      <div className="absolute top-0 left-0 w-80 h-80 bg-primary opacity-20 rounded-full mix-blend-multiply filter blur-2xl animate-blob"></div>
+      <div className="absolute top-0 left-0 w-80 h-80 bg-accent-gradient opacity-20 rounded-full mix-blend-multiply filter blur-2xl animate-blob"></div>
 
       <div className="container mx-auto px-4 max-w-6xl">
-        <div className="flex flex-col lg:flex-row gap-12 items-center lg:items-start">
+        <div className="flex flex-col lg:flex-row gap-12 lg:items-start"> {/* Removed items-center */}
           {/* Left Column: Image and Location */}
-          <div className="relative w-full lg:w-5/12 flex flex-col items-center lg:items-start">
-            <motion.div variants={itemVariants} className="relative w-full max-w-sm lg:max-w-none lg:w-full h-96 rounded-2xl overflow-hidden shadow-xl">
+          <div className="relative w-full lg:w-5/12 flex flex-col items-center lg:items-start min-h-[150vh]"> {/* Increased min-height for scroll */}
+            <motion.div
+              variants={itemVariants}
+              className="relative w-full max-w-sm lg:max-w-none lg:w-full h-96 rounded-2xl overflow-hidden shadow-xl group" // Add group for hover effects
+              whileHover="hover"
+              initial="rest"
+            >
               <Image
                 src="https://placehold.co/400x500?text=Your+Photo" // Placeholder image
                 alt="Profile Picture"
                 fill
-                className="rounded-2xl object-cover"
+                className="rounded-2xl object-cover transition-all duration-300 ease-out group-hover:scale-105" // Scale image on hover
                 unoptimized // Add unoptimized prop
               />
+              {/* Overlay for accent color wave effect */}
+              <motion.div
+                className="absolute inset-0 bg-accent-gradient opacity-0"
+                variants={{
+                  rest: { clipPath: 'circle(0% at 50% 50%)', opacity: 0 },
+                  hover: { clipPath: 'circle(75% at 50% 50%)', opacity: 0.5, transition: { duration: 0.5 } },
+                }}
+              ></motion.div>
             </motion.div>
-            <motion.div variants={itemVariants} className="absolute -bottom-4 lg:-bottom-8 px-6 py-3 bg-primary text-white font-bold rounded-lg shadow-lg">
+            <motion.div variants={itemVariants} className="absolute -bottom-4 lg:-bottom-8 px-6 py-3 bg-accent-gradient text-white font-bold rounded-lg shadow-lg">
               CURRENTLY IN <span className="text-black">서울, 대한민국</span>
             </motion.div>
           </div>
 
           {/* Right Column: Intro, Stats, Skills */}
-          <div className="w-full lg:w-7/12 mt-16 lg:mt-0">
+          <div className="w-full lg:w-7/12 mt-16 lg:mt-0 lg:sticky lg:top-0 lg:h-screen lg:py-16 overflow-y-auto"> {/* Made sticky */}
             {/* Intro/Headline */}
             <motion.h2 variants={itemVariants} className="text-3xl md:text-4xl font-extrabold text-foreground mb-4">
               마음을 움직이는 디지털 스토리텔링
@@ -77,9 +155,9 @@ const AboutSection = () => {
             </motion.p>
 
             {/* Key Competency Icon List (Placeholder) */}
-            <motion.div variants={itemVariants} className="flex flex-wrap gap-4 mb-12">
+            <motion.div ref={magneticTagsRef} variants={itemVariants} className="flex flex-wrap gap-4 mb-12">
               {['전략 기획', 'UX 디자인', '웹 개발', '브랜딩'].map((competency, index) => (
-                <div key={index} className="flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-full text-sm font-medium hover:bg-primary hover:text-white transition-colors duration-300">
+                <div key={index} className="flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-full text-sm font-medium hover:bg-accent-gradient hover:text-white transition-colors duration-300">
                   {/* Icon Placeholder */}
                   <span>💡</span>
                   <span>{competency}</span>
@@ -118,13 +196,16 @@ const AboutSection = () => {
                     <span className="text-lg text-muted-foreground">{skill.name}</span>
                     <span className="text-lg font-bold text-foreground">{skill.percentage}%</span>
                   </div>
-                  <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
-                    <motion.div
-                      className="bg-primary h-3 rounded-full transform-origin-left"
-                      initial={{ scaleX: 0 }}
-                      animate={inView ? { scaleX: skill.percentage / 100 } : { scaleX: 0 }}
-                      transition={{ duration: 1.5, ease: 'easeOut' }}
-                    ></motion.div>
+                  <div className="flex items-center gap-4">
+                    <SkillCube percentage={skill.percentage} colorClass="bg-accent-gradient" isInView={inView} delay={index * 0.1} />
+                    <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
+                      <motion.div
+                        className="bg-accent-gradient h-3 rounded-full transform-origin-left"
+                        initial={{ scaleX: 0 }}
+                        animate={inView ? { scaleX: skill.percentage / 100 } : { scaleX: 0 }}
+                        transition={{ duration: 1.5, ease: 'easeOut', delay: index * 0.1 + 0.5 }}
+                      ></motion.div>
+                    </div>
                   </div>
                 </div>
               ))}

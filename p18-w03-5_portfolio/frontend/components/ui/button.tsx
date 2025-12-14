@@ -20,7 +20,7 @@ const buttonVariants = cva(
           "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
         link: "text-primary underline-offset-4 hover:underline",
         // Custom CTA variants
-        primaryCta: "bg-primary text-white font-bold rounded-full shadow-lg hover:bg-secondary", // Replicate existing primary CTA
+        primaryCta: "bg-accent-gradient text-white font-bold rounded-full shadow-lg hover:brightness-90", // Replicate existing primary CTA
         secondaryCta: "bg-white text-secondary-cta-text border border-gray-300 font-bold rounded-full shadow-lg hover:bg-gray-100", // Replicate existing secondary CTA
         filterChip: "bg-white text-gray-700 border border-gray-300 hover:bg-gray-100 rounded-full",
         filterChipActive: "bg-primary text-white rounded-full",

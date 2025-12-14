@@ -34,6 +34,26 @@ const HeroSection = () => {
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger); // Register ScrollTrigger
 
+    const heroWords = gsap.utils.toArray('.animated-word'); // Get all animated words
+    const particles = gsap.utils.toArray('.particle'); // Get all particles using the new class
+
+    // Set initial 3D transform origin for words
+    gsap.set(heroWords, { transformOrigin: 'center center', perspective: 1000 }); // Add perspective for 3D effect
+
+    // Set initial random positions and sizes for particles on client-side
+    particles.forEach((particle: any) => {
+      gsap.set(particle, {
+        width: gsap.utils.random(5, 15),
+        height: gsap.utils.random(5, 15),
+        x: gsap.utils.random(0, window.innerWidth), // Use window.innerWidth for random x position
+        y: gsap.utils.random(0, window.innerHeight), // Use window.innerHeight for random y position
+        scale: gsap.utils.random(0.5, 1.5),
+        left: '0px', // Reset left/top as x/y are now relative to current position
+        top: '0px',
+      });
+    });
+
+
     const handleMouseMove = (event: MouseEvent) => {
       const { clientX, clientY } = event;
       const centerX = window.innerWidth / 2;
@@ -72,8 +92,63 @@ const HeroSection = () => {
         duration: 0.8,
         ease: 'power2.out',
       });
-    };
 
+      // 3D Parallax for animated words
+      heroWords.forEach((word: any) => {
+        const rect = word.getBoundingClientRect();
+        const wordCenterX = rect.left + rect.width / 2;
+        const wordCenterY = rect.top + rect.height / 2;
+
+        const rotateX = ((clientY - wordCenterY) / window.innerHeight) * 30; // Max 30 degrees rotation
+        const rotateY = ((clientX - wordCenterX) / window.innerWidth) * 30;
+        const translateZ = 50; // Push words forward a bit
+
+        gsap.to(word, {
+          rotationX: -rotateX, // Invert for natural feel
+          rotationY: rotateY,
+          z: translateZ,
+          duration: 0.5,
+          ease: 'power1.out',
+        });
+      });
+
+      // Magnetic Field for particles
+      particles.forEach((particle: any) => {
+        const rect = particle.getBoundingClientRect();
+        const particleCenterX = rect.left + rect.width / 2;
+        const particleCenterY = rect.top + rect.height / 2;
+
+        const distanceX = clientX - particleCenterX;
+        const distanceY = clientY - particleCenterY;
+        const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+
+        const magnetRadius = 100; // Radius within which particles react
+        const repelForce = 0.5; // How strongly particles repel
+
+        if (distance < magnetRadius) {
+          const angle = Math.atan2(distanceY, distanceX);
+          const repelAmount = (1 - (distance / magnetRadius)) * repelForce * 50; // More force when closer
+
+          gsap.to(particle, {
+            x: Math.cos(angle) * repelAmount,
+            y: Math.sin(angle) * repelAmount,
+            scale: 1 + (1 - (distance / magnetRadius)) * 0.5, // Scale up closer particles
+            opacity: 0.5 + (1 - (distance / magnetRadius)) * 0.3, // Increase opacity
+            duration: 0.3,
+            ease: 'power2.out',
+          });
+        } else {
+          gsap.to(particle, {
+            x: 0, // Return to original random x offset
+            y: 0, // Return to original random y offset
+            scale: gsap.utils.random(0.5, 1.5), // Return to initial random scale
+            opacity: 0.3, // Return to initial opacity
+            duration: 0.8,
+            ease: 'elastic.out(1, 0.5)',
+          });
+        }
+      });
+    };
     window.addEventListener('mousemove', handleMouseMove);
 
     // Scroll-based parallax
@@ -109,6 +184,7 @@ const HeroSection = () => {
 
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
+      // Remove text parallax specific cleanup if needed, e.g. gsap.killTweensOf(heroWords);
       scrollTriggers.forEach(trigger => trigger.kill()); // Clean up ScrollTriggers
     };
   }, []);
@@ -121,7 +197,23 @@ const HeroSection = () => {
       <div
         ref={backgroundRef}
         className="absolute inset-0 bg-gradient-to-br from-[var(--background-gradient-start)] to-[var(--background-gradient-end)]"
-      ></div>
+      >
+        <div className="absolute inset-0 pointer-events-none" id="particle-container">
+          {Array.from({ length: 70 }).map((_, i) => ( // Generate 70 particles
+            <div
+              key={i}
+              className="absolute bg-white rounded-full opacity-30 blur-sm particle" // Add 'particle' class for targeting in useEffect
+              // Initial styles can be static or minimal, actual random styles will be set in useEffect
+              style={{
+                width: `10px`, // Placeholder
+                height: `10px`, // Placeholder
+                left: `0%`, // Placeholder
+                top: `0%`, // Placeholder
+              }}
+            ></div>
+          ))}
+        </div>
+      </div>
 
       {/* Small Banner */}
       <motion.div
@@ -149,17 +241,17 @@ const HeroSection = () => {
                         <motion.span
                           key={i}
                           variants={itemVariants}
-                          className="inline-block" // Ensure words don't collapse whitespace
+                          className="inline-block animated-word" // Ensure words don't collapse whitespace
                         >
                           {word}&nbsp;
                         </motion.span>
                       ))}
-                      <motion.span className="text-primary inline-block">
+                      <motion.span className="text-accent-gradient inline-block">
                         {"행복을 코딩하는 알렉스".split(" ").map((word, i) => (
                           <motion.span
                             key={i}
                             variants={itemVariants}
-                            className="inline-block"
+                            className="inline-block animated-word"
                           >
                             {word}&nbsp;
                           </motion.span>
@@ -169,7 +261,7 @@ const HeroSection = () => {
                         <motion.span
                           key={i}
                           variants={itemVariants}
-                          className="inline-block"
+                          className="inline-block animated-word"
                         >
                           {word}&nbsp;
                         </motion.span>
@@ -208,24 +300,15 @@ const HeroSection = () => {
         </motion.div>
       </motion.div>
 
-      {/* Scroll Indicator */}
-      <motion.div
-        className="absolute bottom-10 z-20"
-        animate={{ y: ["-10%", "10%", "-10%"] }}
-        transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-      >
-        <svg className="w-8 h-8 text-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
-        </svg>
-      </motion.div>
+      {/* Scroll Indicator - Moved to Header/Layout */}
 
       {/* Visual Elements with Parallax */}
       <motion.div ref={rocketRef} className="absolute bottom-20 left-20 z-20 text-4xl">🚀</motion.div> {/* Rocket Icon */}
       <motion.div ref={laptopRef} className="absolute top-40 right-40 z-20 text-4xl">💻</motion.div> {/* Laptop Icon */}
-      <motion.div ref={checkRef} className="absolute top-10 right-10 text-primary text-2xl z-20">✔️</motion.div> {/* Check Mark */}
+      <motion.div ref={checkRef} className="absolute top-10 right-10 text-accent-gradient text-2xl z-20">✔️</motion.div> {/* Check Mark */}
 
       {/* Video Area Placeholder - Centered at bottom with rounded corners */}
-      <motion.div ref={videoRef} className="absolute bottom-0 left-1/2 -translate-x-1/2 w-80 h-48 bg-gray-300 rounded-xl z-20"></motion.div>
+      {/*<motion.div ref={videoRef} className="absolute bottom-0 left-1/2 -translate-x-1/2 w-80 h-48 bg-gray-300 rounded-xl z-20"></motion.div>*/}
 
     </section>
   );

@@ -129,7 +129,7 @@ const ServicesSection = () => {
         {/* Header */}
         <div className="text-center mb-12">
           <motion.h2 variants={itemVariants} className="text-4xl md:text-5xl font-extrabold text-foreground mb-4">
-            여러분은 위해 <span className="text-primary">준비했어요!</span>
+            여러분은 위해 <span className="text-accent-gradient">준비했어요!</span>
           </motion.h2>
           <motion.p variants={itemVariants} className="text-lg text-muted-foreground max-w-2xl mx-auto">
             전략적인 생각과 감각적인 디자인, 인터랙션을 더해 당신의 비즈니스를 특별하게 만들어 드릴게요.

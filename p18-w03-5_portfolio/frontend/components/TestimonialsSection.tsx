@@ -114,7 +114,7 @@ const TestimonialsSection = () => {
         {/* Testimonials Header */}
         <div className="text-center mb-12">
           <motion.h2 variants={itemVariants} className="text-4xl md:text-5xl font-extrabold text-foreground mb-4">
-            저와 함께 성장한 <span className="text-primary">소중한 파트너들의 이야기</span>
+            저와 함께 성장한 <span className="text-accent-gradient">소중한 파트너들의 이야기</span>
           </motion.h2>
           <motion.p variants={itemVariants} className="text-lg text-muted-foreground max-w-2xl mx-auto">
             디지털 세상에서 브랜드가 어떻게 반짝이게 되었는지, 생생한 후기를 확인해보세요.
@@ -170,12 +170,12 @@ const TestimonialsSection = () => {
 
         {/* Divider */}
         <div className="flex items-center justify-center my-16">
-          <div className="w-16 h-1 bg-primary rounded-full"></div>
+          <div className="w-16 h-1 bg-accent-gradient rounded-full"></div>
         </div>
 
         {/* Partner Logos Header */}
         <div className="text-center mb-12">
-          <motion.p variants={itemVariants} className="text-primary text-xl font-bold mb-2">💎</motion.p>
+          <motion.p variants={itemVariants} className="text-accent-gradient text-xl font-bold mb-2">💎</motion.p>
           <motion.h3 variants={itemVariants} className="text-3xl md:text-4xl font-extrabold text-foreground mb-4">
             즐겁게 협업한 브랜드
           </motion.h3>

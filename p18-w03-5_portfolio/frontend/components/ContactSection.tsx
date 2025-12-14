@@ -76,7 +76,7 @@ const ContactSection = () => {
         <div className="flex flex-col lg:flex-row gap-12 lg:gap-16">
           {/* Left Column: Contact Form */}
           <motion.div variants={itemVariants} className="w-full lg:w-1/2 p-8 bg-white rounded-lg shadow-lg">
-            <motion.p variants={itemVariants} className="text-sm text-primary font-bold mb-2">반가워요!</motion.p>
+            <motion.p variants={itemVariants} className="text-sm text-accent-gradient font-bold mb-2">반가워요!</motion.p>
             <motion.h2 variants={itemVariants} className="text-3xl md:text-4xl font-extrabold text-foreground mb-4">
               재미있는 프로젝트, <br /> 함께 시작해볼까요?
             </motion.h2>
@@ -174,10 +174,10 @@ const ContactSection = () => {
               </motion.h3>
               <motion.div variants={itemVariants} className="mb-4">
                 <p className="flex items-center gap-2 text-lg text-foreground font-bold">
-                  ✉️ <a href="mailto:hello@entrepreneur.com" className="hover:text-primary transition-colors">hello@entrepreneur.com</a>
+                  ✉️ <a href="mailto:hello@entrepreneur.com" className="hover:text-accent-gradient transition-colors">hello@entrepreneur.com</a>
                 </p>
                 <p className="flex items-center gap-2 text-lg text-foreground font-bold">
-                  📞 <a href="tel:010-1234-5678" className="hover:text-primary transition-colors">010-1234-5678</a>
+                  📞 <a href="tel:010-1234-5678" className="hover:text-accent-gradient transition-colors">010-1234-5678</a>
                 </p>
               </motion.div>
             </div>
@@ -187,13 +187,13 @@ const ContactSection = () => {
                 SNS에서도 만나요!
               </h3>
               <div className="flex space-x-4">
-                <motion.a href="#" whileHover={{ scale: 1.1 }} className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 text-foreground text-2xl hover:bg-primary hover:text-white">
+                <motion.a href="#" whileHover={{ scale: 1.1 }} className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 text-foreground text-2xl hover:bg-accent-gradient hover:text-white">
                   📸
                 </motion.a>
-                <motion.a href="#" whileHover={{ scale: 1.1 }} className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 text-foreground text-2xl hover:bg-primary hover:text-white">
+                <motion.a href="#" whileHover={{ scale: 1.1 }} className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 text-foreground text-2xl hover:bg-accent-gradient hover:text-white">
                   🔗
                 </motion.a>
-                <motion.a href="#" whileHover={{ scale: 1.1 }} className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 text-foreground text-2xl hover:bg-primary hover:text-white">
+                <motion.a href="#" whileHover={{ scale: 1.1 }} className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 text-foreground text-2xl hover:bg-accent-gradient hover:text-white">
                   📝
                 </motion.a>
               </div>

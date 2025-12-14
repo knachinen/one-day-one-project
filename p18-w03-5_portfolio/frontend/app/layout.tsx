@@ -4,6 +4,8 @@ import './globals.css';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Providers } from '@/components/Providers';
+import CustomCursor from '@/components/CustomCursor';
+import PageTransitionProvider from '@/components/PageTransitionProvider';
 
 const notoSansKr = Noto_Sans_KR({
   weight: ['400', '500', '700', '800'],
@@ -50,8 +52,11 @@ export default function RootLayout({
       <body>
         <Providers>
           <Header />
-          {children}
+          <PageTransitionProvider>
+            {children}
+          </PageTransitionProvider>
           <Footer />
+          <CustomCursor />
         </Providers>
       </body>
     </html>

@@ -6,6 +6,7 @@
 :root { /* Main Text Color */
   --primary: #FFC759; /* Primary Color (Gold Orange) */
   --secondary: #F7941D; /* Secondary Color */
+  --gradient-primary-accent: linear-gradient(to right, #FFC759, #F7941D); /* Custom gradient property */
   --muted-foreground: oklch(0.556 0 0); /* Sub Text Color */
   --secondary-cta-text: #1f1f1f; /* Secondary CTA button text color */
   --background-gradient-start: #fffcf4;
@@ -89,6 +90,22 @@
 
 body {
   font-family: var(--font-noto-sans-kr); /* Apply the font variable */
+  position: relative; /* Needed for pseudo-element positioning */
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: -1; /* Ensure it stays behind content */
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 500 500' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  background-size: cover;
+  opacity: 0.05; /* Low opacity for subtlety */
+  mix-blend-mode: multiply; /* Optional: for blending effect */
 }
 
 .dark {
@@ -132,4 +149,17 @@ body {
   body {
     @apply bg-background text-foreground;
  }
+
+  /* New accent gradient utility classes */
+  .bg-accent-gradient {
+    background: var(--gradient-primary-accent);
+  }
+
+  .text-accent-gradient {
+    background: var(--gradient-primary-accent);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
 }
+

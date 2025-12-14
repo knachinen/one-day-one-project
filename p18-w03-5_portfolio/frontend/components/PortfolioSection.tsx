@@ -4,6 +4,8 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ProjectCard from './ProjectCard'; // Import the ProjectCard component
 import { Button } from '@/components/ui/button'; // Import shadcn/ui Button
+import { useUIStore } from '@/store/uiStore'; // Import useUIStore
+import ProjectDetailModal from './ProjectDetailModal'; // Import ProjectDetailModal
 
 const MotionButton = motion.create(Button); // Declare MotionButton here
 
@@ -84,11 +86,23 @@ const sectionVariants = {
 
 const PortfolioSection = () => {
   const [filter, setFilter] = useState('전체보기');
+  const { openModal, closeModal, isModalOpen } = useUIStore(); // Use Zustand store for modal state
+
   const categories = ['전체보기', 'UX/UI 디자인', '웹 앱', '브랜딩', '모바일 앱', '그래픽 디자인'];
 
   const filteredProjects = filter === '전체보기'
     ? projects
     : projects.filter(project => project.category.includes(filter));
+
+  const handleOpenProjectModal = (project: typeof projects[0]) => {
+    openModal(
+      <ProjectDetailModal
+        project={project}
+        isOpen={true} // Modal is open when rendered
+        onClose={closeModal}
+      />
+    );
+  };
 
 
 
@@ -104,7 +118,7 @@ const PortfolioSection = () => {
       <div className="container mx-auto px-4 max-w-6xl">
         {/* Header */}
         <div className="text-center mb-12">
-          <motion.p variants={itemVariants} className="text-primary text-sm font-bold mb-2">🚩 포트폴리오</motion.p>
+          <motion.p variants={itemVariants} className="text-accent-gradient text-sm font-bold mb-2">🚩 포트폴리오</motion.p>
           <motion.h2 variants={itemVariants} className="text-4xl md:text-5xl font-extrabold text-foreground mb-4">
             웅킁웅킁 피어나는 <span className="text-primary">나의 작업실</span>
           </motion.h2>
@@ -129,22 +143,20 @@ const PortfolioSection = () => {
 
         {/* Project Grid */}
         <div className="relative"> {/* Add relative positioning for absolute child (AnimatePresence) if needed */}
-          <AnimatePresence mode="wait">
+          <AnimatePresence mode="sync"> {/* Use mode="sync" for better control over exit animations */}
             <motion.div
-              key={filter} // Key AnimatePresence with filter for re-rendering children
               className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-              variants={containerVariants}
-              initial="hidden"
-              animate="visible"
-              exit="hidden" // Add exit state for projects
+              // Remove key={filter} from here, as AnimatePresence children need stable keys
             >
               {filteredProjects.map((project) => (
                 <motion.div
-                  key={project.id}
+                  key={project.id} // Keep project.id as the key for individual items
+                  layout // Add layout prop for shared layout animation
                   variants={itemVariants}
                   initial="hidden"
                   animate="visible"
                   exit="hidden"
+                  onClick={() => openProjectModal(project)} // Add onClick to open modal
                 >
                   <ProjectCard project={project} />
                 </motion.div>
@@ -164,6 +176,9 @@ const PortfolioSection = () => {
             더 많은 작품 보기
           </MotionButton>
         </motion.div>
+
+        {/* Project Detail Modal (managed by useUIStore) */}
+
       </div>
     </motion.section>
   );
