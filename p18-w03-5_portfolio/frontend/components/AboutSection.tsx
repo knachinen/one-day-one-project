@@ -6,6 +6,7 @@ import Image from 'next/image';
 import gsap from 'gsap'; // Import gsap
 import CountUpNumber from './CountUpNumber'; // Import the new component
 import SkillCube from './SkillCube'; // Import SkillCube
+import RotatingShape from './RotatingShape'; // Import RotatingShape
 
 
 const AboutSection = () => {
@@ -137,6 +138,13 @@ const AboutSection = () => {
                   hover: { clipPath: 'circle(75% at 50% 50%)', opacity: 0.5, transition: { duration: 0.5 } },
                 }}
               ></motion.div>
+            </motion.div>
+            {/* Rotating 3D Shape */}
+            <motion.div variants={itemVariants} className="absolute -top-10 -left-10 w-24 h-24 z-10 opacity-70">
+              <RotatingShape color="#FFC759" /> {/* Use accent-start color */}
+            </motion.div>
+            <motion.div variants={itemVariants} className="absolute bottom-0 -right-10 w-20 h-20 z-10 opacity-70">
+              <RotatingShape color="#F7941D" /> {/* Use accent-end color */}
             </motion.div>
             <motion.div variants={itemVariants} className="absolute -bottom-4 lg:-bottom-8 px-6 py-3 bg-accent-gradient text-white font-bold rounded-lg shadow-lg">
               CURRENTLY IN <span className="text-black">서울, 대한민국</span>

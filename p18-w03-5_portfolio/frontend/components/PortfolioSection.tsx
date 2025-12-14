@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react'; // Add useEffect, useRef, useCallback
 import { motion, AnimatePresence } from 'framer-motion';
 import ProjectCard from './ProjectCard'; // Import the ProjectCard component
 import { Button } from '@/components/ui/button'; // Import shadcn/ui Button
@@ -84,15 +84,57 @@ const sectionVariants = {
 };
 
 
+const PROJECTS_PER_PAGE = 6; // Define how many projects to load per "page"
+
 const PortfolioSection = () => {
   const [filter, setFilter] = useState('전체보기');
   const { openModal, closeModal, isModalOpen } = useUIStore(); // Use Zustand store for modal state
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [displayedProjects, setDisplayedProjects] = useState<typeof projects>([]);
+  const [loading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+
+  const observer = useRef<IntersectionObserver>();
+  const lastProjectElementRef = useCallback((node: HTMLDivElement) => {
+    if (loading) return;
+    if (observer.current) observer.current.disconnect();
+    observer.current = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting && hasMore) {
+        setCurrentPage(prevPage => prevPage + 1);
+      }
+    });
+    if (node) observer.current.observe(node);
+  }, [loading, hasMore]);
+
+  // Effect to load initial projects and when filter or currentPage changes
+  useEffect(() => {
+    setLoading(true);
+    // Simulate API call delay
+    setTimeout(() => {
+      const filtered = filter === '전체보기'
+        ? projects
+        : projects.filter(project => project.category.includes(filter));
+
+      const startIndex = (currentPage - 1) * PROJECTS_PER_PAGE;
+      const endIndex = startIndex + PROJECTS_PER_PAGE;
+      const newProjects = filtered.slice(0, endIndex);
+
+      setDisplayedProjects(newProjects);
+      setHasMore(newProjects.length < filtered.length);
+      setLoading(false);
+    }, 500); // Simulate network delay
+  }, [filter, currentPage]);
+
+
   const categories = ['전체보기', 'UX/UI 디자인', '웹 앱', '브랜딩', '모바일 앱', '그래픽 디자인'];
 
-  const filteredProjects = filter === '전체보기'
+  // This `filteredProjects` variable is now just the full list based on current filter, not paginated
+  // The actual displayed projects come from `displayedProjects` state
+  const fullFilteredProjects = filter === '전체보기'
     ? projects
     : projects.filter(project => project.category.includes(filter));
+
 
   const handleOpenProjectModal = (project: typeof projects[0]) => {
     openModal(
@@ -148,34 +190,63 @@ const PortfolioSection = () => {
               className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
               // Remove key={filter} from here, as AnimatePresence children need stable keys
             >
-              {filteredProjects.map((project) => (
-                <motion.div
-                  key={project.id} // Keep project.id as the key for individual items
-                  layout // Add layout prop for shared layout animation
-                  variants={itemVariants}
-                  initial="hidden"
-                  animate="visible"
-                  exit="hidden"
-                  onClick={() => openProjectModal(project)} // Add onClick to open modal
-                >
-                  <ProjectCard project={project} />
-                </motion.div>
-              ))}
+              {displayedProjects.map((project, index) => {
+                // If it's the last element and there's more to load, attach the ref
+                if (fullFilteredProjects.length === displayedProjects.length && hasMore && index === displayedProjects.length -1) { // Check if we are at the end of the full filtered list
+                  return (
+                    <motion.div
+                      ref={lastProjectElementRef} // Attach ref to the last element
+                      key={project.id}
+                      layout
+                      variants={itemVariants}
+                      initial="hidden"
+                      animate="visible"
+                      exit="hidden"
+                      onClick={() => handleOpenProjectModal(project)}
+                    >
+                      <ProjectCard project={project} />
+                    </motion.div>
+                  );
+                }
+                return (
+                  <motion.div
+                    key={project.id}
+                    layout
+                    variants={itemVariants}
+                    initial="hidden"
+                    animate="visible"
+                    exit="hidden"
+                    onClick={() => handleOpenProjectModal(project)}
+                  >
+                    <ProjectCard project={project} />
+                  </motion.div>
+                );
+              })}
             </motion.div>
           </AnimatePresence>
         </div>
 
-        {/* Bottom CTA Button */}
-        <motion.div variants={itemVariants} className="text-center mt-16">
-          <MotionButton
-            variant="outlineCta"
-            size="lg"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            더 많은 작품 보기
-          </MotionButton>
-        </motion.div>
+        {/* Loading Indicator */}
+        {loading && (
+          <motion.div variants={itemVariants} className="text-center mt-8">
+            <p className="text-muted-foreground">프로젝트 불러오는 중...</p>
+          </motion.div>
+        )}
+
+        {/* Bottom CTA Button (Only show if no more projects to load or if it's a "load more" button) */}
+        {!hasMore && ( // Only show CTA if all projects are loaded
+          <motion.div variants={itemVariants} className="text-center mt-16">
+            <MotionButton
+              variant="outlineCta"
+              size="lg"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => { /* Handle action when all projects are loaded, e.g., scroll to top or contact */ }}
+            >
+              모든 작품 보기 완료!
+            </MotionButton>
+          </motion.div>
+        )}
 
         {/* Project Detail Modal (managed by useUIStore) */}
 

@@ -104,6 +104,7 @@ const TestimonialsSection = () => {
 
   return (
     <motion.section
+      id="testimonials" // Add id for dynamic theme switching
       className="py-16 md:py-24 bg-white text-foreground overflow-hidden"
       variants={sectionVariants}
       initial="hidden"

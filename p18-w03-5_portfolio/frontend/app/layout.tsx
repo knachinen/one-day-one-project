@@ -6,6 +6,7 @@ import Footer from '@/components/Footer';
 import { Providers } from '@/components/Providers';
 import CustomCursor from '@/components/CustomCursor';
 import PageTransitionProvider from '@/components/PageTransitionProvider';
+import MobileNav from '@/components/MobileNav';
 
 const notoSansKr = Noto_Sans_KR({
   weight: ['400', '500', '700', '800'],
@@ -51,6 +52,7 @@ export default function RootLayout({
       </head>
       <body>
         <Providers>
+          <MobileNav /> {/* Add MobileNav */}
           <Header />
           <PageTransitionProvider>
             {children}
