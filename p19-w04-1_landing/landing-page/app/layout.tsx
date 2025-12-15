@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/header";
 import Footer from "@/components/footer"; // Import the Footer component
+import { Toaster } from "@/components/ui/sonner"; // Import Toaster
 
 // Configure Inter font
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
@@ -32,6 +33,7 @@ export default function RootLayout({
         <Header />
         {children}
         <Footer /> {/* Render the Footer component */}
+        <Toaster /> {/* Render the Toaster component */}
       </body>
     </html>
   );
