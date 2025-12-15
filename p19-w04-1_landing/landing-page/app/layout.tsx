@@ -68,8 +68,8 @@ export default function RootLayout({
           })(window,document,'script','dataLayer','${GTM_ID}');
         `}
       </Script>
-      {/* Hotjar Tracking Code */}
-      <Script id="hotjar" strategy="afterInteractive">
+      {/* Hotjar Tracking Code (Temporarily commented out) */}
+      {/* <Script id="hotjar" strategy="afterInteractive">
         {`
             (function(h,o,t,j,a,r){
                 h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
@@ -80,7 +80,7 @@ export default function RootLayout({
                 a.appendChild(r);
             })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
         `}
-      </Script>
+      </Script> */}
       <body className={`${inter.variable} font-inter font-pretendard antialiased pt-[60px] md:pt-[80px]`}>
         <noscript>
           <iframe
