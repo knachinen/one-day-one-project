@@ -13,6 +13,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner"; // Assuming sonner is installed for toast notifications
+import { motion, useScroll, useTransform } from "framer-motion"; // Import motion for parallax
+import React, { useRef } from "react";
 
 // Define Zod schema for form validation
 const formSchema = z.object({
@@ -59,9 +61,16 @@ export default function FinalCtaSection() {
     form.reset(); // Clear the form after submission
   }
 
+  const ref = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"],
+  });
+  const y = useTransform(scrollYProgress, [0, 1], [-50, 50]); // Parallax effect: moves -50px to 50px
+
   return (
-    <section id="final-cta" className="py-[100px] lg:py-[120px] bg-white">
-      <div className="container mx-auto px-4 text-center">
+    <section id="final-cta" ref={ref} className="py-[100px] lg:py-[120px] bg-white overflow-hidden relative">
+      <motion.div style={{ y }} className="container mx-auto px-4 text-center">
         {/* Section Header */}
         <h1 className="text-4xl lg:text-5xl font-bold leading-tight text-gray-800">
           당신의 아이디어를 현실로 만들 준비되셨나요?
@@ -90,12 +99,24 @@ export default function FinalCtaSection() {
                 </FormItem>
               )}
             />
-            <Button
-              type="submit"
-              className="bg-gradient-to-r from-vibe-blue to-energy-orange hover:from-vibe-blue/90 hover:to-energy-orange/90 text-white font-bold py-3 px-8 rounded-full text-lg whitespace-nowrap"
+            <motion.div
+              whileHover={{ y: -3 }} // Subtle elevation
+              transition={{ type: "spring", stiffness: 400, damping: 10 }}
             >
-              무료로 시작하기 →
-            </Button>
+              <Button
+                type="submit"
+                className="bg-gradient-to-r from-vibe-blue to-energy-orange hover:from-vibe-blue/90 hover:to-energy-orange/90 text-white font-bold py-3 px-8 rounded-full text-lg whitespace-nowrap group"
+              >
+                무료로 시작하기
+                <motion.span
+                  className="ml-2 inline-block"
+                  transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                  whileHover={{ x: 5 }} // Bouncing arrow
+                >
+                  →
+                </motion.span>
+              </Button>
+            </motion.div>
           </form>
         </Form>
 
@@ -105,7 +126,7 @@ export default function FinalCtaSection() {
             <p className="flex items-center gap-2">✅ 평생 무료 구독</p>
             <p className="flex items-center gap-2">🛡️ 스팸 없는 청정 구역</p>
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 }
