@@ -158,7 +158,7 @@ const AboutSection = () => {
               마음을 움직이는 디지털 스토리텔링
             </motion.h2>
             <motion.p variants={itemVariants} className="text-lg text-muted-foreground mb-8">
-              반갑습니다. 1인 창업가들의 든든한 파트너 <span className="font-extrabold text-foreground">김미소</span>입니다.
+              반갑습니다. 1인 창업가들의 든든한 파트너 <span className="font-extrabold text-foreground">알렉스</span>입니다.
               복잡한 문제를 귀엽고 친근한 디자인과 직관적인 스토리텔링으로 풀어냅니다. 여러분의 브랜드가 가진 고유한 매력을 발견해드릴게요.
             </motion.p>
 
