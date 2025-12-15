@@ -136,11 +136,30 @@
 }
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
   * {
     @apply border-border outline-ring/50;
   }
   body {
     @apply bg-background text-foreground;
   }
+}
+
+@keyframes pulse-border {
+  0% {
+    box-shadow: 0 0 0 0px rgba(79, 70, 229, 0.4); /* Tailwind's indigo-600 with opacity */
+  }
+  70% {
+    box-shadow: 0 0 0 8px rgba(79, 70, 229, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0px rgba(79, 70, 229, 0);
+  }
+}
+
+.animate-pulse-border {
+  animation: pulse-border 10s infinite; /* 10 seconds duration, infinite repetition */
 }
 
