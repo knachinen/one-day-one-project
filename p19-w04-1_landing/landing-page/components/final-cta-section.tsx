@@ -25,6 +25,12 @@ const formSchema = z.object({
   }),
 });
 
+declare global {
+  interface Window {
+    dataLayer: Record<string, any>[];
+  }
+}
+
 export default function FinalCtaSection() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -43,6 +49,14 @@ export default function FinalCtaSection() {
         onClick: () => console.log("Toast confirmed"),
       },
     });
+
+    // Push event to dataLayer for GTM tracking
+    if (typeof window !== "undefined" && window.dataLayer) {
+      window.dataLayer.push({
+        event: "final_cta_submission",
+        email_submitted: values.email,
+      });
+    }
 
     // Here you would typically send data to your API endpoint
     // For example:
