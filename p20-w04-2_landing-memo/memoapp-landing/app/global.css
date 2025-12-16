@@ -7,3 +7,26 @@ body {
 section {
   scroll-margin-top: 72px; /* Navbar height */
 }
+
+@keyframes gradient-animation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animate-gradient {
+  background: linear-gradient(
+    -45deg,
+    #B0E0E6, /* accent-mint */
+    #E6E6FA, /* accent-lavender */
+    #FFDAB9  /* accent-peach */
+  );
+  background-size: 400% 400%;
+  animation: gradient-animation 20s ease infinite;
+}

@@ -20,7 +20,7 @@ export default function HeroTitle() {
         delay: shouldReduceMotion ? 0 : 0.0,
         ease: 'easeOut',
       }}
-      className="text-[36px] font-bold leading-[1.2] tracking-[-0.01em] md:text-[56px]"
+      className="text-[56px] md:text-[72px] font-bold leading-[1.2] tracking-[-0.01em] text-text-dark" // Updated font sizes and color
     >
       생각이 떠오르는 순간,
       <br />

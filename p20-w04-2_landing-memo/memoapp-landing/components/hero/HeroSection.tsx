@@ -7,7 +7,10 @@ import FloatingNotesClientWrapper from './FloatingNotesClientWrapper'; // Import
 export default function HeroSection() {
   return (
     <section className="relative min-h-[100svh] flex flex-col items-center justify-center text-center px-4 md:px-5 lg:px-6 md:text-left overflow-hidden">
-      <div className="max-w-[1200px] mx-auto z-10"> {/* Added z-10 to ensure text is above floating notes */}
+      {/* Background Gradient Animation */}
+      <div className="absolute inset-0 -z-10 animate-gradient"></div> {/* Added background div */}
+
+      <div className="max-w-[1200px] mx-auto z-10"> {/* Added z-10 to ensure text is above floating notes */} 
         <HeroTitle />
         <HeroSubtitle />
         <HeroCTA />
