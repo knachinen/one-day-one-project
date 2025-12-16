@@ -4,7 +4,7 @@ This todo list outlines the steps for implementing Phase 3 of the memoapp landin
 
 ## Implementation Steps:
 
-1.  **Create Component Structure:**
+1.  **Create Component Structure:** (completed)
     *   Create the `components/hero/cards` directory.
     *   Create empty files for the following components:
         *   `components/hero/FloatingNotes.tsx`
@@ -15,7 +15,7 @@ This todo list outlines the steps for implementing Phase 3 of the memoapp landin
         *   `components/hero/cards/CalendarNoteCard.tsx`
         *   `components/hero/cards/VoiceNoteCard.tsx`
 
-2.  **Implement `NoteCard.tsx` (Common Card Style):**
+2.  **Implement `NoteCard.tsx` (Common Card Style):** (completed)
     *   Apply base styles:
         *   `rounded-2xl`
         *   `bg-white/90`
@@ -24,7 +24,7 @@ This todo list outlines the steps for implementing Phase 3 of the memoapp landin
         *   Set `width` (e.g., a sensible default or allow prop).
     *   Include `aria-hidden="true"` and `pointer-events-none` for accessibility/UX.
 
-3.  **Implement Specific Note Card Components (within `components/hero/cards`):**
+3.  **Implement Specific Note Card Components (within `components/hero/cards`):** (completed)
     *   **`ChecklistCard.tsx`**:
         *   Title (1 line), 3-4 check items.
         *   Use SVG icons for checkboxes.
@@ -38,18 +38,18 @@ This todo list outlines the steps for implementing Phase 3 of the memoapp landin
         *   Waveform SVG icon, playback time text.
     *   Each card should use `NoteCard` for its base styling.
 
-4.  **Implement `FloatingNotes.tsx`:**
+4.  **Implement `FloatingNotes.tsx`:** (completed)
     *   Container for all NoteCard components.
     *   Apply conditional display: `hidden md:block` (visible only on `md` screens and above).
     *   Apply positioning: `absolute inset-0 pointer-events-none`.
     *   Place each specific note card component with absolute positioning based on the provided desktop guide (top/left percentages).
 
-5.  **Update `HeroSection.tsx` (Extend Structure):**
+5.  **Update `HeroSection.tsx` (Extend Structure):** (completed)
     *   Change the `<section>` tag to have `className="relative"`.
     *   Import `FloatingNotes` component.
     *   Add `<FloatingNotes />` inside the `<section>`, after `HeroCTA`.
 
-6.  **Verification (Checklist):**
+6.  **Verification (Checklist):** (completed)
     *   Floating memo cards display correctly on desktop.
     *   Floating memo cards are hidden on mobile.
     *   Hero text readability is maintained.
