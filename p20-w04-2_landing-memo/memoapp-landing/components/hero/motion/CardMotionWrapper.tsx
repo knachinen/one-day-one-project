@@ -16,14 +16,12 @@ export default function CardMotionWrapper({ children, rotate = 0, className, 'ar
     <motion.div
       className={className} // Pass className here
       aria-hidden={ariaHidden} // Pass aria-hidden here
-      animate={{ y: [0, -5, 0], rotate: [0, rotate, 0] }} // Add continuous animation
-      transition={{
-        duration: shouldReduceMotion ? 0 : 3, // Longer duration for continuous animation
-        repeat: Infinity, // Loop indefinitely
-        ease: 'easeInOut',
-      }}
       whileHover={shouldReduceMotion ? {} : { y: -4, rotate: rotate }}
       whileTap={shouldReduceMotion ? {} : { scale: 0.97 }}
+      transition={{
+        duration: shouldReduceMotion ? 0 : 0.2,
+        ease: 'easeOut',
+      }}
       style={{ pointerEvents: 'auto' }}
     >
       {children}
