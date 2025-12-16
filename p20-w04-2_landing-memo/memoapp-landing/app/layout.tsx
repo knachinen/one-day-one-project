@@ -1,4 +1,5 @@
 import './global.css'
+import Navbar from '@/components/navigation/Navbar'
 // import localFont from 'next/font/local'
 
 // export const pretendard = localFont({
@@ -14,7 +15,10 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="ko">
-      <body>{children}</body>
+      <body>
+        <Navbar />
+        {children}
+      </body>
     </html>
   )
 }
