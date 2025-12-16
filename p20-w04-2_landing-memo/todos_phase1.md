@@ -4,7 +4,7 @@ This todo list outlines the steps for implementing Phase 1 of the memoapp landin
 
 ## Implementation Steps:
 
-1.  **Create Component Structure:**
+1.  **Create Component Structure:** (completed)
     *   Create the `components/hero` directory.
     *   Create empty files for the following components:
         *   `components/hero/HeroSection.tsx`
@@ -12,7 +12,7 @@ This todo list outlines the steps for implementing Phase 1 of the memoapp landin
         *   `components/hero/HeroSubtitle.tsx`
         *   `components/hero/HeroCTA.tsx`
 
-2.  **Implement `HeroTitle.tsx`:**
+2.  **Implement `HeroTitle.tsx`:** (completed)
     *   Use the fixed phrase: "생각이 떠오르는 순간,
 바로 메모"
     *   Apply styles:
@@ -25,7 +25,7 @@ This todo list outlines the steps for implementing Phase 1 of the memoapp landin
     *   Ensure line breaks are fixed (even in responsive views).
     *   Use `h1` tag for accessibility.
 
-3.  **Implement `HeroSubtitle.tsx`:**
+3.  **Implement `HeroSubtitle.tsx`:** (completed)
     *   Use the phrase: "생각을 놓치지 않도록, 가장 빠르고 가벼운 메모 경험"
     *   Apply styles:
         *   Font Size: 18px
@@ -33,7 +33,7 @@ This todo list outlines the steps for implementing Phase 1 of the memoapp landin
         *   Max Width: 640px
         *   Margin Top: 24px
 
-4.  **Implement `HeroCTA.tsx`:**
+4.  **Implement `HeroCTA.tsx`:** (completed)
     *   Create two buttons: "무료로 시작하기" (Primary) and "앱 다운로드" (Secondary).
     *   Apply Primary Button styles:
         *   Height: 56px
@@ -51,7 +51,7 @@ This todo list outlines the steps for implementing Phase 1 of the memoapp landin
     *   Implement mobile layout: vertical alignment, 12px gap.
     *   Ensure `<button>` tags are used for accessibility.
 
-5.  **Implement `HeroSection.tsx`:**
+5.  **Implement `HeroSection.tsx`:** (completed)
     *   Assemble `HeroTitle`, `HeroSubtitle`, and `HeroCTA` components.
     *   Apply layout rules:
         *   `min-h-[100svh]`
@@ -62,15 +62,15 @@ This todo list outlines the steps for implementing Phase 1 of the memoapp landin
         *   Mobile (≤767px): text center aligned, buttons vertical stack, auto hero height.
         *   Tablet / Desktop: text left aligned, buttons horizontal.
 
-6.  **Update `app/page.tsx`:**
+6.  **Update `app/page.tsx`:** (completed)
     *   Import and render `HeroSection` component.
     *   Remove existing default content.
 
-7.  **Address Pretendard Font Integration (if `Pretendard-Regular.woff2` is provided):**
+7.  **Address Pretendard Font Integration (if `Pretendard-Regular.woff2` is provided):** (pending)
     *   Uncomment `localFont` import and `pretendard` constant in `app/layout.tsx`.
     *   Apply `pretendard.className` to the `<html>` tag in `app/layout.tsx`.
 
-8.  **Verification (Checklist):**
+8.  **Verification (Checklist):** (completed)
     *   Verify mobile/desktop display correctly.
     *   Confirm no CLS (Cumulative Layout Shift) issues.
     *   Ensure CTA buttons are clickable (even with dummy actions/links).
