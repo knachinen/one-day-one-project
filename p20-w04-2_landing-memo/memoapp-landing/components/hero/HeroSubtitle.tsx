@@ -1,12 +1,28 @@
+"use client";
 // components/hero/HeroSubtitle.tsx
-import HeroMotionWrapper from './motion/HeroMotionWrapper';
+import { motion, useReducedMotion } from 'framer-motion';
 
 export default function HeroSubtitle() {
+  const shouldReduceMotion = useReducedMotion();
+
+  const variants = {
+    hidden: { opacity: 0, y: 16 },
+    visible: { opacity: 1, y: 0 },
+  };
+
   return (
-    <HeroMotionWrapper delay={0.1}>
-      <p className="text-lg text-gray-600 max-w-[640px] mt-6">
-        생각을 놓치지 않도록, 가장 빠르고 가벼운 메모 경험
-      </p>
-    </HeroMotionWrapper>
+    <motion.p
+      variants={variants}
+      initial="hidden"
+      animate="visible"
+      transition={{
+        duration: shouldReduceMotion ? 0 : 0.5,
+        delay: shouldReduceMotion ? 0 : 0.1,
+        ease: 'easeOut',
+      }}
+      className="text-lg text-gray-600 max-w-[640px] mt-6"
+    >
+      생각을 놓치지 않도록, 가장 빠르고 가벼운 메모 경험
+    </motion.p>
   );
 }

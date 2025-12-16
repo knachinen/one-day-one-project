@@ -40,7 +40,7 @@ This todo list outlines the steps for implementing Phase 4 of the memoapp landin
     *   Add `"framer-motion": "^x.x.x"` (latest stable version) to dependencies.
     *   Run `pnpm install`.
 
-7.  **Verification (Checklist):** (in_progress)
+7.  **Verification (Checklist):** (completed)
     *   Hero content entry animation is smooth and natural.
     *   Card hover effects are subtle and responsive.
     *   `prefers-reduced-motion` setting correctly disables animations.

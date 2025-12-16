@@ -18,7 +18,6 @@ export default function CardMotionWrapper({ children, rotate = 0 }: CardMotionWr
         duration: shouldReduceMotion ? 0 : 0.2,
         ease: 'easeOut',
       }}
-      // Re-enable pointer-events for the card itself, as the parent FloatingNotes has pointer-events-none
       style={{ pointerEvents: 'auto' }}
     >
       {children}

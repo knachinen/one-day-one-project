@@ -1,5 +1,6 @@
 import './global.css'
 import Navbar from '@/components/navigation/Navbar'
+// import MotionWrapper from '@/components/MotionWrapper' // Import MotionWrapper
 // import localFont from 'next/font/local'
 
 // export const pretendard = localFont({

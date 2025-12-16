@@ -1,3 +1,4 @@
+"use client";
 // components/hero/FloatingNotes.tsx
 import ChecklistCard from './cards/ChecklistCard';
 import TagNoteCard from './cards/TagNoteCard';
