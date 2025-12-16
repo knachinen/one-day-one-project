@@ -2,7 +2,7 @@
 import HeroTitle from './HeroTitle';
 import HeroSubtitle from './HeroSubtitle';
 import HeroCTA from './HeroCTA';
-import FloatingNotes from './FloatingNotes'; // Import FloatingNotes
+import FloatingNotesClientWrapper from './FloatingNotesClientWrapper'; // Import the new wrapper
 
 export default function HeroSection() {
   return (
@@ -12,7 +12,7 @@ export default function HeroSection() {
         <HeroSubtitle />
         <HeroCTA />
       </div>
-      <FloatingNotes /> {/* Add FloatingNotes component */}
+      <FloatingNotesClientWrapper /> {/* Use the new wrapper */}
     </section>
   );
 }
