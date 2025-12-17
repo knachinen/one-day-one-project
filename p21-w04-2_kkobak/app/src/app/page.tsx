@@ -1,8 +1,9 @@
-'use client' // Add use client directive
+'use client'
 
 import Link from 'next/link'
 import HabitList from '@/components/HabitList'
 import KkobagiCharacter from '@/components/KkobagiCharacter'
+import HabitTree from '@/components/HabitTree' // Import HabitTree
 import { useHabitStore } from '@/stores/habitStore'
 import { useEffect, useState } from 'react'
 
@@ -11,14 +12,14 @@ export default function Home() {
   const [completionPercentage, setCompletionPercentage] = useState(0)
   const [totalHabitsToday, setTotalHabitsToday] = useState(0)
   const [completedHabitsToday, setCompletedHabitsToday] = useState(0)
-  const [habitsForToday, setHabitsForToday] = useState(habits) // State for habits to pass to HabitList
+  const [habitsForToday, setHabitsForToday] = useState(habits)
 
   useEffect(() => {
     const today = new Date().getDay() // 0 for Sunday, 6 for Saturday
     const todayISO = new Date().toISOString().split('T')[0]
 
     const filteredHabits = habits.filter((h) => h.repeat_days.includes(today))
-    setHabitsForToday(filteredHabits); // Update state for HabitList
+    setHabitsForToday(filteredHabits);
 
     const total = filteredHabits.length
     setTotalHabitsToday(total)
@@ -56,7 +57,8 @@ export default function Home() {
             <HabitList habits={habitsForToday} />
           </div>
           <div>
-            {/* "My Habit Tree" and "Weekly Achievement" can go here */}
+            <HabitTree completionPercentage={completionPercentage} />
+            {/* "Weekly Achievement" can go here */}
           </div>
         </div>
       </main>

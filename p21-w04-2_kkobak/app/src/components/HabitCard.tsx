@@ -4,16 +4,21 @@ import { Habit } from '@/types'
 import { useHabitStore } from '@/stores/habitStore'
 import { v4 as uuidv4 } from 'uuid'
 import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
-import useSound from '@/hooks/useSound' // Import the custom hook
-import useStreak from '@/hooks/useStreak' // Import useStreak hook
+import { motion, useAnimation } from 'framer-motion'
+import useSound from '@/hooks/useSound'
+import useStreak from '@/hooks/useStreak'
 
 export default function HabitCard({ habit }: { habit: Habit }) {
-  const { records, addRecord, updateRecord } = useHabitStore()
+  const { records, addRecord, updateRecord, streaks } = useHabitStore() // Get streaks from store
   const [isChecked, setIsChecked] = useState(false)
   const [recordId, setRecordId] = useState<string | null>(null)
-  const { play } = useSound('/sounds/ding.mp3') // Placeholder sound file
+  const { play } = useSound('/sounds/ding.mp3')
   const currentStreak = useStreak(habit.id)
+  const fireAnimationControls = useAnimation()
+
+  // Get longest streak for this habit
+  const habitStreakInfo = streaks.find((s) => s.habit_id === habit.id)
+  const longestStreak = habitStreakInfo ? habitStreakInfo.longest_streak : 0
 
   useEffect(() => {
     const today = new Date().toISOString().split('T')[0]
@@ -24,10 +29,22 @@ export default function HabitCard({ habit }: { habit: Habit }) {
       setIsChecked(record.is_completed)
       setRecordId(record.id)
     } else {
-        setIsChecked(false)
-        setRecordId(null)
+      setIsChecked(false)
+      setRecordId(null)
     }
   }, [records, habit.id])
+
+  useEffect(() => {
+    // Trigger fire animation when streak increases
+    if (currentStreak > 0) {
+      fireAnimationControls.start({
+        scale: [1, 1.2, 1],
+        rotate: [0, 10, -10, 0],
+        transition: { duration: 0.5, ease: 'easeOut' },
+      })
+    }
+  }, [currentStreak, fireAnimationControls])
+
 
   const handleCheck = () => {
     const today = new Date().toISOString().split('T')[0]
@@ -45,12 +62,12 @@ export default function HabitCard({ habit }: { habit: Habit }) {
         check_date: today,
         is_completed: true,
         completed_at: new Date().toISOString(),
-      };
-      addRecord(newRecord);
-      setRecordId(newRecord.id);
-      play(); // Play sound on check
+      }
+      addRecord(newRecord)
+      setRecordId(newRecord.id)
+      play()
     }
-    setIsChecked(!isChecked);
+    setIsChecked(!isChecked)
   }
 
   return (
@@ -76,9 +93,21 @@ export default function HabitCard({ habit }: { habit: Habit }) {
       </div>
       <div className="mt-2">
         <div className="font-bold">{habit.name}</div>
-        <div className="text-sm text-gray-500">
-          {currentStreak > 0 ? `${currentStreak}일째 연속` : '스트릭 없음'}
+        <div className="flex items-center text-sm text-gray-500">
+          {currentStreak > 0 ? (
+            <>
+              <motion.span animate={fireAnimationControls} className="mr-1">
+                🔥
+              </motion.span>
+              {currentStreak}일째 연속
+            </>
+          ) : (
+            '스트릭 없음'
+          )}
         </div>
+        {longestStreak > 0 && (
+          <div className="text-xs text-gray-400">최고 기록: {longestStreak}일</div>
+        )}
       </div>
     </div>
   )
