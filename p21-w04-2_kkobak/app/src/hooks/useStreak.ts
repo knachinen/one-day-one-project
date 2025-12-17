@@ -6,37 +6,43 @@ const useStreak = (habitId: string) => {
   const [currentStreak, setCurrentStreak] = useState(0)
 
   useEffect(() => {
+    const completedRecords = records
+      .filter((r) => r.habit_id === habitId && r.is_completed)
+      .map((r) => new Date(r.check_date))
+      .sort((a, b) => b.getTime() - a.getTime())
+
+    if (completedRecords.length === 0) {
+      setCurrentStreak(0)
+      return
+    }
+
     let streak = 0
-    let currentDate = new Date()
-    currentDate.setHours(0, 0, 0, 0) // Normalize to start of day
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
 
-    while (true) {
-      const targetDate = currentDate.toISOString().split('T')[0]
-      const recordForDate = records.find(
-        (r) => r.habit_id === habitId && r.check_date === targetDate
-      )
+    // Check if the most recent record is today or yesterday
+    const mostRecentRecord = completedRecords[0]
+    const differenceInDays = (today.getTime() - mostRecentRecord.getTime()) / (1000 * 3600 * 24);
 
-      if (recordForDate && recordForDate.is_completed) {
-        streak++
-        currentDate.setDate(currentDate.getDate() - 1) // Move to previous day
-      } else {
-        // If there's a record for today but it's not completed, streak is 0
-        // If there's no record for today and it's not the past, streak is 0
-        // If there's no record for a past day, streak breaks
-        if (streak > 0 && targetDate !== new Date().toISOString().split('T')[0]) { // Allow today to be uncompleted without breaking past streak
-            const yesterday = new Date();
-            yesterday.setDate(yesterday.getDate() - 1);
-            yesterday.setHours(0,0,0,0);
-            if (currentDate.getTime() < yesterday.getTime()) { // Only break if a past day was missed
-                break;
-            }
-        } else if (streak === 0 && targetDate === new Date().toISOString().split('T')[0] && recordForDate && !recordForDate.is_completed) {
-            streak = 0; // Today is not completed, so current streak is 0
+    if (differenceInDays > 1) {
+      setCurrentStreak(0);
+      return;
+    }
+
+
+    streak = 1;
+    for (let i = 0; i < completedRecords.length - 1; i++) {
+        const current = completedRecords[i];
+        const next = completedRecords[i+1];
+        const diff = (current.getTime() - next.getTime()) / (1000 * 3600 * 24);
+        if (diff === 1) {
+            streak++;
         } else {
             break;
         }
-      }
     }
+
+
     setCurrentStreak(streak)
   }, [habitId, records])
 
