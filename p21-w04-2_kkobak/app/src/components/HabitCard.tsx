@@ -9,6 +9,39 @@ import Link from 'next/link'
 import useSound from '@/hooks/useSound'
 import useStreak from '@/hooks/useStreak'
 
+// Helper function to get habit icons
+const getHabitIcon = (iconName: string) => {
+  switch (iconName) {
+    case 'water-drop':
+    case '💧': // Fallback for existing emoji
+      return (
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-blue-400">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v18M12 3c-1.105 0-2-.895-2-2s.895-2 2-2-.895 2-2 2zM12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9-4.03-9-9-9zM12 18v3" />
+        </svg>
+      );
+    case 'book':
+    case '📚': // Fallback for existing emoji
+      return (
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-purple-400">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M12 21.75V4.5m0 17.25a2.25 2.25 0 002.25-2.25V15m3 0l2.25-2.25m-2.25 2.25l-2.25-2.25m-3-12h2.25m-2.25 0a2.25 2.25 0 012.25-2.25H15M9 6h7.5m-7.5 0c1.105 0 2-.895 2-2s-.895-2-2-2zM12 18c-1.105 0-2-.895-2-2s.895-2 2-2z" />
+        </svg>
+      );
+    case 'movement':
+    case '🏃': // Fallback for existing emoji
+      return (
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-gray-400">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M15.042 21.737L13.122 17.5l4.896-1.551a1.125 1.125 0 011.411 1.096l-.768 3.841a1.125 1.125 0 01-1.002.937h-3.374zm-8.25-13.68L6.87 9.75l-4.896 1.551a1.125 1.125 0 01-1.411-1.096l.768-3.841a1.125 1.125 0 011.002-.937h3.374zm11.25 13.68l.001-.001V7.5M10.5 7.5l-.001-.001M13.5 12.75L12 11.25l-1.5 1.5m4.5-5.25v-1.5m-7.5 7.5V18" />
+        </svg>
+      );
+    default:
+      return (
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-gray-500">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9.75 9.75m0 0a1.125 1.125 0 110-2.25 1.125 1.125 0 010 2.25zm0 0H9m11.25 0c1.314 0 2.502.871 2.91 2.175A9.753 9.753 0 0021.75 12c0 5.385-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12c0-1.284.18-2.518.524-3.682a4.504 4.504 0 012.327-1.472l.334-.148.277-.119c.153-.066.311-.129.473-.19.083-.031.167-.06.25-.088.139-.047.282-.092.427-.133.74-.217 1.536-.328 2.332-.328z" />
+        </svg>
+      );
+  }
+};
+
 export default function HabitCard({ habit }: { habit: Habit }) {
   const { records, addRecord, updateRecord, streaks, softDeleteHabit } = useHabitStore()
   const { play } = useSound('/sounds/ding.mp3')
@@ -80,15 +113,15 @@ export default function HabitCard({ habit }: { habit: Habit }) {
   return (
     <div
       className={`p-4 rounded-lg shadow-md relative group ${
-        isChecked ? 'bg-green-100' : 'bg-white hover:bg-gray-50'
+        isChecked ? 'bg-yellow-50' : 'bg-white hover:bg-gray-50'
       }`}
     >
       <div className="flex items-center justify-between">
-        <div className="text-2xl">{habit.icon}</div>
+        <div className="text-2xl">{getHabitIcon(habit.icon)}</div>
         <motion.button
           onClick={handleCheck}
           className={`w-8 h-8 rounded-full border-2 flex items-center justify-center ${
-            isChecked ? 'bg-green-500 border-green-500' : 'border-gray-400'
+            isChecked ? 'bg-yellow-400 border-yellow-400' : 'border-gray-400'
           }`}
           whileTap={{ scale: 0.9 }}
           whileHover={{ scale: 1.1 }}

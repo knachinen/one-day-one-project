@@ -1,0 +1,11 @@
+- [completed] Refactor the main dashboard layout to a 3-column structure in `app/src/app/page.tsx` and associated CSS.
+- [completed] Implement the Header elements (Kkobagi logo, notification icon, user profile) in `app/src/app/layout.tsx` or a dedicated Header component.
+- [completed] Modify `KkobagiCharacter.tsx` to use a placeholder for the 3D character image instead of an emoji.
+- [completed] Adjust text content and styling within `KkobagiCharacter.tsx` to match the design's messages and chip background for completion rate.
+- [completed] Identify or create custom icons (or use placeholders/standard library icons) for `HabitCard.tsx` as per design (water droplet, book, arrow/motion).
+- [completed] Modify `HabitCard.tsx` to use the new icons.
+- [completed] Change the completion check color in `HabitCard.tsx` to yellow.
+- [completed] Review the un-specified edit/delete functionality in `HabitCard.tsx`.
+- [completed] Modify `HabitTree.tsx` to use a placeholder for the tree image and add the level/status text.
+- [completed] Update `WeeklyChart.tsx` to align with the specified color palette and add any missing detailed text.
+- [completed] Update the styling of the "습관 추가" (Add Habit) and "히스토리" (History) buttons to match the FAB and circular button designs.

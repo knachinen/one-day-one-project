@@ -1,12 +1,11 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import React from 'react'
 
 interface HabitTreeProps {
   completionPercentage: number
   completedHabitsToday: number
-  has7DayOverallStreak: boolean // New prop for 7-day streak flower
+  has7DayOverallStreak: boolean
 }
 
 export default function HabitTree({
@@ -14,110 +13,20 @@ export default function HabitTree({
   completedHabitsToday,
   has7DayOverallStreak,
 }: HabitTreeProps) {
-  let treeSize = 'text-6xl'
-  let flower = null
-  const [leaves, setLeaves] = useState<number[]>([]); // To track individual leaves for animation
-
-  // Simple growth based on percentage
-  if (completionPercentage >= 30) {
-    treeSize = 'text-7xl'
-  }
-  if (completionPercentage >= 70) {
-    treeSize = 'text-8xl'
-  }
-  // The flower based on completionPercentage will be replaced by the 7-day streak flower if applicable
-  if (has7DayOverallStreak) {
-    treeSize = 'text-8xl' // Ensure tree is large enough for the flower
-    flower = (
-      <motion.span
-        initial={{ opacity: 0, scale: 0.5 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ type: 'spring', stiffness: 500, damping: 20, delay: 0.5 }}
-        role="img"
-        aria-label="special-flower"
-        className="text-4xl absolute top-1/4" // Adjust position as needed
-      >
-        💐
-      </motion.span>
-    )
-  } else if (completionPercentage >= 100) {
-    treeSize = 'text-8xl'
-    flower = (
-      <motion.span
-        initial={{ opacity: 0, scale: 0.5 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ type: 'spring', stiffness: 500, damping: 20 }}
-        role="img"
-        aria-label="flower"
-        className="text-2xl absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2"
-      >
-        🌸
-      </motion.span>
-    )
-  }
-
-  // Effect to add leaves based on completedHabitsToday
-  useEffect(() => {
-    // Only add leaves if completedHabitsToday increases
-    if (completedHabitsToday > leaves.length) {
-        // Add new leaves up to the completedHabitsToday count
-        const newLeavesCount = completedHabitsToday - leaves.length;
-        setLeaves(prevLeaves => [...prevLeaves, ...Array(newLeavesCount).fill(0).map((_, i) => prevLeaves.length + i)]);
-    }
-    // If completedHabitsToday decreases (e.g., unchecking), remove leaves
-    else if (completedHabitsToday < leaves.length) {
-        setLeaves(prevLeaves => prevLeaves.slice(0, completedHabitsToday));
-    }
-  }, [completedHabitsToday, leaves.length]);
-
-
-  // Positions for up to 10 leaves (example, could be more dynamic)
-  const leafPositions = [
-    { top: '10%', left: '20%' }, { top: '20%', right: '15%' },
-    { top: '30%', left: '10%' }, { top: '40%', right: '25%' },
-    { top: '50%', left: '25%' }, { top: '60%', right: '10%' },
-    { top: '70%', left: '5%' }, { top: '80%', right: '20%' },
-    { top: '15%', left: '50%' }, { top: '45%', right: '5%' }
-  ];
-
+  // Simplification based on design: Hardcoding level and status for now.
+  const level = 5;
+  const statusMessage = "우두커니 자라는 중";
 
   return (
     <div className="bg-green-100 p-4 rounded-lg h-48 flex flex-col items-center justify-center relative overflow-hidden">
-      <p className="text-lg font-bold text-green-800">
-        나의 습관 나무 (달성률: {completionPercentage}%)
-      </p>
-      <motion.span
-        initial={{ scale: 0.8 }}
-        animate={{ scale: 1 }}
-        transition={{ type: 'spring', stiffness: 500, damping: 20 }}
-        role="img"
-        aria-label="tree"
-        className={`${treeSize} mt-2`}
-      >
-        🌳
-      </motion.span>
-      {flower}
-
-      <AnimatePresence>
-        {leaves.map((_, index) => {
-          const position = leafPositions[index % leafPositions.length]; // Cycle through positions
-          return (
-            <motion.span
-              key={index}
-              initial={{ opacity: 0, scale: 0, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0, y: 20 }}
-              transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-              role="img"
-              aria-label="leaf"
-              className="absolute text-xl"
-              style={{ top: position.top, left: position.left, right: position.right }}
-            >
-              🍃
-            </motion.span>
-          );
-        })}
-      </AnimatePresence>
+      <p className="text-lg font-bold">나의 습관 나무</p> {/* Simplified title */}
+      <p className="text-sm text-gray-600">레벨 {level} + {statusMessage}</p> {/* Level/Status Text */}
+      {/* Tree Image Placeholder */}
+      <div className="mt-2">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-16 h-16 text-green-700">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M3 21h18M12 3v18m-4-8h8m-4-8v8m-4 4h8" />
+        </svg>
+      </div>
     </div>
   )
 }

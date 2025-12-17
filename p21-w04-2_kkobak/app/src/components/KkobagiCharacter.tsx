@@ -16,67 +16,48 @@ export default function KkobagiCharacter({
   completedHabitsToday,
   weeklyCompletionRate, // Accept new prop
 }: KkobagiCharacterProps) {
-  const controls = useAnimation()
-  let emoji = '😀'
-  let dailyMessage = '오늘도 새로운 시작! 꼬바기가 응원할게요.'
-  let weeklyRetrospectionMessage = ''; // New message for weekly retrospection
+  // The emoji variable and its logic, and the useEffect for animation are removed for the placeholder character.
+  const userName = "민지님"; // Placeholder for user name
+  let welcomeMessage = `좋은 아침이에요, ${userName}!`;
+  let encouragementMessage = '';
 
+  // Generate encouragement message based on completionPercentage
   if (completionPercentage === 100 && totalHabitsToday > 0) {
-    emoji = '🎉'
-    dailyMessage = '오늘 할 일을 몽땅 해냈어요! 정말 대단해요!'
+    encouragementMessage = '오늘 할 일을 몽땅 해냈어요! 정말 대단해요!';
   } else if (completionPercentage >= 70) {
-    emoji = '😊'
-    dailyMessage = '거의 다 왔어요! 조금만 더 힘내요!'
+    encouragementMessage = '거의 다 왔어요! 조금만 더 힘내요!';
   } else if (completionPercentage >= 30) {
-    emoji = '🙂'
-    dailyMessage = '절반이나 해냈어요! 꼬바기가 응원할게요!'
+    encouragementMessage = '벌써 절반이나 해냈어요! 힘내요! 🔥';
   } else {
-    emoji = '🤔'
-    dailyMessage = '오늘도 새로운 시작! 꼬바기가 응원할게요.'
+    encouragementMessage = '오늘도 새로운 시작! 꼬바기가 응원할게요.';
   }
 
-  // Generate weekly retrospection message based on weeklyCompletionRate
-  if (weeklyCompletionRate >= 90) {
-    weeklyRetrospectionMessage = '이번 주 정말 완벽해요! 꼬바기가 다 뿌듯하네요!';
-  } else if (weeklyCompletionRate >= 50) {
-    weeklyRetrospectionMessage = '이번 주도 잘 해내고 있어요! 다음 주엔 더 성장할 거예요!';
-  } else if (weeklyCompletionRate > 0) {
-    weeklyRetrospectionMessage = '이번 주엔 조금 힘들었나요? 괜찮아요, 다시 시작하면 돼요!';
-  } else {
-    weeklyRetrospectionMessage = '아직 이번 주 기록이 없어요. 새로운 습관을 시작해볼까요?';
-  }
-
-  useEffect(() => {
-    if (completionPercentage === 100 && totalHabitsToday > 0) {
-      controls.start({
-        y: [0, -20, 0], // Jump animation
-        transition: { duration: 0.5, ease: 'easeOut' },
-      })
-    } else {
-      controls.start({ y: 0 })
-    }
-  }, [completionPercentage, totalHabitsToday, controls])
+  // Animation controls removed as the character is now a static placeholder.
 
 
   return (
     <div className="bg-yellow-100 p-4 rounded-lg mb-4">
-      <div className="flex items-center justify-between">
-        <p className="text-lg">오늘 달성률 {completionPercentage}%</p>
-        <motion.span
-          className="text-4xl"
-          animate={controls}
-        >
-          {emoji}
-        </motion.span>
+      <div className="flex justify-between items-center mb-2">
+        {/* Completion Rate Chip */}
+        <span className="bg-yellow-200 text-yellow-800 text-sm font-semibold px-2.5 py-0.5 rounded-full">
+          오늘 달성률 {completionPercentage}%
+        </span>
+        {/* Placeholder for 3D Kkobagi Character Image */}
+        {/* The actual 3D character will be integrated here later. */}
+        <div className="w-20 h-20 bg-yellow-300 rounded-full flex items-center justify-center text-xl font-bold">
+          Kko
+        </div>
       </div>
-      <p className="text-sm text-gray-600">{dailyMessage}</p>
+
+      <p className="text-xl font-bold">{welcomeMessage}</p>
+      <p className="text-base text-gray-700 mt-1">{encouragementMessage}</p>
+
       {totalHabitsToday > 0 && (
         <p className="text-sm text-gray-600">
           ({completedHabitsToday} / {totalHabitsToday} 완료)
         </p>
       )}
-      {/* Display weekly retrospection message */}
-      <p className="text-sm text-gray-600 mt-2">{weeklyRetrospectionMessage}</p>
+      {/* Weekly retrospection message removed from here as per design spec for KkobagiCharacter */}
     </div>
   )
 }
