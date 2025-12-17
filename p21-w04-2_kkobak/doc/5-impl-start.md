@@ -12,4 +12,5 @@
 - Read the reference documents each for having the project context. 
 - Make a todo list to implement the phase 1 with the design requirements and the tech stack.
 - Save the todo list to a new file. 
-- Implement the phase 1 with the todo list
+- Implement the phase 1 with the todo list step by step
+- If one step is finished, then I will verify it.

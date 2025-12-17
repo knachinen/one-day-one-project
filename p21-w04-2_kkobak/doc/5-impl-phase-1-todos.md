@@ -4,33 +4,33 @@ This plan outlines the steps to develop the core features of the Kkobak prototyp
 
 ## 1. Project Setup and Initial Configuration
 
-*   [ ] Initialize a new Next.js project using `create-next-app`.
-*   [ ] Install and configure Tailwind CSS for styling.
-*   [ ] Install `zustand` for state management and `framer-motion` for animations.
-*   [ ] Set up project structure: create directories for components, stores, and hooks.
-*   [ ] Configure ESLint and Prettier for code quality.
+*   [x] Initialize a new Next.js project using `create-next-app`.
+*   [x] Install and configure Tailwind CSS for styling.
+*   [x] Install `zustand` for state management and `framer-motion` for animations.
+*   [x] Set up project structure: create directories for components, stores, and hooks.
+*   [x] Configure ESLint and Prettier for code quality.
 
 ## 2. Data Persistence and State Management (Sub-step 1.1)
 
-*   [ ] Define the `Habit` and `HabitRecord` types based on the data model.
-*   [ ] Create a Zustand store for managing habits and records.
-*   [ ] Implement a middleware for the Zustand store to persist data to LocalStorage.
-*   [ ] Implement logic to load data from LocalStorage when the app initializes.
+*   [x] Define the `Habit` and `HabitRecord` types based on the data model.
+*   [x] Create a Zustand store for managing habits and records.
+*   [x] Implement a middleware for the Zustand store to persist data to LocalStorage.
+*   [x] Implement logic to load data from LocalStorage when the app initializes.
 
 ## 3. Habit Creation (Sub-step 1.1)
 
-*   [ ] Create the "New Habit" page/modal UI based on the design specification (`doc/3-design-2__gemini.md`).
-*   [ ] Implement the form for adding a new habit, including name, icon, and repetition days.
-*   [ ] Add validation for the habit name (required, max 30 characters).
-*   [ ] Connect the form to the Zustand store to add new habits.
+*   [x] Create the "New Habit" page/modal UI based on the design specification (`doc/3-design-2__gemini.md`).
+*   [x] Implement the form for adding a new habit, including name, icon, and repetition days.
+*   [x] Add validation for the habit name (required, max 30 characters).
+*   [x] Connect the form to the Zustand store to add new habits.
 
 ## 4. Main Dashboard UI (Sub-step 1.2)
 
-*   [ ] Create the main dashboard layout based on the design specification (`doc/3-design-1__gemini.md`).
-*   [ ] Implement the header component with the logo and profile icon.
+*   [x] Create the main dashboard layout based on the design specification (`doc/3-design-1__gemini.md`).
+*   [x] Implement the header component with the logo and profile icon.
 *   [ ] Create the "Kkobagi" character component area.
-*   [ ] Implement the "Today's Habits" section to display the list of habits for the current day.
-*   [ ] Create the habit card component, including the habit name, icon, and check button.
+*   [x] Implement the "Today's Habits" section to display the list of habits for the current day.
+*   [x] Create the habit card component, including the habit name, icon, and check button.
 
 ## 5. Daily Check-in Functionality (Sub-step 1.2 & 1.3)
 
