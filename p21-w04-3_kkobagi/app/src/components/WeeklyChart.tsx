@@ -13,25 +13,19 @@ interface WeeklyChartProps {
 const COLORS = ['#FFEB3B', '#E0E0E0'] // Changed to yellow and light gray
 
 export default function WeeklyChart({ habits, records }: WeeklyChartProps) {
-  const weeklyCompletionRate = useWeeklyCompletionRate(habits, records)
+  const weeklyStats = useWeeklyCompletionRate(habits, records)
 
   const data = [
-    { name: 'Completed', value: weeklyCompletionRate },
-    { name: 'Remaining', value: 100 - weeklyCompletionRate },
+    { name: 'Completed', value: weeklyStats.rate },
+    { name: 'Remaining', value: 100 - weeklyStats.rate },
   ]
-
-  // Hardcoded placeholders for detailed text based on design example
-  const totalWeeklyHabits = 14;
-  const completedWeeklyHabits = 10;
-  const totalHabitsToday = 4; // Assuming from design "금주 현황: 4개 중 2개 완료"
-  const completedHabitsToday = 2; // Assuming from design "금주 현황: 4개 중 2개 완료"
 
   return (
     <div className="bg-white p-4 rounded-lg shadow-md relative"> {/* Added relative for absolute positioning */}
       <h3 className="text-lg font-bold mb-2">이번 주 달성률</h3>
       {/* "금주 현황" - top right */}
       <p className="absolute top-2 right-2 text-xs text-gray-400">
-        금주 현황: {totalHabitsToday}개 중 {completedHabitsToday}개 완료
+        금주 현황: {weeklyStats.totalToday}개 중 {weeklyStats.completedToday}개 완료
       </p>
       <div className="flex flex-col items-center"> {/* Centering the chart and main percentage */}
         <PieChart width={150} height={150}>
@@ -51,8 +45,8 @@ export default function WeeklyChart({ habits, records }: WeeklyChartProps) {
           </Pie>
           <Tooltip />
         </PieChart>
-        <p className="mt-2 text-xl font-bold">{weeklyCompletionRate}%</p>
-        <p className="text-sm text-gray-600">총 {totalWeeklyHabits}건 중 {completedWeeklyHabits}건 완료했어요!</p>
+        <p className="mt-2 text-xl font-bold">{weeklyStats.rate}%</p>
+        <p className="text-sm text-gray-600">총 {weeklyStats.total}건 중 {weeklyStats.completed}건 완료했어요!</p>
       </div>
     </div>
   )
