@@ -31,11 +31,22 @@ export const useHabitStore = create<HabitState>()(
             h.id === habitId ? { ...h, is_active: false } : h
           ),
         })),
-      addRecord: (record) => set((state) => ({ records: [...state.records, record] })),
+      addRecord: (record) =>
+        set((state) => {
+          console.log('--- addRecord Called ---');
+          console.log('  Adding record:', record);
+          const newRecords = [...state.records, record];
+          console.log('  New records state:', newRecords);
+          return { records: newRecords };
+        }),
       updateRecord: (record) =>
-        set((state) => ({
-          records: state.records.map((r) => (r.id === record.id ? record : r)),
-        })),
+        set((state) => {
+          console.log('--- updateRecord Called ---');
+          console.log('  Updating record:', record);
+          const updatedRecords = state.records.map((r) => (r.id === record.id ? record : r));
+          console.log('  Updated records state:', updatedRecords);
+          return { records: updatedRecords };
+        }),
       addOrUpdateStreak: (streak) =>
         set((state) => {
           const existingStreakIndex = state.streaks.findIndex(

@@ -3,37 +3,39 @@
 import { Habit } from '@/types'
 import { useHabitStore } from '@/stores/habitStore'
 import { v4 as uuidv4 } from 'uuid'
-import { useState, useEffect } from 'react'
+import { useEffect, useMemo } from 'react' // Use useMemo for derived state
 import { motion, useAnimation } from 'framer-motion'
-import Link from 'next/link' // Import Link
+import Link from 'next/link'
 import useSound from '@/hooks/useSound'
 import useStreak from '@/hooks/useStreak'
 
 export default function HabitCard({ habit }: { habit: Habit }) {
-  const { records, addRecord, updateRecord, streaks, softDeleteHabit } = useHabitStore() // Get softDeleteHabit
-  const [isChecked, setIsChecked] = useState(false)
-  const [recordId, setRecordId] = useState<string | null>(null)
+  const { records, addRecord, updateRecord, streaks, softDeleteHabit } = useHabitStore()
   const { play } = useSound('/sounds/ding.mp3')
   const currentStreak = useStreak(habit.id)
   const fireAnimationControls = useAnimation()
 
+  // Derive checked status and record ID directly from the store's records
+  const todayISO = new Date().toISOString().split('T')[0]
+  const currentRecord = useMemo(() => {
+    const foundRecord = records.find((r) => r.habit_id === habit.id && r.check_date === todayISO);
+    console.log(`  HabitCard: ${habit.name} - useMemo currentRecord:`, foundRecord);
+    return foundRecord;
+  }, [records, habit.id, todayISO]);
+
+  const isChecked = useMemo(() => {
+    const checkedStatus = !!currentRecord?.is_completed;
+    console.log(`  HabitCard: ${habit.name} - useMemo isChecked:`, checkedStatus);
+    return checkedStatus;
+  }, [currentRecord]);
+
+  const recordId = currentRecord?.id || null;
+  console.log(`  HabitCard: ${habit.name} - Derived recordId:`, recordId);
+
+
   // Get longest streak for this habit
   const habitStreakInfo = streaks.find((s) => s.habit_id === habit.id)
   const longestStreak = habitStreakInfo ? habitStreakInfo.longest_streak : 0
-
-  useEffect(() => {
-    const today = new Date().toISOString().split('T')[0]
-    const record = records.find(
-      (r) => r.habit_id === habit.id && r.check_date === today
-    )
-    if (record) {
-      setIsChecked(record.is_completed)
-      setRecordId(record.id)
-    } else {
-      setIsChecked(false)
-      setRecordId(null)
-    }
-  }, [records, habit.id])
 
   useEffect(() => {
     // Trigger fire animation when streak increases
@@ -48,33 +50,37 @@ export default function HabitCard({ habit }: { habit: Habit }) {
 
 
   const handleCheck = () => {
-    const today = new Date().toISOString().split('T')[0]
+    console.log(`--- handleCheck for ${habit.name} (${habit.id}) ---`);
+    console.log(`  Pre-action isChecked: ${isChecked}`);
+    console.log(`  Pre-action recordId: ${recordId}`);
+
     if (isChecked && recordId) {
+      console.log('  Action: Unchecking habit');
       updateRecord({
         id: recordId,
         habit_id: habit.id,
-        check_date: today,
+        check_date: todayISO,
         is_completed: false,
       })
-    } else if (!isChecked) {
+    } else { // if (!isChecked)
+      console.log('  Action: Checking habit');
       const newRecord = {
         id: uuidv4(),
         habit_id: habit.id,
-        check_date: today,
+        check_date: todayISO,
         is_completed: true,
         completed_at: new Date().toISOString(),
       }
       addRecord(newRecord)
-      setRecordId(newRecord.id)
       play()
     }
-    setIsChecked(!isChecked)
+    console.log('  Post-action: Store update initiated. UI re-render expected.');
   }
 
   return (
     <div
-      className={`p-4 rounded-lg shadow-md ${
-        isChecked ? 'bg-green-100' : 'bg-white'
+      className={`p-4 rounded-lg shadow-md relative group ${
+        isChecked ? 'bg-green-100' : 'bg-white hover:bg-gray-50'
       }`}
     >
       <div className="flex items-center justify-between">
@@ -86,7 +92,7 @@ export default function HabitCard({ habit }: { habit: Habit }) {
           }`}
           whileTap={{ scale: 0.9 }}
           whileHover={{ scale: 1.1 }}
-          animate={{ scale: isChecked ? [1, 1.2, 1] : 1 }}
+          animate={{ scale: isChecked ? 1.2 : 1 }} // Simplified animation to two keyframes for spring
           transition={{ type: 'spring', stiffness: 500, damping: 20 }}
         >
           {isChecked && <span className="text-white">✔</span>}
@@ -110,7 +116,7 @@ export default function HabitCard({ habit }: { habit: Habit }) {
           <div className="text-xs text-gray-400">최고 기록: {longestStreak}일</div>
         )}
       </div>
-      <div className="absolute top-2 right-2 flex space-x-2">
+      <div className="absolute top-2 right-2 flex space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
         <Link href={`/habit/${habit.id}/edit`}>
           <button className="text-gray-500 hover:text-gray-700">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-pencil" viewBox="0 0 16 16">

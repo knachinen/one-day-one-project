@@ -76,7 +76,10 @@ export default function Home() {
           </div>
         </div>
       </main>
-      <Link href="/new-habit" className="fixed bottom-16 right-4 bg-yellow-400 text-white p-4 rounded-full shadow-lg">
+      <Link href="/history" className="fixed bottom-32 right-4 bg-blue-400 text-white p-4 rounded-full shadow-lg z-10">
+        히스토리
+      </Link>
+      <Link href="/new-habit" className="fixed bottom-16 right-4 bg-yellow-400 text-white p-4 rounded-full shadow-lg z-10">
         + 습관 추가
       </Link>
     </div>
