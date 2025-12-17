@@ -46,13 +46,13 @@ This plan outlines the steps to develop the core features of the Kkobak prototyp
 *   [x] Calculate the daily habit completion percentage.
 *   [x] Implement the logic to change the Kkobagi character's animation/expression based on the completion percentage.
 *   [x] Implement the logic to display different encouragement messages based on the completion percentage.
-*   [ ] Add a "cheer" or "jump" animation for the Kkobagi character upon habit completion.
+*   [x] Add a "cheer" or "jump" animation for the Kkobagi character upon habit completion.
 
 ## 7. Streak Calculation (Sub-step 1.4)
 
-*   [ ] Implement the logic to calculate the current streak for each habit.
-*   [ ] Display the current streak on the habit card.
-*   [ ] Ensure the streak resets if a day is missed.
+*   [x] Implement the logic to calculate the current streak for each habit.
+*   [x] Display the current streak on the habit card.
+*   [x] Ensure the streak resets if a day is missed.
 
 ## 8. Final Touches and Review
 

@@ -6,12 +6,14 @@ import { v4 as uuidv4 } from 'uuid'
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import useSound from '@/hooks/useSound' // Import the custom hook
+import useStreak from '@/hooks/useStreak' // Import useStreak hook
 
 export default function HabitCard({ habit }: { habit: Habit }) {
   const { records, addRecord, updateRecord } = useHabitStore()
   const [isChecked, setIsChecked] = useState(false)
   const [recordId, setRecordId] = useState<string | null>(null)
   const { play } = useSound('/sounds/ding.mp3') // Placeholder sound file
+  const currentStreak = useStreak(habit.id)
 
   useEffect(() => {
     const today = new Date().toISOString().split('T')[0]
@@ -74,7 +76,9 @@ export default function HabitCard({ habit }: { habit: Habit }) {
       </div>
       <div className="mt-2">
         <div className="font-bold">{habit.name}</div>
-        {/* Streak will be displayed here */}
+        <div className="text-sm text-gray-500">
+          {currentStreak > 0 ? `${currentStreak}일째 연속` : '스트릭 없음'}
+        </div>
       </div>
     </div>
   )
