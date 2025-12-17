@@ -34,12 +34,12 @@ This plan outlines the steps to develop the core features of the Kkobak prototyp
 
 ## 5. Daily Check-in Functionality (Sub-step 1.2 & 1.3)
 
-*   [ ] Implement the logic for the daily check-in button.
-*   [ ] On check-in, create a `HabitRecord` and update the state.
-*   [ ] Implement the ability to un-check a habit for the current day.
-*   [ ] Add animations for the check-in action using Framer Motion (spring effect).
-*   [ ] Add a sound effect on check-in (optional, with a toggle).
-*   [ ] Change the visual state of a habit card when it's completed.
+*   [x] Implement the logic for the daily check-in button.
+*   [x] On check-in, create a `HabitRecord` and update the state.
+*   [x] Implement the ability to un-check a habit for the current day.
+*   [x] Add animations for the check-in action using Framer Motion (spring effect).
+*   [x] Add a sound effect on check-in (optional, with a toggle).
+*   [x] Change the visual state of a habit card when it's completed.
 
 ## 6. Kkobagi Character Interaction (Sub-step 1.3 & 1.4)
 

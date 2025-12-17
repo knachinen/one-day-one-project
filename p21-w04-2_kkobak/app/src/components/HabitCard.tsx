@@ -4,11 +4,14 @@ import { Habit } from '@/types'
 import { useHabitStore } from '@/stores/habitStore'
 import { v4 as uuidv4 } from 'uuid'
 import { useState, useEffect } from 'react'
+import { motion } from 'framer-motion'
+import useSound from '@/hooks/useSound' // Import the custom hook
 
 export default function HabitCard({ habit }: { habit: Habit }) {
   const { records, addRecord, updateRecord } = useHabitStore()
   const [isChecked, setIsChecked] = useState(false)
   const [recordId, setRecordId] = useState<string | null>(null)
+  const { play } = useSound('/sounds/ding.mp3') // Placeholder sound file
 
   useEffect(() => {
     const today = new Date().toISOString().split('T')[0]
@@ -43,6 +46,7 @@ export default function HabitCard({ habit }: { habit: Habit }) {
       };
       addRecord(newRecord);
       setRecordId(newRecord.id);
+      play(); // Play sound on check
     }
     setIsChecked(!isChecked);
   }
@@ -55,14 +59,18 @@ export default function HabitCard({ habit }: { habit: Habit }) {
     >
       <div className="flex items-center justify-between">
         <div className="text-2xl">{habit.icon}</div>
-        <button
+        <motion.button
           onClick={handleCheck}
-          className={`w-8 h-8 rounded-full border-2 ${
+          className={`w-8 h-8 rounded-full border-2 flex items-center justify-center ${
             isChecked ? 'bg-green-500 border-green-500' : 'border-gray-400'
           }`}
+          whileTap={{ scale: 0.9 }}
+          whileHover={{ scale: 1.1 }}
+          animate={{ scale: isChecked ? [1, 1.2, 1] : 1 }}
+          transition={{ type: 'spring', stiffness: 500, damping: 20 }}
         >
           {isChecked && <span className="text-white">✔</span>}
-        </button>
+        </motion.button>
       </div>
       <div className="mt-2">
         <div className="font-bold">{habit.name}</div>
@@ -71,3 +79,4 @@ export default function HabitCard({ habit }: { habit: Habit }) {
     </div>
   )
 }
+
