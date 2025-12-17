@@ -8,6 +8,7 @@ import WeeklyChart from '@/components/WeeklyChart'
 import { useHabitStore } from '@/stores/habitStore'
 import { useEffect, useState } from 'react'
 import useOverallDailyCompletionStreak from '@/hooks/useOverallDailyCompletionStreak'
+import useWeeklyCompletionRate from '@/hooks/useWeeklyCompletionRate' // Import the new hook
 
 export default function Home() {
   const { habits, records } = useHabitStore()
@@ -19,6 +20,23 @@ export default function Home() {
   const activeHabits = habits.filter(h => h.is_active);
 
   const has7DayOverallStreak = useOverallDailyCompletionStreak(activeHabits, records)
+  const weeklyCompletionRate = useWeeklyCompletionRate(activeHabits, records)
+
+  // Notification permission logic
+  const [notificationPermission, setNotificationPermission] = useState<NotificationPermission>('default');
+
+  useEffect(() => {
+    if (typeof Notification !== 'undefined') {
+      setNotificationPermission(Notification.permission);
+    }
+  }, []);
+
+  const requestNotificationPermission = async () => {
+    if (typeof Notification !== 'undefined') {
+      const permission = await Notification.requestPermission();
+      setNotificationPermission(permission);
+    }
+  };
 
   useEffect(() => {
     const today = new Date().getDay() // 0 for Sunday, 6 for Saturday
@@ -60,6 +78,7 @@ export default function Home() {
               completionPercentage={completionPercentage}
               totalHabitsToday={totalHabitsToday}
               completedHabitsToday={completedHabitsToday}
+              weeklyCompletionRate={weeklyCompletionRate} // Pass weekly completion rate
             />
 
             <HabitList habits={habitsForToday} />

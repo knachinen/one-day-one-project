@@ -7,30 +7,43 @@ interface KkobagiCharacterProps {
   completionPercentage: number
   totalHabitsToday: number
   completedHabitsToday: number
+  weeklyCompletionRate: number // New prop
 }
 
 export default function KkobagiCharacter({
   completionPercentage,
   totalHabitsToday,
   completedHabitsToday,
+  weeklyCompletionRate, // Accept new prop
 }: KkobagiCharacterProps) {
   const controls = useAnimation()
-  // Logic to determine Kkobagi's expression and message based on completionPercentage
   let emoji = '😀'
-  let message = '오늘도 새로운 시작! 꼬바기가 응원할게요.'
+  let dailyMessage = '오늘도 새로운 시작! 꼬바기가 응원할게요.'
+  let weeklyRetrospectionMessage = ''; // New message for weekly retrospection
 
   if (completionPercentage === 100 && totalHabitsToday > 0) {
     emoji = '🎉'
-    message = '오늘 할 일을 몽땅 해냈어요! 정말 대단해요!'
+    dailyMessage = '오늘 할 일을 몽땅 해냈어요! 정말 대단해요!'
   } else if (completionPercentage >= 70) {
     emoji = '😊'
-    message = '거의 다 왔어요! 조금만 더 힘내요!'
+    dailyMessage = '거의 다 왔어요! 조금만 더 힘내요!'
   } else if (completionPercentage >= 30) {
     emoji = '🙂'
-    message = '절반이나 해냈어요! 꼬바기가 응원할게요!'
+    dailyMessage = '절반이나 해냈어요! 꼬바기가 응원할게요!'
   } else {
     emoji = '🤔'
-    message = '오늘도 새로운 시작! 꼬바기가 응원할게요.'
+    dailyMessage = '오늘도 새로운 시작! 꼬바기가 응원할게요.'
+  }
+
+  // Generate weekly retrospection message based on weeklyCompletionRate
+  if (weeklyCompletionRate >= 90) {
+    weeklyRetrospectionMessage = '이번 주 정말 완벽해요! 꼬바기가 다 뿌듯하네요!';
+  } else if (weeklyCompletionRate >= 50) {
+    weeklyRetrospectionMessage = '이번 주도 잘 해내고 있어요! 다음 주엔 더 성장할 거예요!';
+  } else if (weeklyCompletionRate > 0) {
+    weeklyRetrospectionMessage = '이번 주엔 조금 힘들었나요? 괜찮아요, 다시 시작하면 돼요!';
+  } else {
+    weeklyRetrospectionMessage = '아직 이번 주 기록이 없어요. 새로운 습관을 시작해볼까요?';
   }
 
   useEffect(() => {
@@ -56,12 +69,14 @@ export default function KkobagiCharacter({
           {emoji}
         </motion.span>
       </div>
-      <p className="text-sm text-gray-600">{message}</p>
+      <p className="text-sm text-gray-600">{dailyMessage}</p>
       {totalHabitsToday > 0 && (
         <p className="text-sm text-gray-600">
           ({completedHabitsToday} / {totalHabitsToday} 완료)
         </p>
       )}
+      {/* Display weekly retrospection message */}
+      <p className="text-sm text-gray-600 mt-2">{weeklyRetrospectionMessage}</p>
     </div>
   )
 }
