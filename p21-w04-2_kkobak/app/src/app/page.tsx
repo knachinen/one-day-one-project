@@ -16,13 +16,15 @@ export default function Home() {
   const [completedHabitsToday, setCompletedHabitsToday] = useState(0)
   const [habitsForToday, setHabitsForToday] = useState(habits)
 
-  const has7DayOverallStreak = useOverallDailyCompletionStreak(habits, records)
+  const activeHabits = habits.filter(h => h.is_active);
+
+  const has7DayOverallStreak = useOverallDailyCompletionStreak(activeHabits, records)
 
   useEffect(() => {
     const today = new Date().getDay() // 0 for Sunday, 6 for Saturday
     const todayISO = new Date().toISOString().split('T')[0]
 
-    const filteredHabits = habits.filter((h) => h.repeat_days.includes(today))
+    const filteredHabits = activeHabits.filter((h) => h.repeat_days.includes(today))
     setHabitsForToday(filteredHabits);
 
     const total = filteredHabits.length
@@ -67,7 +69,7 @@ export default function Home() {
               has7DayOverallStreak={has7DayOverallStreak}
             />
             <div className="mt-4">
-              <WeeklyChart habits={habits} records={records} />
+              <WeeklyChart habits={activeHabits} records={records} />
             </div>
           </div>
         </div>

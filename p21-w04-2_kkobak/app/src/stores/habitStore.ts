@@ -8,7 +8,7 @@ interface HabitState {
   streaks: Streak[] // Add streaks array
   addHabit: (habit: Habit) => void
   updateHabit: (habit: Habit) => void
-  deleteHabit: (habitId: string) => void
+  softDeleteHabit: (habitId: string) => void
   addRecord: (record: HabitRecord) => void
   updateRecord: (record: HabitRecord) => void
   addOrUpdateStreak: (streak: Streak) => void // Add action to add or update streak
@@ -25,9 +25,11 @@ export const useHabitStore = create<HabitState>()(
         set((state) => ({
           habits: state.habits.map((h) => (h.id === habit.id ? h : habit)),
         })),
-      deleteHabit: (habitId) =>
+      softDeleteHabit: (habitId) =>
         set((state) => ({
-          habits: state.habits.filter((h) => h.id !== habitId),
+          habits: state.habits.map((h) =>
+            h.id === habitId ? { ...h, is_active: false } : h
+          ),
         })),
       addRecord: (record) => set((state) => ({ records: [...state.records, record] })),
       updateRecord: (record) =>
