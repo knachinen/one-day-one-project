@@ -57,7 +57,10 @@ export default function Home() {
             <HabitList habits={habitsForToday} />
           </div>
           <div>
-            <HabitTree completionPercentage={completionPercentage} />
+            <HabitTree
+              completionPercentage={completionPercentage}
+              completedHabitsToday={completedHabitsToday} // Pass completedHabitsToday
+            />
             {/* "Weekly Achievement" can go here */}
           </div>
         </div>
