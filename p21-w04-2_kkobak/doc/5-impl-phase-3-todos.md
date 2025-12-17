@@ -4,20 +4,20 @@ This plan outlines the steps to implement advanced analytics, notifications, and
 
 ## 1. Habit-specific Statistics and Trend Analysis (Sub-step 3.1)
 
-*   [ ] Create a dedicated page (`/habit/[id]`) to display detailed statistics for a single habit.
-*   [ ] On this page, display summary metrics like total successful checks, average completion rate, and longest streak.
-*   [ ] Implement a trend line chart using `recharts` to visualize completion rates for the last 7 and 30 days.
-*   [ ] Create utility functions to process `HabitRecord` data into a suitable JSON format for the charts.
+*   [x] Create a dedicated page (`/habit/[id]`) to display detailed statistics for a single habit.
+*   [x] On this page, display summary metrics like total successful checks, average completion rate, and longest streak.
+*   [x] Implement a trend line chart using `recharts` to visualize completion rates for the last 7 and 30 days.
+*   [x] Create utility functions to process `HabitRecord` data into a suitable JSON format for the charts.
 
 ## 2. Kkobagi's Weekly/Monthly Retrospection Message (Sub-step 3.2)
 
-*   [ ] Implement a logic to analyze the overall weekly completion rate.
-*   [ ] Based on the completion rate, generate a personalized retrospective message from Kkobagi (e.g., "Excellent week!", "Don't worry, start again!").
-*   [ ] Display this message on the main dashboard or a dedicated retrospective section.
+*   [x] Implement a logic to analyze the overall weekly completion rate.
+*   [x] Based on the completion rate, generate a personalized retrospective message from Kkobagi (e.g., "Excellent week!", "Don't worry, start again!").
+*   [x] Display this message on the main dashboard or a dedicated retrospective section.
 
 ## 3. Browser Notifications and Snooze Functionality (Sub-step 3.3)
 
-*   [ ] Implement logic to request browser notification permission from the user.
+*   [x] Implement logic to request browser notification permission from the user.
 *   [ ] Schedule notifications based on `notification_time` set for habits (using `setTimeout` for browser-only functionality).
 *   [ ] Add a "Snooze" option to notifications (e.g., 10 minutes later).
 *   [ ] Implement a toggle in habit creation/edit to enable/disable notifications.
