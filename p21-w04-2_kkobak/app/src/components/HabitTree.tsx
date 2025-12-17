@@ -5,10 +5,15 @@ import { motion, AnimatePresence } from 'framer-motion'
 
 interface HabitTreeProps {
   completionPercentage: number
-  completedHabitsToday: number // New prop
+  completedHabitsToday: number
+  has7DayOverallStreak: boolean // New prop for 7-day streak flower
 }
 
-export default function HabitTree({ completionPercentage, completedHabitsToday }: HabitTreeProps) {
+export default function HabitTree({
+  completionPercentage,
+  completedHabitsToday,
+  has7DayOverallStreak,
+}: HabitTreeProps) {
   let treeSize = 'text-6xl'
   let flower = null
   const [leaves, setLeaves] = useState<number[]>([]); // To track individual leaves for animation
@@ -20,7 +25,22 @@ export default function HabitTree({ completionPercentage, completedHabitsToday }
   if (completionPercentage >= 70) {
     treeSize = 'text-8xl'
   }
-  if (completionPercentage >= 100) {
+  // The flower based on completionPercentage will be replaced by the 7-day streak flower if applicable
+  if (has7DayOverallStreak) {
+    treeSize = 'text-8xl' // Ensure tree is large enough for the flower
+    flower = (
+      <motion.span
+        initial={{ opacity: 0, scale: 0.5 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ type: 'spring', stiffness: 500, damping: 20, delay: 0.5 }}
+        role="img"
+        aria-label="special-flower"
+        className="text-4xl absolute top-1/4" // Adjust position as needed
+      >
+        💐
+      </motion.span>
+    )
+  } else if (completionPercentage >= 100) {
     treeSize = 'text-8xl'
     flower = (
       <motion.span
