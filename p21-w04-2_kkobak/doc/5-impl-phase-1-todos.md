@@ -43,9 +43,9 @@ This plan outlines the steps to develop the core features of the Kkobak prototyp
 
 ## 6. Kkobagi Character Interaction (Sub-step 1.3 & 1.4)
 
-*   [ ] Calculate the daily habit completion percentage.
-*   [ ] Implement the logic to change the Kkobagi character's animation/expression based on the completion percentage.
-*   [ ] Implement the logic to display different encouragement messages based on the completion percentage.
+*   [x] Calculate the daily habit completion percentage.
+*   [x] Implement the logic to change the Kkobagi character's animation/expression based on the completion percentage.
+*   [x] Implement the logic to display different encouragement messages based on the completion percentage.
 *   [ ] Add a "cheer" or "jump" animation for the Kkobagi character upon habit completion.
 
 ## 7. Streak Calculation (Sub-step 1.4)
