@@ -25,7 +25,9 @@ export default function Home() {
     const todayISO = new Date().toISOString().split('T')[0]
 
     const filteredHabits = activeHabits.filter((h) => h.repeat_days.includes(today))
-    setHabitsForToday(filteredHabits);
+    // Ensure uniqueness by ID to prevent React key errors
+    const uniqueFilteredHabits = Array.from(new Map(filteredHabits.map(item => [item.id, item])).values());
+    setHabitsForToday(uniqueFilteredHabits);
 
     const total = filteredHabits.length
     setTotalHabitsToday(total)
