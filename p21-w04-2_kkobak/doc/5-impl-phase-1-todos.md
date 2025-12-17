@@ -28,7 +28,7 @@ This plan outlines the steps to develop the core features of the Kkobak prototyp
 
 *   [x] Create the main dashboard layout based on the design specification (`doc/3-design-1__gemini.md`).
 *   [x] Implement the header component with the logo and profile icon.
-*   [ ] Create the "Kkobagi" character component area.
+*   [x] Create the "Kkobagi" character component area.
 *   [x] Implement the "Today's Habits" section to display the list of habits for the current day.
 *   [x] Create the habit card component, including the habit name, icon, and check button.
 
