@@ -4,9 +4,10 @@ import Link from 'next/link'
 import HabitList from '@/components/HabitList'
 import KkobagiCharacter from '@/components/KkobagiCharacter'
 import HabitTree from '@/components/HabitTree'
+import WeeklyChart from '@/components/WeeklyChart'
 import { useHabitStore } from '@/stores/habitStore'
 import { useEffect, useState } from 'react'
-import useOverallDailyCompletionStreak from '@/hooks/useOverallDailyCompletionStreak' // Import the new hook
+import useOverallDailyCompletionStreak from '@/hooks/useOverallDailyCompletionStreak'
 
 export default function Home() {
   const { habits, records } = useHabitStore()
@@ -15,7 +16,7 @@ export default function Home() {
   const [completedHabitsToday, setCompletedHabitsToday] = useState(0)
   const [habitsForToday, setHabitsForToday] = useState(habits)
 
-  const has7DayOverallStreak = useOverallDailyCompletionStreak(habits, records) // Use the new hook
+  const has7DayOverallStreak = useOverallDailyCompletionStreak(habits, records)
 
   useEffect(() => {
     const today = new Date().getDay() // 0 for Sunday, 6 for Saturday
@@ -63,9 +64,11 @@ export default function Home() {
             <HabitTree
               completionPercentage={completionPercentage}
               completedHabitsToday={completedHabitsToday}
-              has7DayOverallStreak={has7DayOverallStreak} // Pass has7DayOverallStreak
+              has7DayOverallStreak={has7DayOverallStreak}
             />
-            {/* "Weekly Achievement" can go here */}
+            <div className="mt-4">
+              <WeeklyChart habits={habits} records={records} />
+            </div>
           </div>
         </div>
       </main>
