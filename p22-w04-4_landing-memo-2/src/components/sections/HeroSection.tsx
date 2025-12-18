@@ -22,13 +22,13 @@ export default function HeroSection() {
       <div className="flex flex-col sm:flex-row gap-4 z-10"> {/* Added z-10 to keep buttons above cards */}
         {/* Primary CTA */}
         <Link href="#get-started">
-          <button className="px-8 py-3 bg-primary text-white text-lg rounded-full shadow-lg hover:bg-primary-dark transition-colors">
+          <button className="px-8 py-3 bg-primary text-white text-base md:text-lg rounded-full shadow-lg hover:bg-primary-dark transition-colors">
             무료로 시작하기
           </button>
         </Link>
         {/* Secondary CTA */}
         <Link href="#download">
-          <button className="px-8 py-3 border border-gray-300 text-gray-800 text-lg rounded-full shadow-md hover:bg-gray-100 transition-colors">
+          <button className="px-8 py-3 border border-gray-300 text-gray-800 text-base md:text-lg rounded-full shadow-md hover:bg-gray-100 transition-colors">
             앱 다운로드
           </button>
         </Link>
