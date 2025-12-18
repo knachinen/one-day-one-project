@@ -9,9 +9,6 @@ const config: Config = {
   ],
   theme: {
     extend: {
-      colors: {
-        primary: "#7B61FF", // Example primary color from PRD or tech stack
-      },
       // Other theme extensions can go here
     },
   },
