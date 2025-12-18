@@ -1,27 +1,49 @@
 // src/components/sections/HeroSection.tsx
-import Link from 'next/link'; // Import Link for navigation
+"use client"; // Mark as Client Component
+import { motion } from 'framer-motion'; // Import motion from framer-motion
+import Link from 'next/link';
 import MemoCard from "@/components/ui/MemoCard"; // Import MemoCard
 
 export default function HeroSection() {
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2 // Stagger children animations by 0.2 seconds
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: { y: 0, opacity: 1, transition: { duration: 0.6 } }
+  };
+
   return (
     <section className="relative flex flex-col items-center justify-center min-h-screen text-center px-4 py-20 overflow-hidden">
       {/* Main Content Container - explicitly establishing stacking context and z-index */}
-      <div className="relative z-20 flex flex-col items-center"> {/* THIS IS THE KEY CHANGE */}
+      <motion.div
+        className="relative z-20 flex flex-col items-center"
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+      >
         {/* Auxiliary Message */}
-        <p className="text-sm text-primary mb-2">NEW VERSION 2.0</p>
+        <motion.p className="text-sm text-primary mb-2" variants={itemVariants}>NEW VERSION 2.0</motion.p>
 
         {/* Main Headline */}
-        <h1 className="text-5xl md:text-6xl font-bold leading-tight mb-4 max-w-4xl">
+        <motion.h1 className="text-5xl md:text-6xl font-bold leading-tight mb-4 max-w-4xl" variants={itemVariants}>
           생각이 떠오르는 순간, 바로 메모
-        </h1>
+        </motion.h1>
 
         {/* Sub-text */}
-        <p className="text-lg md:text-xl text-gray-700 max-w-3xl mb-8">
+        <motion.p className="text-lg md:text-xl text-gray-700 max-w-3xl mb-8" variants={itemVariants}>
           회의 중에도, 길을 걷다가, 침대에 누워서도 당신의 모든 영감을 가장 빠르고 간편하게 기록하세요.
-        </p>
+        </motion.p>
 
         {/* CTA Button Group */}
-        <div className="flex flex-col sm:flex-row gap-4"> {/* z-index not needed here, handled by parent */}
+        <motion.div className="flex flex-col sm:flex-row gap-4">
           {/* Primary CTA */}
           <Link href="#get-started">
             <button className="px-8 py-3 bg-primary text-white text-base md:text-lg rounded-full shadow-lg hover:bg-primary-dark transition-colors">
@@ -34,8 +56,10 @@ export default function HeroSection() {
               앱 다운로드
             </button>
           </Link>
-        </div>
-      </div> {/* END of Main Content Container */}
+        </motion.div>
+      </motion.div>
+      {/* END of Main Content Container */}
+
 
       {/* Floating Memo Cards (Static positioning for now) */}
       {/* Cards container implicitly has z-index lower than Main Content Container due to structural order and z-index properties */}
