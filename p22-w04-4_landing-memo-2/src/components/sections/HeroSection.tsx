@@ -37,7 +37,7 @@ export default function HeroSection() {
   };
 
   return (
-    <section className="relative flex flex-col items-center justify-center min-h-screen text-center px-4 py-20 overflow-hidden">
+    <section className="relative min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-[#E8F0FF] to-[#F3E8FF] overflow-hidden">
       {/* Main Content Container - explicitly establishing stacking context and z-index */}
       <motion.div
         className="relative z-20 flex flex-col items-center"
@@ -46,74 +46,90 @@ export default function HeroSection() {
         animate="visible"
       >
         {/* Auxiliary Message */}
-        <motion.p className="text-sm text-primary mb-2" variants={itemVariants}>NEW VERSION 2.0</motion.p>
+        <span className="px-4 py-1 bg-white/50 text-[#7C4DFF] text-xs font-bold rounded-full mb-6 border border-[#7C4DFF]/20">
+          NEW VERSION 2.0
+        </span>
 
         {/* Main Headline */}
-        <motion.h1 className="text-5xl md:text-6xl font-bold leading-tight mb-4 max-w-4xl" variants={itemVariants}>
-          생각이 떠오르는 순간, 바로 메모
+        <motion.h1 className="text-5xl font-extrabold text-[#1A1A1A] text-center leading-tight mb-4" variants={itemVariants}>
+          생각이 떠오르는 순간, <br/>
+          <span className="text-[#7C4DFF]">바로 메모</span>
         </motion.h1>
 
         {/* Sub-text */}
-        <motion.p className="text-lg md:text-xl text-gray-700 max-w-3xl mb-8" variants={itemVariants}>
-          회의 중에도, 길을 걷다가, 침대에 누워서도 당신의 모든 영감을 가장 빠르고 간편하게 기록하세요.
+        <motion.p className="text-gray-600 text-lg text-center mb-10 max-w-xl" variants={itemVariants}>
+          회의 중에도, 길을 걷다가도, 침대에 누워서도. <br/>
+          당신의 모든 영감을 가장 빠르고 간편하게 기록하세요.
         </motion.p>
 
         {/* CTA Button Group */}
-        <motion.div className="flex flex-col sm:flex-row gap-4">
-          {/* Primary CTA */}
-          <Link href="#get-started">
+        <div className="flex flex-col items-center gap-6">
+          <div className="flex gap-4">
             <motion.button
-              className="px-8 py-3 bg-primary text-white text-base md:text-lg rounded-full shadow-lg transition-colors" // Removed hover:bg-primary-dark from here
+              className="flex items-center gap-2 px-8 py-4 bg-[#7C4DFF] text-white font-bold rounded-full shadow-[0_10px_20px_rgba(124,77,255,0.3)] hover:scale-105 transition-transform"
               variants={buttonHoverVariants}
               initial="initial"
               whileHover="hover"
             >
               무료로 시작하기
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
             </motion.button>
-          </Link>
-          {/* Secondary CTA */}
-          <Link href="#download">
+            
             <motion.button
-              className="px-8 py-3 border border-gray-300 text-gray-800 text-base md:text-lg rounded-full shadow-md transition-colors" // Removed hover:bg-gray-100 from here
+              className="px-8 py-4 bg-white text-gray-700 font-bold rounded-full border border-gray-200 shadow-sm hover:bg-gray-50"
               variants={buttonHoverVariants}
               initial="initial"
               whileHover="hover"
             >
               앱 다운로드
             </motion.button>
-          </Link>
-        </motion.div>
+          </div>
+
+          <div className="flex gap-6 text-sm text-[#4CAF50] font-medium">
+            <span className="flex items-center gap-1">✔ 평생 무료</span>
+            <span className="flex items-center gap-1">✔ 모든 기기 동기화</span>
+            <span className="flex items-center gap-1">✔ 보안 암호화</span>
+          </div>
+        </div>
       </motion.div>
       {/* END of Main Content Container */}
 
 
-      {/* Floating Memo Cards (Static positioning for now) */}
-      {/* Cards container implicitly has z-index lower than Main Content Container due to structural order and z-index properties */}
-      <div className="absolute inset-0">
-        {/* Card 1: Top Left */}
-        <MemoCard
-          title="정보 리스트"
-          content="체크리스트, 태그 #영감"
-          className="absolute top-[15%] left-[15%] w-32 h-24 md:w-48 md:h-32 z-10 -rotate-6 transform -translate-x-1/2 -translate-y-1/2 pointer-events-auto" // Adjusted position and z-index for responsive size
-        />
-        {/* Card 2: Top Right */}
-        <MemoCard
-          title="새로운 아이디어"
-          content="3D 아이콘 (혹은 추상적 이미지)"
-          className="absolute top-[10%] right-[15%] w-36 h-28 md:w-56 md:h-36 z-10 rotate-3 transform translate-x-1/2 -translate-y-1/2 pointer-events-auto" // Adjusted position and z-index for responsive size
-        />
-        {/* Card 3: Bottom Left */}
-        <MemoCard
-          title="음성 메모"
-          content="마이크 아이콘, 웨이브 형태의 사운드 바"
-          className="absolute bottom-[10%] left-[20%] w-34 h-26 md:w-52 md:h-34 z-10 rotate-3 transform -translate-x-1/2 translate-y-1/2 pointer-events-auto" // Adjusted position and z-index for responsive size
-        />
-        {/* Card 4: Bottom Right */}
-        <MemoCard
-          title="팀 주간 회의"
-          content="날짜 표시 (OCT 24), 태그 #할 일"
-          className="absolute bottom-[15%] right-[10%] w-32 h-24 md:w-48 md:h-32 z-10 -rotate-12 transform translate-x-1/2 translate-y-1/2 pointer-events-auto" // Adjusted position and z-index for responsive size
-        />
+      {/* Floating Memo Cards */}
+      <MemoCard className="absolute top-[15%] left-[10%] w-64 -rotate-6 hidden md:block">
+        <div className="flex justify-between items-center mb-4">
+          <span className="text-gray-400 text-xs font-bold">장보기 리스트</span>
+          <div className="w-1 h-1 bg-gray-300 rounded-full"></div>
+        </div>
+        <ul className="space-y-3 mb-4">
+          <li className="flex items-center gap-2 text-sm text-gray-700"><input type="checkbox" checked readOnly className="accent-[#7C4DFF]"/> 유기농 우유</li>
+          <li className="flex items-center gap-2 text-sm text-gray-700"><input type="checkbox" readOnly className="accent-[#7C4DFF]"/> 방사유정란</li>
+        </ul>
+        <span className="px-3 py-1 bg-[#F0EBFF] text-[#7C4DFF] text-xs rounded-lg font-bold">#영감</span>
+      </MemoCard>
+
+      <MemoCard className="absolute bottom-[20%] right-[10%] w-72 rotate-3 hidden md:block">
+        <div className="flex items-center gap-3 mb-3">
+          <div className="bg-blue-100 text-blue-600 p-2 rounded-lg font-bold text-xs text-center">OCT<br/>24</div>
+          <div>
+            <h4 className="font-bold text-gray-800">팀 주간 회의</h4>
+            <p className="text-xs text-gray-500">오후 2:00 - 3:00</p>
+          </div>
+        </div>
+        <div className="flex -space-x-2">
+          <div className="w-8 h-8 rounded-full border-2 border-white bg-blue-400"></div>
+          <div className="w-8 h-8 rounded-full border-2 border-white bg-green-400"></div>
+          <div className="w-8 h-8 rounded-full border-2 border-white bg-yellow-400"></div>
+          <div className="w-8 h-8 flex items-center justify-center rounded-full border-2 border-white bg-gray-100 text-[10px] text-gray-500">+2</div>
+        </div>
+      </MemoCard>
+
+      {/* Scroll for more indicator */}
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-gray-600 animate-bounce">
+        <span className="text-sm">Scroll for more</span>
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+        </svg>
       </div>
     </section>
   );

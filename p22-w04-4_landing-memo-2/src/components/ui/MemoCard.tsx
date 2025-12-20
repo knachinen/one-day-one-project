@@ -4,25 +4,21 @@ import React from 'react';
 import { motion } from 'framer-motion'; // Import motion from framer-motion
 
 interface MemoCardProps {
-  title: string;
-  content: string;
+  children: React.ReactNode;
   className?: string;
 }
 
-export default function MemoCard({ title, content, className }: MemoCardProps) {
+export default function MemoCard({ children, className }: MemoCardProps) {
   return (
     <motion.div // Use motion.div for animation
       className={`
-        relative p-4 rounded-xl shadow-lg
-        bg-white bg-opacity-20 backdrop-filter backdrop-blur-lg
-        border border-white border-opacity-30
+        bg-white p-6 rounded-2xl shadow-xl
         ${className}
       `}
-      whileHover={{ scale: 1.05, boxShadow: "0px 10px 20px rgba(0, 0, 0, 0.2)" }} // Scale and shadow on hover
-      transition={{ duration: 0.2 }} // Smooth transition
+      whileHover={{ scale: 1.05, boxShadow: "0px 15px 30px rgba(0, 0, 0, 0.1)" }} // Enhanced shadow on hover for depth
+      transition={{ duration: 0.3 }} // A slightly slower transition for a smoother effect
     >
-      <h3 className="font-semibold text-gray-800 text-base sm:text-lg mb-2">{title}</h3>
-      <p className="text-sm text-gray-700">{content}</p>
+      {children}
     </motion.div>
   );
 }
