@@ -55,8 +55,8 @@ export default function HeroSection() {
       <MemoCard className="absolute hidden lg:block top-[12%] left-[8%] w-60 bg-white/90 backdrop-blur-sm p-6 rounded-[24px] shadow-[0_20px_40px_rgba(0,0,0,0.06)] -rotate-6 transition-transform hover:rotate-0 duration-500">
         <p className="text-[10px] font-bold text-gray-400 mb-3 uppercase tracking-tighter">장보기 리스트</p>
         <div className="space-y-3 mb-4">
-          <div className="flex items-center gap-2"><div className="w-4 h-4 border-2 border-[#7C4DFF] rounded flex items-center justify-center bg-[#7C4DFF]"><svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div><span className="text-sm font-semibold text-gray-700">유기농 우유</span></div>
-          <div className="flex items-center gap-2"><div className="w-4 h-4 border-2 border-gray-200 rounded"></div><span className="text-sm font-semibold text-gray-700">방사유정란</span></div>
+          <div className="flex items-center gap-2"><div className="w-4 h-4 border-2 border-[#7C4DFF] rounded flex items-center justify-center bg-[#7C4DFF]"><svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div><span className="text-sm font-semibold text-gray-700">두유</span></div>
+          <div className="flex items-center gap-2"><div className="w-4 h-4 border-2 border-gray-200 rounded"></div><span className="text-sm font-semibold text-gray-700">청경채</span></div>
           <div className="flex items-center gap-2"><div className="w-4 h-4 border-2 border-gray-200 rounded"></div><span className="text-sm font-semibold text-gray-700">사과 3개</span></div>
         </div>
         <span className="inline-block px-3 py-1 bg-[#F0EBFF] text-[#7C4DFF] text-[10px] font-black rounded-lg">#영감</span>
