@@ -1,0 +1,30 @@
+.move-button {
+  position: fixed;
+  bottom: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 15px 30px;
+  font-size: 1.5em;
+  font-family: 'Playfair Display', serif; /* Use the chosen font */
+  color: white;
+  background-color: transparent;
+  border: 2px solid yellow;
+  border-radius: 5px;
+  cursor: pointer;
+  box-shadow: 0 0 10px yellow, 0 0 20px yellow, 0 0 30px yellow, 0 0 40px yellow;
+  animation: pulse-glow 2s infinite alternate; /* Pulsing glow effect */
+  z-index: 1000;
+}
+
+.move-button:hover {
+  box-shadow: 0 0 20px yellow, 0 0 30px yellow, 0 0 40px yellow, 0 0 50px yellow, 0 0 60px yellow;
+}
+
+@keyframes pulse-glow {
+  from {
+    box-shadow: 0 0 10px yellow, 0 0 20px yellow, 0 0 30px yellow, 0 0 40px yellow;
+  }
+  to {
+    box-shadow: 0 0 15px yellow, 0 0 25px yellow, 0 0 35px yellow, 0 0 45px yellow, 0 0 50px yellow;
+  }
+}

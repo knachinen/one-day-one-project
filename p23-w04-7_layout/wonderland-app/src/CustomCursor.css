@@ -1,0 +1,13 @@
+.cursor-arrow {
+  position: fixed;
+  top: -10px; /* Offset to center the arrow tip */
+  left: -5px; /* Offset to center the arrow tip */
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 20px solid white;
+  pointer-events: none;
+  z-index: 9999;
+  transition: transform 0.1s linear; /* Smooths the movement */
+}
