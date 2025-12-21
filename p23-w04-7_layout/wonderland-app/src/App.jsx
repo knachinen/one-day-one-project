@@ -1,3 +1,4 @@
+import { useMemo, useRef } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { EffectComposer, Bloom, Noise } from '@react-three/postprocessing'
 import * as THREE from 'three'
@@ -6,36 +7,74 @@ import CustomCursor from './CustomCursor';
 import MoveButton from './MoveButton';
 import './CustomCursor.css';
 
-function Background() {
-  const { size } = useThree();
+
+// 1. Enhanced Background with moving noise
+function DeepWonderlandBackground() {
+    const uniforms = useMemo(() => ({
+      uColorTop: { value: new THREE.Color('#000000') },
+      uColorBottom: { value: new THREE.Color('#100821') },
+      uTime: { value: 0 }
+    }), [])
+  
+    useFrame((state) => {
+      uniforms.uTime.value = state.clock.getElapsedTime() * 0.05;
+    })
+  
+    return (
+      <mesh scale={[100, 100, 1]} position={[0, 0, -15]}>
+        <planeGeometry />
+        <shaderMaterial
+          uniforms={uniforms}
+          vertexShader={`
+            varying vec2 vUv;
+            void main() {
+              vUv = uv;
+              gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+            }
+          `}
+          fragmentShader={`
+            uniform vec3 uColorTop;
+            uniform vec3 uColorBottom;
+            uniform float uTime;
+            varying vec2 vUv;
+
+            float random(vec2 st) {
+              return fract(sin(dot(st.xy, vec2(12.9898,78.233))) * 43758.5453123);
+            }
+
+            void main() {
+              vec3 color = mix(uColorBottom, uColorTop, vUv.y);
+              float noise = random(vUv + uTime * 0.01) * 0.03;
+              color += noise;
+              gl_FragColor = vec4(color, 1.0);
+            }
+          `}
+        />
+      </mesh>
+    )
+}
+
+// 2. Reusable Emissive Text component
+function EmissiveText({ children, emissiveIntensity = 2.5, ...props }) {
   return (
-    <mesh position={[0, 0, -10]} scale={[100, 100, 1]}>
-      <planeGeometry />
-      <shaderMaterial
-        uniforms={{
-          uColorTop: { value: new THREE.Color('#000000') },
-          uColorBottom: { value: new THREE.Color('#1a0b3a') }
-        }}
-        vertexShader={`
-          varying vec2 vUv;
-          void main() {
-            vUv = uv;
-            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-          }
-        `}
-        fragmentShader={`
-          varying vec2 vUv;
-          uniform vec3 uColorTop;
-          uniform vec3 uColorBottom;
-          void main() {
-            gl_FragColor = vec4(mix(uColorBottom, uColorTop, vUv.y), 1.0);
-          }
-        `}
+    <Text
+      {...props}
+      font="/fonts/PlayfairDisplay.ttf"
+      anchorX="center"
+      anchorY="middle"
+    >
+      {children}
+      <meshStandardMaterial 
+        color="white" 
+        emissive="white" 
+        emissiveIntensity={emissiveIntensity}
+        toneMapped={false}
       />
-    </mesh>
+    </Text>
   )
 }
 
+// All other components remain the same
 function Lights() {
   return (
     <>
@@ -49,27 +88,18 @@ function Lights() {
 function Rig() {
   const { camera, mouse } = useThree();
   const vec = new THREE.Vector3();
-
   useFrame(() => {
-    // Increased multiplier for more pronounced parallax
     camera.position.lerp(vec.set(mouse.x * 4, mouse.y * 4, camera.position.z), 0.05);
     camera.lookAt(0, 0, 0);
   });
   return null;
 }
 
-// Asset components from previous steps
 function PocketWatch({ position }) {
   return (
     <group position={position}>
       <Cylinder args={[1, 1, 0.3, 64]}>
-        <meshStandardMaterial 
-          color="#8a2be2" 
-          emissive="#8a2be2" // Make it glow
-          emissiveIntensity={2}
-          metalness={0.8}
-          roughness={0.2}
-        />
+        <meshStandardMaterial color="#8a2be2" emissive="#8a2be2" emissiveIntensity={2} metalness={0.8} roughness={0.2} />
       </Cylinder>
       <Cylinder args={[1.05, 1.05, 0.3, 64]} position={[0, 0.05, 0]}>
         <meshStandardMaterial color="white" metalness={0.5} roughness={0.3} />
@@ -103,37 +133,30 @@ function App() {
     <div className="app-container">
       <CustomCursor />
       <MoveButton />
-      <Canvas camera={{ position: [0, 0, 8], fov: 45 }}>
+      <Canvas 
+        gl={{ 
+          antialias: true, 
+          toneMapping: THREE.ReinhardToneMapping,
+        }}
+        camera={{ position: [0, 0, 8], fov: 45 }}
+      >
         <Lights />
-        <Background />
+        <DeepWonderlandBackground />
         <Rig />
         
-        {/* Main Title */}
-        <Text
-          fontSize={1.2}
-          font="/fonts/PlayfairDisplay.ttf"
-          position={[0, 1.5, 0]}
-          lineHeight={0.8} // Adjusted line height
-          color="white"
-          anchorX="center"
-          anchorY="middle"
-        >
-          MOUSE PARALLAX{"\n"}Goes to WONDERLAND
-        </Text>
+        {/* Main Title with floating animation */}
+        <Float speed={2} rotationIntensity={0.5} floatIntensity={0.8}>
+          <EmissiveText fontSize={1.2} position={[0, 1.5, 0]} lineHeight={0.8}>
+            MOUSE PARALLAX{"\n"}Goes to WONDERLAND
+          </EmissiveText>
+        </Float>
 
-        {/* Body Text */}
-        <Text
-          fontSize={0.4}
-          font="/fonts/PlayfairDisplay.ttf"
-          position={[0, -0.5, 0]}
-          color="white"
-          anchorX="center"
-          anchorY="middle"
-          maxWidth={10}
-          textAlign="center"
-        >
-          Don't be tired, it's a long way to go, but it's a beautiful way.
-        </Text>
+        {/* Body Text with floating animation */}
+        <Float speed={1.5} rotationIntensity={0.2} floatIntensity={0.5}>
+          <EmissiveText fontSize={0.35} position={[0, -0.6, 0]} maxWidth={6} textAlign="center" lineHeight={1.5} emissiveIntensity={0.5}>
+            {"Don't be tired, it's a long way to go,\nbut it's a beautiful way."}
+          </EmissiveText>
+        </Float>
 
         {/* Floating Objects */}
         <Float speed={1} rotationIntensity={1} floatIntensity={1.5}>
@@ -143,12 +166,12 @@ function App() {
           <PocketWatch position={[4, 2, -4]} />
         </Float>
         
-        <EffectComposer>
+        <EffectComposer disableNormalPass>
           <Bloom 
-            intensity={1.5}
-            luminanceThreshold={0.2}
+            intensity={1.8}
+            luminanceThreshold={0.5} 
             luminanceSmoothing={0.9} 
-            height={300} 
+            mipmapBlur              
           />
           <Noise opacity={0.05} />
         </EffectComposer>
