@@ -7,9 +7,10 @@ import SquadCard from '../components/SquadCard';
 import AnnouncementCard from '../components/AnnouncementCard';
 import { getMySquads } from '../api/squads';
 import { getAnnouncements } from '../api/announcements';
+import { getTodayStudyTime } from '../api/sessions';
 
 export default function HomeScreen() {
-  // Placeholder for actual study data
+  // Study data from backend
   const [studyTime, setStudyTime] = useState('00h 00m');
   const [progress, setProgress] = useState(0);
 
@@ -29,12 +30,18 @@ export default function HomeScreen() {
       setLoading(true);
       setError(null);
 
-      // Fetch squads and announcements in parallel
-      const [squadsData, announcementsData] = await Promise.all([
+      // Fetch all data in parallel
+      const [todayData, squadsData, announcementsData] = await Promise.all([
+        getTodayStudyTime('test-user-1'), // Use test user for MVP
         getMySquads(),
         getAnnouncements(),
       ]);
 
+      // Update study time and progress
+      setStudyTime(todayData.studyTime);
+      setProgress(todayData.progress);
+
+      // Update squads and announcements
       setMySquads(squadsData);
       setAnnouncements(announcementsData);
     } catch (err) {

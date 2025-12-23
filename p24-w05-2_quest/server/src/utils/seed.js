@@ -9,10 +9,10 @@ async function seed() {
     const now = Date.now();
     const password = await bcrypt.hash('test1234', 10);
 
-    // Create test users
-    const user1Id = uuidv4();
-    const user2Id = uuidv4();
-    const user3Id = uuidv4();
+    // Create test users with fixed IDs for easy testing
+    const user1Id = 'test-user-1'; // Fixed ID for API testing
+    const user2Id = 'test-user-2';
+    const user3Id = 'test-user-3';
 
     console.log('👤 Creating users...');
     await db.run(
@@ -87,20 +87,27 @@ async function seed() {
     console.log('⏱️  Creating study sessions...');
     const startOfDay = new Date().setHours(0, 0, 0, 0);
 
-    // Squad 1 sessions
+    // User 1 sessions (test-user-1) - total: 2h 30m (9000 seconds)
     await db.run(
       `INSERT OR IGNORE INTO study_sessions (session_id, user_id, squad_id, start_time, end_time, duration, created_at)
        VALUES (?, ?, ?, ?, ?, ?, ?)`,
-      [uuidv4(), user1Id, squad1Id, startOfDay + 3600000, startOfDay + 7200000, 3600, now]
+      [uuidv4(), user1Id, squad1Id, startOfDay + 3600000, startOfDay + 7200000, 3600, now] // 1 hour
     );
 
+    await db.run(
+      `INSERT OR IGNORE INTO study_sessions (session_id, user_id, squad_id, start_time, end_time, duration, created_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?)`,
+      [uuidv4(), user1Id, squad1Id, startOfDay + 7200000, startOfDay + 12600000, 5400, now] // 1.5 hours
+    );
+
+    // User 2 sessions (test-user-2)
     await db.run(
       `INSERT OR IGNORE INTO study_sessions (session_id, user_id, squad_id, start_time, end_time, duration, created_at)
        VALUES (?, ?, ?, ?, ?, ?, ?)`,
       [uuidv4(), user2Id, squad1Id, startOfDay + 7200000, startOfDay + 10800000, 3600, now]
     );
 
-    // Squad 2 sessions
+    // User 2 in Squad 2
     await db.run(
       `INSERT OR IGNORE INTO study_sessions (session_id, user_id, squad_id, start_time, end_time, duration, created_at)
        VALUES (?, ?, ?, ?, ?, ?, ?)`,
@@ -108,6 +115,9 @@ async function seed() {
     );
 
     console.log('✅ Study sessions created\n');
+    console.log('📊 Sample data:');
+    console.log('  - User 1 (test-user-1): 2h 30m today');
+    console.log('  - User 2 (test-user-2): 1h 30m today\n');
 
     console.log('🎉 Database seeding complete!\n');
     console.log('Test credentials:');
