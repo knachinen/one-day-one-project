@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { colors, spacing, fontSize } from '../constants/theme';
+import { COLORS, spacing, fontSize } from '../constants/theme';
 
 export default function ProfileScreen() {
   return (
@@ -15,7 +15,7 @@ export default function ProfileScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.background,
+    backgroundColor: COLORS.BACKGROUND,
     alignItems: 'center',
     justifyContent: 'center',
     padding: spacing.lg,
@@ -23,16 +23,16 @@ const styles = StyleSheet.create({
   title: {
     fontSize: fontSize.xxxl,
     fontWeight: 'bold',
-    color: colors.textPrimary,
+    color: COLORS.TEXT_MAIN,
     marginBottom: spacing.sm,
   },
   subtitle: {
     fontSize: fontSize.md,
-    color: colors.textSecondary,
+    color: COLORS.textSecondary,
     marginBottom: spacing.xl,
   },
   comingSoon: {
     fontSize: fontSize.base,
-    color: colors.textTertiary,
+    color: COLORS.TEXT_SUB,
   },
 });

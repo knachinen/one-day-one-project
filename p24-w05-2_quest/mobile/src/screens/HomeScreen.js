@@ -1,103 +1,42 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { colors, spacing, fontSize, borderRadius, shadows } from '../constants/theme';
-import { testConnection } from '../api/config';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet } from 'react-native';
+import { COLORS, spacing, fontSize, borderRadius, shadows } from '../constants/theme';
+import DashboardCard from '../components/DashboardCard';
 
 export default function HomeScreen() {
-  const [connectionStatus, setConnectionStatus] = useState('testing');
-  const [serverData, setServerData] = useState(null);
-
-  useEffect(() => {
-    checkConnection();
-  }, []);
-
-  const checkConnection = async () => {
-    setConnectionStatus('testing');
-    const result = await testConnection();
-
-    if (result.success) {
-      setConnectionStatus('connected');
-      setServerData(result.data);
-    } else {
-      setConnectionStatus('error');
-    }
-  };
-
-  const getStatusIcon = () => {
-    switch (connectionStatus) {
-      case 'testing':
-        return '🔄';
-      case 'connected':
-        return '✅';
-      case 'error':
-        return '❌';
-      default:
-        return '⚪';
-    }
-  };
-
-  const getStatusText = () => {
-    switch (connectionStatus) {
-      case 'testing':
-        return 'Connecting to server...';
-      case 'connected':
-        return 'Connected to server!';
-      case 'error':
-        return 'Connection failed';
-      default:
-        return 'Unknown';
-    }
-  };
+  // Placeholder for actual study data
+  const [studyTime, setStudyTime] = useState('00h 00m');
+  const [progress, setProgress] = useState(0);
 
   return (
     <View style={styles.container}>
-      {/* Header */}
+      {/* New Header */}
       <View style={styles.header}>
-        <Text style={styles.title}>Quest</Text>
-        <Text style={styles.subtitle}>목표 달성형 학습 메신저</Text>
+        <View style={styles.headerLeft}>
+          <View style={styles.avatar} />
+          <Text style={styles.headerText}>안녕하세요, 김알렉스님</Text>
+        </View>
+        <View style={styles.notificationIcon} />
       </View>
 
       {/* Dashboard Card */}
-      <View style={styles.card}>
-        <Text style={styles.cardTitle}>오늘의 학습</Text>
+      <DashboardCard studyTime={studyTime} progress={progress} />
 
-        <View style={styles.timerContainer}>
-          <Text style={styles.timerText}>00h 00m</Text>
-          <View style={styles.badge}>
-            <Text style={styles.badgeText}>+0%</Text>
-          </View>
-        </View>
-
-        <View style={styles.progressContainer}>
-          <View style={styles.progressBar}>
-            <View style={[styles.progressFill, { width: '0%' }]} />
-          </View>
-          <Text style={styles.goalText}>목표: 05h 00m</Text>
+      {/* My Squads Section */}
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>내 스쿼드</Text>
+        <View style={styles.placeholderCard}>
+          <Text style={styles.placeholderText}>Squad Card Placeholder</Text>
         </View>
       </View>
 
-      {/* Connection Status Card */}
-      <View style={styles.statusCard}>
-        <Text style={styles.statusIcon}>{getStatusIcon()}</Text>
-        <Text style={styles.statusText}>{getStatusText()}</Text>
-
-        {connectionStatus === 'connected' && serverData && (
-          <Text style={styles.statusDetail}>
-            {serverData.message}
-          </Text>
-        )}
-
-        {connectionStatus === 'error' && (
-          <TouchableOpacity style={styles.retryButton} onPress={checkConnection}>
-            <Text style={styles.retryButtonText}>다시 시도</Text>
-          </TouchableOpacity>
-        )}
+      {/* Announcements Section */}
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>공지사항</Text>
+        <View style={styles.placeholderCard}>
+          <Text style={styles.placeholderText}>Announcement Card Placeholder</Text>
+        </View>
       </View>
-
-      {/* Info Text */}
-      <Text style={styles.infoText}>
-        MVP 개발 중입니다 🚀
-      </Text>
     </View>
   );
 }
@@ -105,124 +44,61 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.background,
+    backgroundColor: COLORS.BACKGROUND,
     padding: spacing.lg,
   },
   header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
     marginTop: spacing.xxl,
     marginBottom: spacing.xxl,
+    paddingHorizontal: spacing.md,
   },
-  title: {
-    fontSize: fontSize.huge,
-    fontWeight: 'bold',
-    color: colors.primary,
-    marginBottom: spacing.xs,
-  },
-  subtitle: {
-    fontSize: fontSize.base,
-    color: colors.textSecondary,
-  },
-
-  // Dashboard card
-  card: {
-    backgroundColor: colors.card,
-    borderRadius: borderRadius.md,
-    padding: spacing.xl,
-    marginBottom: spacing.lg,
-    ...shadows.base,
-  },
-  cardTitle: {
-    fontSize: fontSize.md,
-    fontWeight: '600',
-    color: colors.textPrimary,
-    marginBottom: spacing.lg,
-  },
-  timerContainer: {
+  headerLeft: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: spacing.lg,
   },
-  timerText: {
-    fontSize: fontSize.huge,
-    fontWeight: 'bold',
-    color: colors.textPrimary,
+  avatar: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: COLORS.borderLight, // Using borderLight from extended COLORS
     marginRight: spacing.md,
   },
-  badge: {
-    backgroundColor: colors.success,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.xs,
-    borderRadius: borderRadius.base,
-  },
-  badgeText: {
-    fontSize: fontSize.sm,
+  headerText: {
+    fontSize: fontSize.lg,
     fontWeight: '600',
-    color: colors.textInverse,
+    color: COLORS.TEXT_MAIN,
+  },
+  notificationIcon: {
+    width: 24,
+    height: 24,
+    backgroundColor: COLORS.borderLight, // Placeholder
+    borderRadius: 12,
   },
 
-  // Progress bar
-  progressContainer: {
-    marginTop: spacing.md,
+  // New Sections
+  section: {
+    marginTop: spacing.xxxl,
   },
-  progressBar: {
-    height: 8,
-    backgroundColor: colors.borderLight,
-    borderRadius: borderRadius.sm,
-    overflow: 'hidden',
-    marginBottom: spacing.sm,
+  sectionTitle: {
+    fontSize: fontSize.lg,
+    fontWeight: 'bold',
+    color: COLORS.TEXT_MAIN,
+    marginBottom: spacing.md,
   },
-  progressFill: {
-    height: '100%',
-    backgroundColor: colors.primary,
-  },
-  goalText: {
-    fontSize: fontSize.sm,
-    color: colors.textSecondary,
-    textAlign: 'right',
-  },
-
-  // Status card
-  statusCard: {
-    backgroundColor: colors.card,
+  placeholderCard: {
+    backgroundColor: COLORS.WHITE,
     borderRadius: borderRadius.md,
     padding: spacing.xl,
     alignItems: 'center',
-    ...shadows.base,
+    justifyContent: 'center',
+    height: 100,
+    ...shadows.sm,
   },
-  statusIcon: {
-    fontSize: 48,
-    marginBottom: spacing.md,
-  },
-  statusText: {
-    fontSize: fontSize.md,
-    fontWeight: '500',
-    color: colors.textPrimary,
-    marginBottom: spacing.sm,
-  },
-  statusDetail: {
-    fontSize: fontSize.sm,
-    color: colors.textSecondary,
-    textAlign: 'center',
-  },
-  retryButton: {
-    marginTop: spacing.md,
-    backgroundColor: colors.primary,
-    paddingHorizontal: spacing.xl,
-    paddingVertical: spacing.md,
-    borderRadius: borderRadius.base,
-  },
-  retryButtonText: {
+  placeholderText: {
     fontSize: fontSize.base,
-    fontWeight: '600',
-    color: colors.textInverse,
-  },
-
-  infoText: {
-    fontSize: fontSize.sm,
-    color: colors.textTertiary,
-    textAlign: 'center',
-    marginTop: spacing.xl,
+    color: COLORS.TEXT_SUB,
   },
 });

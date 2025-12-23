@@ -1,60 +1,67 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import HomeScreen from '../screens/HomeScreen';
 import StatsScreen from '../screens/StatsScreen';
 import SquadScreen from '../screens/SquadScreen';
 import ProfileScreen from '../screens/ProfileScreen';
-import { colors, spacing } from '../constants/theme';
+import { COLORS, spacing, shadows } from '../constants/theme';
 
 const Tab = createBottomTabNavigator();
 
-// Simple icon components (using emoji for MVP)
-const TabIcon = ({ name, focused }) => {
-  const icons = {
-    Home: focused ? '🏠' : '🏘️',
-    Stats: focused ? '📊' : '📈',
-    Squad: focused ? '👥' : '👤',
-    Profile: focused ? '⚙️' : '🔧',
-  };
-
-  return (
-    <View style={styles.iconContainer}>
-      <Text style={styles.icon}>{icons[name]}</Text>
+// Custom TabBarButton for the central FAB
+const CustomTabBarButton = ({ children, onPress }) => (
+  <TouchableOpacity
+    style={styles.fabContainer}
+    onPress={onPress}
+  >
+    <View style={styles.fab}>
+      {children}
     </View>
-  );
+  </TouchableOpacity>
+);
+
+// Updated icon components
+const TabIcon = ({ name, focused }) => {
+  const iconName = focused ? name : `${name}-outline`;
+  // This is a placeholder for a real icon library like Ionicons or Feather
+  const mockIcons = {
+    'Home': '🏠', 'Home-outline': '🏡',
+    'Stats': '📊', 'Stats-outline': '📈',
+    'Squad': '👥', 'Squad-outline': '👤',
+    'Profile': '⚙️', 'Profile-outline': '🔧',
+  };
+  return <Text style={[styles.icon, { color: focused ? COLORS.PRIMARY : COLORS.TEXT_SUB }]}>{mockIcons[iconName]}</Text>;
 };
 
 export default function MainNavigator() {
   return (
     <Tab.Navigator
       screenOptions={{
-        tabBarActiveTintColor: colors.primary,
-        tabBarInactiveTintColor: colors.textTertiary,
+        headerShown: false, // Hiding header for all screens as per new design
+        tabBarShowLabel: false,
         tabBarStyle: {
-          backgroundColor: colors.card,
-          borderTopWidth: 1,
-          borderTopColor: colors.borderLight,
-          paddingTop: spacing.xs,
-        },
-        tabBarLabelStyle: {
-          fontSize: 12,
-        },
-        headerStyle: {
-          backgroundColor: colors.card,
+          position: 'absolute',
+          bottom: 25,
+          left: 20,
+          right: 20,
           elevation: 0,
-          shadowOpacity: 0,
-          borderBottomWidth: 1,
-          borderBottomColor: colors.borderLight,
+          backgroundColor: COLORS.WHITE,
+          borderRadius: 15,
+          height: 70,
+          // 목업 수준의 부드러운 그림자 적용
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: 4 },
+          shadowOpacity: 0.05,
+          shadowRadius: 10,
+          elevation: 3,
         },
-        headerTintColor: colors.textPrimary,
       }}
     >
       <Tab.Screen
         name="Home"
         component={HomeScreen}
         options={{
-          title: '홈',
           tabBarIcon: ({ focused }) => <TabIcon name="Home" focused={focused} />,
         }}
       />
@@ -62,15 +69,23 @@ export default function MainNavigator() {
         name="Stats"
         component={StatsScreen}
         options={{
-          title: '통계',
           tabBarIcon: ({ focused }) => <TabIcon name="Stats" focused={focused} />,
+        }}
+      />
+      <Tab.Screen
+        name="Start"
+        component={() => null} // Dummy component
+        options={{
+          tabBarIcon: () => <Text style={styles.fabIcon}>▶</Text>,
+          tabBarButton: (props) => (
+            <CustomTabBarButton {...props} onPress={() => alert('Start Session!')} />
+          ),
         }}
       />
       <Tab.Screen
         name="Squad"
         component={SquadScreen}
         options={{
-          title: '스쿼드',
           tabBarIcon: ({ focused }) => <TabIcon name="Squad" focused={focused} />,
         }}
       />
@@ -78,7 +93,6 @@ export default function MainNavigator() {
         name="Profile"
         component={ProfileScreen}
         options={{
-          title: 'MY',
           tabBarIcon: ({ focused }) => <TabIcon name="Profile" focused={focused} />,
         }}
       />
@@ -87,11 +101,25 @@ export default function MainNavigator() {
 }
 
 const styles = StyleSheet.create({
-  iconContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   icon: {
     fontSize: 24,
+  },
+  fabContainer: {
+    top: -30,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  fab: {
+    width: 70,
+    height: 70,
+    borderRadius: 35,
+    backgroundColor: COLORS.PRIMARY,
+    justifyContent: 'center',
+    alignItems: 'center',
+    ...shadows.lg,
+  },
+  fabIcon: {
+    fontSize: 24,
+    color: COLORS.WHITE,
   },
 });

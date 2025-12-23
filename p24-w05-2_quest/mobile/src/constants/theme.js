@@ -1,36 +1,29 @@
 // Design tokens for Quest MVP
 
-export const colors = {
-  // Brand colors
-  primary: '#66CC66',
+export const COLORS = {
+  PRIMARY: '#66CC66',     // Quest Green
+  BACKGROUND: '#F7F8F9',  // 연한 회색 배경
+  WHITE: '#FFFFFF',
+  TEXT_MAIN: '#111111',   // 타이머 숫자
+  TEXT_SUB: '#999999',    // 단위 및 보조 텍스트
+  PROGRESS_BG: '#E0E0E0', // 진행 바 배경
+
+  // Additional existing colors
   primaryDark: '#52A352',
   primaryLight: '#85D685',
-
-  // Secondary colors
   secondary: '#FF7043',
   live: '#FF1744',
   success: '#4CAF50',
   error: '#EF5350',
   warning: '#FFA726',
   info: '#42A5F5',
-
-  // Background colors
-  background: '#F7F8F9',
   backgroundSecondary: '#F8F9FA',
-  card: '#FFFFFF',
-
-  // Text colors
-  textPrimary: '#111111',
   textSecondary: '#666666',
   textTertiary: '#999999',
   textDisabled: '#CCCCCC',
   textInverse: '#FFFFFF',
-
-  // Status colors
   online: '#66CC66',
   offline: '#999999',
-
-  // Border colors
   border: '#DDDDDD',
   borderLight: '#E8E8E8',
   borderStrong: '#CCCCCC',
