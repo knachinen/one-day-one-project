@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Ionicons } from '@expo/vector-icons';
 import { COLORS, spacing, fontSize, borderRadius, shadows } from '../constants/theme';
 import DashboardCard from '../components/DashboardCard';
 import SquadCard from '../components/SquadCard';
@@ -58,10 +59,12 @@ export default function HomeScreen() {
       {/* New Header */}
       <View style={styles.header}>
         <View style={styles.headerLeft}>
-          <View style={styles.avatar} />
+          <View style={styles.avatar}>
+            <Text style={styles.avatarText}>G</Text>
+          </View>
           <Text style={styles.headerText}>안녕하세요, 김알렉스님</Text>
         </View>
-        <View style={styles.notificationIcon} />
+        <Ionicons name="notifications-outline" size={24} color={COLORS.TEXT_MAIN} />
       </View>
 
       {/* Dashboard Card */}
@@ -150,20 +153,22 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: COLORS.borderLight, // Using borderLight from extended COLORS
+    backgroundColor: COLORS.PRIMARY,
     marginRight: spacing.md,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  avatarText: {
+    color: COLORS.WHITE,
+    fontSize: fontSize.lg,
+    fontWeight: 'bold',
   },
   headerText: {
     fontSize: fontSize.lg,
     fontWeight: '600',
     color: COLORS.TEXT_MAIN,
   },
-  notificationIcon: {
-    width: 24,
-    height: 24,
-    backgroundColor: COLORS.borderLight, // Placeholder
-    borderRadius: 12,
-  },
+
 
   // Sections
   section: {
