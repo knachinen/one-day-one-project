@@ -35,9 +35,7 @@ export default function MainNavigator() {
           backgroundColor: colors.card,
           borderTopWidth: 1,
           borderTopColor: colors.borderLight,
-          paddingBottom: spacing.xs,
           paddingTop: spacing.xs,
-          height: 60,
         },
         tabBarLabelStyle: {
           fontSize: 12,
