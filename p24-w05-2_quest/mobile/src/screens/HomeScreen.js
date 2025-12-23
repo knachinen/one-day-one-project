@@ -1,13 +1,49 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, spacing, fontSize, borderRadius, shadows } from '../constants/theme';
 import DashboardCard from '../components/DashboardCard';
+import SquadCard from '../components/SquadCard';
+import AnnouncementCard from '../components/AnnouncementCard';
+import { getMySquads } from '../api/squads';
+import { getAnnouncements } from '../api/announcements';
 
 export default function HomeScreen() {
   // Placeholder for actual study data
   const [studyTime, setStudyTime] = useState('00h 00m');
   const [progress, setProgress] = useState(0);
+
+  // Data from backend
+  const [mySquads, setMySquads] = useState([]);
+  const [announcements, setAnnouncements] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Fetch data on mount
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      // Fetch squads and announcements in parallel
+      const [squadsData, announcementsData] = await Promise.all([
+        getMySquads(),
+        getAnnouncements(),
+      ]);
+
+      setMySquads(squadsData);
+      setAnnouncements(announcementsData);
+    } catch (err) {
+      console.error('Failed to fetch data:', err);
+      setError('데이터를 불러오는데 실패했습니다.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
@@ -24,21 +60,56 @@ export default function HomeScreen() {
       {/* Dashboard Card */}
       <DashboardCard studyTime={studyTime} progress={progress} />
 
-      {/* My Squads Section */}
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>내 스쿼드</Text>
-        <View style={styles.placeholderCard}>
-          <Text style={styles.placeholderText}>Squad Card Placeholder</Text>
+      {/* Loading State */}
+      {loading && (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color={COLORS.PRIMARY} />
+          <Text style={styles.loadingText}>데이터 로딩 중...</Text>
         </View>
-      </View>
+      )}
+
+      {/* Error State */}
+      {error && !loading && (
+        <View style={styles.errorContainer}>
+          <Text style={styles.errorText}>{error}</Text>
+        </View>
+      )}
+
+      {/* My Squads Section */}
+      {!loading && !error && (
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>내 스쿼드</Text>
+          {mySquads.length > 0 ? (
+            mySquads.map((squad) => (
+              <SquadCard
+                key={squad.id}
+                squad={squad}
+                onPress={() => console.log(`Squad ${squad.name} pressed`)}
+              />
+            ))
+          ) : (
+            <Text style={styles.emptyText}>가입한 스쿼드가 없습니다.</Text>
+          )}
+        </View>
+      )}
 
       {/* Announcements Section */}
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>공지사항</Text>
-        <View style={styles.placeholderCard}>
-          <Text style={styles.placeholderText}>Announcement Card Placeholder</Text>
+      {!loading && !error && (
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>공지사항</Text>
+          {announcements.length > 0 ? (
+            announcements.map((announcement) => (
+              <AnnouncementCard
+                key={announcement.id}
+                announcement={announcement}
+                onPress={() => console.log(`Announcement ${announcement.title} pressed`)}
+              />
+            ))
+          ) : (
+            <Text style={styles.emptyText}>공지사항이 없습니다.</Text>
+          )}
         </View>
-      </View>
+      )}
       </ScrollView>
     </SafeAreaView>
   );
@@ -87,7 +158,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
   },
 
-  // New Sections
+  // Sections
   section: {
     marginTop: spacing.xxxl,
   },
@@ -97,17 +168,36 @@ const styles = StyleSheet.create({
     color: COLORS.TEXT_MAIN,
     marginBottom: spacing.md,
   },
-  placeholderCard: {
-    backgroundColor: COLORS.WHITE,
-    borderRadius: borderRadius.md,
-    padding: spacing.xl,
+
+  // Loading State
+  loadingContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    height: 100,
-    ...shadows.sm,
+    paddingVertical: spacing.xxxl,
   },
-  placeholderText: {
+  loadingText: {
+    marginTop: spacing.md,
     fontSize: fontSize.base,
     color: COLORS.TEXT_SUB,
+  },
+
+  // Error State
+  errorContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: spacing.xxxl,
+  },
+  errorText: {
+    fontSize: fontSize.base,
+    color: COLORS.error,
+    textAlign: 'center',
+  },
+
+  // Empty State
+  emptyText: {
+    fontSize: fontSize.base,
+    color: COLORS.TEXT_SUB,
+    textAlign: 'center',
+    paddingVertical: spacing.xl,
   },
 });

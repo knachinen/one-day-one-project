@@ -46,11 +46,13 @@ app.get('/api/test-db', async (req, res) => {
   }
 });
 
-// Routes (to be added)
+// Routes
+app.use('/api/squads', require('./routes/squads'));
+app.use('/api/announcements', require('./routes/announcements'));
+// To be added:
 // app.use('/api/auth', require('./routes/auth'));
 // app.use('/api/users', require('./routes/users'));
 // app.use('/api/sessions', require('./routes/sessions'));
-// app.use('/api/squads', require('./routes/squads'));
 // app.use('/api/messages', require('./routes/messages'));
 
 // In-memory stores for real-time features
