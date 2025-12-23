@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, spacing, fontSize, borderRadius, shadows } from '../constants/theme';
 import DashboardCard from '../components/DashboardCard';
 
@@ -9,7 +10,8 @@ export default function HomeScreen() {
   const [progress, setProgress] = useState(0);
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.safeArea} edges={['top']}>
+      <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
       {/* New Header */}
       <View style={styles.header}>
         <View style={styles.headerLeft}>
@@ -37,15 +39,22 @@ export default function HomeScreen() {
           <Text style={styles.placeholderText}>Announcement Card Placeholder</Text>
         </View>
       </View>
-    </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  safeArea: {
     flex: 1,
     backgroundColor: COLORS.BACKGROUND,
+  },
+  container: {
+    flex: 1,
+  },
+  contentContainer: {
     padding: spacing.lg,
+    paddingBottom: 110, // Tab bar height (80) + safe area + spacing
   },
   header: {
     flexDirection: 'row',

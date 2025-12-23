@@ -1,6 +1,7 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Platform } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import HomeScreen from '../screens/HomeScreen';
 import StatsScreen from '../screens/StatsScreen';
 import SquadScreen from '../screens/SquadScreen';
@@ -31,30 +32,41 @@ const TabIcon = ({ name, focused }) => {
     'Squad': '👥', 'Squad-outline': '👤',
     'Profile': '⚙️', 'Profile-outline': '🔧',
   };
-  return <Text style={[styles.icon, { color: focused ? COLORS.PRIMARY : COLORS.TEXT_SUB }]}>{mockIcons[iconName]}</Text>;
+  return (
+    <View style={styles.iconContainer}>
+      <Text style={[styles.icon, { color: focused ? COLORS.PRIMARY : COLORS.TEXT_SUB }]}>
+        {mockIcons[iconName]}
+      </Text>
+    </View>
+  );
 };
 
 export default function MainNavigator() {
+  const insets = useSafeAreaInsets();
+  const tabBarHeight = 80; // Increased height for icon space
+
   return (
     <Tab.Navigator
       screenOptions={{
-        headerShown: false, // Hiding header for all screens as per new design
+        headerShown: false,
         tabBarShowLabel: false,
         tabBarStyle: {
           position: 'absolute',
-          bottom: 25,
-          left: 20,
-          right: 20,
-          elevation: 0,
+          bottom: 0,
+          left: 0,
+          right: 0,
           backgroundColor: COLORS.WHITE,
-          borderRadius: 15,
-          height: 70,
-          // 목업 수준의 부드러운 그림자 적용
-          shadowColor: '#000',
-          shadowOffset: { width: 0, height: 4 },
-          shadowOpacity: 0.05,
-          shadowRadius: 10,
-          elevation: 3,
+          borderRadius: 0,
+          height: tabBarHeight + insets.bottom,
+          paddingBottom: insets.bottom,
+          paddingTop: 0,
+          borderWidth: 0,
+          borderTopWidth: 0,
+          ...shadows.md,
+        },
+        tabBarItemStyle: {
+          paddingTop: 12,
+          paddingBottom: 18, // Ensure space at bottom to prevent cutoff
         },
       }}
     >
@@ -100,26 +112,42 @@ export default function MainNavigator() {
   );
 }
 
+// Constants for consistent sizing
+const TAB_BAR_HEIGHT = 70;
+const FAB_SIZE = 70;
+
 const styles = StyleSheet.create({
+  iconContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 50, // Explicit height to contain icons
+  },
   icon: {
-    fontSize: 24,
+    fontSize: 22, // Slightly smaller for better fit
   },
   fabContainer: {
     top: -30,
+    flex: 1,
+    width: 90,
+    height: 90,
     justifyContent: 'center',
     alignItems: 'center',
   },
   fab: {
-    width: 70,
-    height: 70,
-    borderRadius: 35,
+    width: FAB_SIZE,
+    height: FAB_SIZE,
+    borderRadius: FAB_SIZE / 2,
     backgroundColor: COLORS.PRIMARY,
     justifyContent: 'center',
     alignItems: 'center',
     ...shadows.lg,
   },
   fabIcon: {
-    fontSize: 24,
+    fontSize: 28,
     color: COLORS.WHITE,
+    lineHeight: 28,
+    textAlign: 'center',
+    textAlignVertical: 'center',
+    includeFontPadding: false,
   },
 });

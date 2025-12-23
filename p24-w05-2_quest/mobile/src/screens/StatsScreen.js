@@ -1,24 +1,31 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, spacing, fontSize } from '../constants/theme';
 
 export default function StatsScreen() {
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>통계</Text>
-      <Text style={styles.subtitle}>학습 데이터 분석</Text>
-      <Text style={styles.comingSoon}>Coming Soon...</Text>
-    </View>
+    <SafeAreaView style={styles.safeArea} edges={['top']}>
+      <View style={styles.container}>
+        <Text style={styles.title}>통계</Text>
+        <Text style={styles.subtitle}>학습 데이터 분석</Text>
+        <Text style={styles.comingSoon}>Coming Soon...</Text>
+      </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  safeArea: {
     flex: 1,
     backgroundColor: COLORS.BACKGROUND,
+  },
+  container: {
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
     padding: spacing.lg,
+    paddingBottom: 110, // Tab bar height (80) + safe area + spacing
   },
   title: {
     fontSize: fontSize.xxxl,
