@@ -1,9 +1,12 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const HomeScreen: React.FC = () => {
+  const insets = useSafeAreaInsets();
+
   return (
-    <ScrollView style={styles.scrollViewContainer}>
+    <ScrollView style={[styles.scrollViewContainer, { paddingTop: insets.top }]}>
       <View style={styles.container}>
         {/* Top Dashboard Section */}
         <View style={styles.dashboardCard}>
@@ -24,10 +27,17 @@ const HomeScreen: React.FC = () => {
         {/* My Squads Card Section */}
         <View style={styles.squadCard}>
           <Text style={styles.squadTitle}>My Squads</Text>
-          {/* Placeholder for squad image and online status */}
-          <View style={styles.squadContent}>
-            <Text style={styles.squadOnline}>● 4 members online</Text>
+          <View style={styles.squadImageArea}>
+            {/* Placeholder for squad image */}
+            <View style={styles.squadImage} />
+            {/* Placeholder for user avatars */}
+            <View style={styles.avatarStack}>
+              <View style={[styles.avatar, { left: 0 }]} />
+              <View style={[styles.avatar, { left: 15, backgroundColor: '#FFD700' }]} />
+              <Text style={styles.moreUsers}>+2</Text>
+            </View>
           </View>
+          <Text style={styles.squadOnline}>● 4 members online</Text>
         </View>
 
         {/* Announcements List Section */}
@@ -35,9 +45,11 @@ const HomeScreen: React.FC = () => {
           <Text style={styles.announcementsTitle}>Announcements</Text>
           {/* Placeholder for announcement items */}
           <View style={styles.announcementItem}>
+            <View style={[styles.announcementIcon, { backgroundColor: 'blue' }]} />
             <Text style={styles.announcementText}>New update released!</Text>
           </View>
           <View style={styles.announcementItem}>
+            <View style={[styles.announcementIcon, { backgroundColor: 'orange' }]} />
             <Text style={styles.announcementText}>Meeting tomorrow at 10 AM.</Text>
           </View>
         </View>
@@ -120,8 +132,46 @@ const styles = StyleSheet.create({
     color: '#111111', // Primary (Black/Dark Gray)
     marginBottom: 8,
   },
-  squadContent: {
-    // Placeholder for image and avatars
+  squadImageArea: {
+    height: 100, // Placeholder height
+    backgroundColor: '#E0E0E0', // Placeholder for image
+    borderRadius: 8,
+    marginBottom: 8,
+    justifyContent: 'flex-end',
+    position: 'relative',
+  },
+  squadImage: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: '#C0C0C0', // Placeholder image color
+    borderRadius: 8,
+  },
+  avatarStack: {
+    flexDirection: 'row',
+    position: 'absolute',
+    bottom: 8,
+    left: 8,
+  },
+  avatar: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    backgroundColor: '#66CC66', // Example avatar color
+    borderWidth: 1.5,
+    borderColor: '#FFFFFF',
+    marginRight: -10, // Overlap avatars
+  },
+  moreUsers: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    backgroundColor: '#999999', // Tertiary color for more users
+    textAlign: 'center',
+    lineHeight: 24,
+    fontSize: 10,
+    color: '#FFFFFF',
+    borderWidth: 1.5,
+    borderColor: '#FFFFFF',
+    marginLeft: 5,
   },
   squadOnline: {
     fontSize: 14,
@@ -145,9 +195,19 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   announcementItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
     paddingVertical: 8,
     borderBottomWidth: 1,
     borderBottomColor: '#F7F8F9',
+  },
+  announcementIcon: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    marginRight: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   announcementText: {
     fontSize: 14,
