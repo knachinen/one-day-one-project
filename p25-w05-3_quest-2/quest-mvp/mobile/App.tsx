@@ -1,9 +1,9 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback } from 'react';
 import AppNavigator from './src/navigation/AppNavigator';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
-import { View } from 'react-native';
+import './global.css';
 
 SplashScreen.preventAutoHideAsync();
 
