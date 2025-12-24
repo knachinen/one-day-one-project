@@ -4,7 +4,7 @@ export const Colors = {
   card: '#FFFFFF',
   text: {
     primary: '#111111', // Black/Dark Gray
-    secondary: '#666666', // Medium Gray
+    secondary: '#999999', // Medium Gray
     tertiary: '#999999', // Light Gray
   },
   accent: {

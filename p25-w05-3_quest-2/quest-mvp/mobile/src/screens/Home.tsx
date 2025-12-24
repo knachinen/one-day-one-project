@@ -1,12 +1,20 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Colors } from '../constants/Colors'; // Import Colors
 
 const HomeScreen: React.FC = () => {
   const insets = useSafeAreaInsets();
 
   return (
     <ScrollView style={[styles.scrollViewContainer, { paddingTop: insets.top }]}>
+      {/* Top Profile Bar Placeholder */}
+      <View style={styles.profileBar}>
+        <Text style={styles.profileGreeting}>Hello, User!</Text>
+        {/* Placeholder for settings/notifications icon */}
+        <View style={styles.profileIconPlaceholder} />
+      </View>
+
       <View style={styles.container}>
         {/* Top Dashboard Section */}
         <View style={styles.dashboardCard}>
@@ -61,13 +69,32 @@ const HomeScreen: React.FC = () => {
 const styles = StyleSheet.create({
   scrollViewContainer: {
     flex: 1,
-    backgroundColor: '#F7F8F9', // Background (Light Gray)
+    backgroundColor: Colors.background, // Background (Light Gray)
   },
   container: {
     padding: 16,
   },
+  profileBar: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingBottom: 16,
+    backgroundColor: Colors.background, // Assuming the profile bar will be part of the general background
+  },
+  profileGreeting: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: Colors.text.primary,
+  },
+  profileIconPlaceholder: {
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    backgroundColor: Colors.text.tertiary, // Placeholder color
+  },
   dashboardCard: {
-    backgroundColor: '#FFFFFF', // Card Background
+    backgroundColor: Colors.card, // Card Background
     borderRadius: 10,
     padding: 16,
     marginBottom: 16,
@@ -86,37 +113,37 @@ const styles = StyleSheet.create({
   focusTime: {
     fontSize: 36, // Dashboard Timer size
     fontWeight: '800', // Extra-Bold
-    color: '#111111', // Primary (Black/Dark Gray)
+    color: Colors.text.primary, // Primary (Black/Dark Gray)
   },
   badge: {
-    backgroundColor: '#4CAF50', // Success Indicator
+    backgroundColor: Colors.accent.successIndicator, // Success Indicator
     borderRadius: 15,
     paddingVertical: 4,
     paddingHorizontal: 8,
   },
   badgeText: {
-    color: '#FFFFFF',
+    color: Colors.card,
     fontSize: 12,
     fontWeight: 'bold',
   },
   progressBarBackground: {
     height: 8,
     borderRadius: 4,
-    backgroundColor: '#E0E0E0',
+    backgroundColor: Colors.background, // E0E0E0 is close to background
     marginBottom: 8,
   },
   progressBarFill: {
     width: '60%', // Example fill
     height: '100%',
-    backgroundColor: '#66CC66', // Brand Primary (Quest Green)
+    backgroundColor: Colors.primary, // Brand Primary (Quest Green)
     borderRadius: 4,
   },
   goalText: {
     fontSize: 14,
-    color: '#666666', // Secondary (Medium Gray)
+    color: Colors.text.secondary, // Secondary (Medium Gray)
   },
   squadCard: {
-    backgroundColor: '#FFFFFF', // Card Background
+    backgroundColor: Colors.card, // Card Background
     borderRadius: 10,
     padding: 16,
     marginBottom: 16,
@@ -129,12 +156,12 @@ const styles = StyleSheet.create({
   squadTitle: {
     fontSize: 18, // Heading size
     fontWeight: 'bold',
-    color: '#111111', // Primary (Black/Dark Gray)
+    color: Colors.text.primary, // Primary (Black/Dark Gray)
     marginBottom: 8,
   },
   squadImageArea: {
     height: 100, // Placeholder height
-    backgroundColor: '#E0E0E0', // Placeholder for image
+    backgroundColor: Colors.background, // Placeholder for image, using background color
     borderRadius: 8,
     marginBottom: 8,
     justifyContent: 'flex-end',
@@ -142,7 +169,7 @@ const styles = StyleSheet.create({
   },
   squadImage: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: '#C0C0C0', // Placeholder image color
+    backgroundColor: Colors.text.tertiary, // Placeholder image color, using tertiary
     borderRadius: 8,
   },
   avatarStack: {
@@ -155,30 +182,30 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
     borderRadius: 12,
-    backgroundColor: '#66CC66', // Example avatar color
+    backgroundColor: Colors.primary, // Example avatar color
     borderWidth: 1.5,
-    borderColor: '#FFFFFF',
+    borderColor: Colors.card,
     marginRight: -10, // Overlap avatars
   },
   moreUsers: {
     width: 24,
     height: 24,
     borderRadius: 12,
-    backgroundColor: '#999999', // Tertiary color for more users
+    backgroundColor: Colors.text.tertiary, // Tertiary color for more users
     textAlign: 'center',
     lineHeight: 24,
     fontSize: 10,
-    color: '#FFFFFF',
+    color: Colors.card,
     borderWidth: 1.5,
-    borderColor: '#FFFFFF',
+    borderColor: Colors.card,
     marginLeft: 5,
   },
   squadOnline: {
     fontSize: 14,
-    color: '#666666', // Secondary (Medium Gray)
+    color: Colors.text.secondary, // Secondary (Medium Gray)
   },
   announcementsCard: {
-    backgroundColor: '#FFFFFF', // Card Background
+    backgroundColor: Colors.card, // Card Background
     borderRadius: 10,
     padding: 16,
     marginBottom: 16,
@@ -191,7 +218,7 @@ const styles = StyleSheet.create({
   announcementsTitle: {
     fontSize: 18, // Heading size
     fontWeight: 'bold',
-    color: '#111111', // Primary (Black/Dark Gray)
+    color: Colors.text.primary, // Primary (Black/Dark Gray)
     marginBottom: 8,
   },
   announcementItem: {
@@ -199,7 +226,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 8,
     borderBottomWidth: 1,
-    borderBottomColor: '#F7F8F9',
+    borderBottomColor: Colors.background, // Using background for light gray separator
   },
   announcementIcon: {
     width: 24,
@@ -211,7 +238,7 @@ const styles = StyleSheet.create({
   },
   announcementText: {
     fontSize: 14,
-    color: '#111111', // Primary (Black/Dark Gray)
+    color: Colors.text.primary, // Primary (Black/Dark Gray)
   },
 });
 
