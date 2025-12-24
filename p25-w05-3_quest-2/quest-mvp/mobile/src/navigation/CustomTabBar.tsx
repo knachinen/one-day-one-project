@@ -4,16 +4,18 @@ import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '../constants/Colors';
 import FABButton from './FABButton'; // Import FABButton
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const CustomTabBar: React.FC<BottomTabBarProps> = ({ state, descriptors, navigation }) => {
   const focusedOptions = descriptors[state.routes[state.index].key].options;
+  const insets = useSafeAreaInsets(); // Get safe area insets
 
   if (focusedOptions.tabBarVisible === false) {
     return null;
   }
 
   return (
-    <View style={styles.tabBarContainer}>
+    <View style={[styles.tabBarContainer, { paddingBottom: insets.bottom }]}>
       <View style={styles.tabBar}>
         {/* First tab (Home) */}
         {state.routes[0] && (() => {

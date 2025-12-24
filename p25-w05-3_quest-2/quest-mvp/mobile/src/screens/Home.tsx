@@ -7,7 +7,7 @@ const HomeScreen: React.FC = () => {
   const insets = useSafeAreaInsets();
 
   return (
-    <ScrollView style={[styles.scrollViewContainer, { paddingTop: insets.top }]}>
+    <ScrollView style={[styles.scrollViewContainer, { paddingTop: insets.top, paddingBottom: insets.bottom }]}>
       {/* Top Profile Bar Placeholder */}
       <View style={styles.profileBar}>
         <Text style={styles.profileGreeting}>Hello, User!</Text>

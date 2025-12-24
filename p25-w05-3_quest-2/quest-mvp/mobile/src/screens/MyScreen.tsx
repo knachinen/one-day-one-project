@@ -6,7 +6,7 @@ import { Colors } from '../constants/Colors';
 const MyScreen: React.FC = () => {
   const insets = useSafeAreaInsets();
   return (
-    <ScrollView style={[styles.container, { paddingTop: insets.top, backgroundColor: Colors.background }]}>
+    <ScrollView style={[styles.container, { paddingTop: insets.top, paddingBottom: insets.bottom, backgroundColor: Colors.background }]}>
       <View style={styles.content}>
         <Text style={styles.title}>My Profile</Text>
 

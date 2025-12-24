@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
 import AppNavigator from './src/navigation/AppNavigator';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { StatusBar } from 'expo-status-bar';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import './global.css';
@@ -27,6 +28,7 @@ export default function App() {
 
   return (
     <SafeAreaProvider onLayout={onLayoutRootView}>
+      <StatusBar style="auto" />
       <AppNavigator />
     </SafeAreaProvider>
   );
