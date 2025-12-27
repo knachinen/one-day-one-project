@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useRef } from "react";
+import Link from "next/link";
 import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { ArrowRight, Play, X } from "lucide-react";
 import { Button } from "@/components/ui/Button";
@@ -83,10 +84,12 @@ export function Hero() {
               variants={fadeIn}
               className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
             >
-              <Button size="lg" className="group shadow-[0_4px_14px_rgba(0,123,255,0.39)]">
-                지금 무료로 시작하기
-                <ArrowRight className="ml-2 w-5 h-5 transition-transform group-hover:translate-x-1" />
-              </Button>
+              <Link href="#contact" className="w-full sm:w-auto">
+                <Button size="lg" className="w-full group shadow-[0_4px_14px_rgba(0,123,255,0.39)]">
+                  지금 무료로 시작하기
+                  <ArrowRight className="ml-2 w-5 h-5 transition-transform group-hover:translate-x-1" />
+                </Button>
+              </Link>
               <Button variant="outline" size="lg" className="bg-white" onClick={() => setShowDemo(true)}>
                 <Play className="mr-2 w-4 h-4 fill-current" />
                 데모 영상 보기

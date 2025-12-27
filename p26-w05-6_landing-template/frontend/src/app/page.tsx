@@ -3,6 +3,7 @@ import { Hero } from "@/components/sections/Hero";
 import { ProblemSolution } from "@/components/sections/ProblemSolution";
 import { Features } from "@/components/sections/Features";
 import { SocialProof } from "@/components/sections/SocialProof";
+import { ContactForm } from "@/components/sections/ContactForm";
 import { FAQ } from "@/components/sections/FAQ";
 import { Footer } from "@/components/layout/Footer";
 
@@ -15,6 +16,7 @@ export default function Home() {
         <ProblemSolution />
         <Features />
         <SocialProof />
+        <ContactForm />
         <FAQ />
       </main>
       <Footer />

@@ -12,6 +12,7 @@ const navItems = [
   { name: "서비스 소개", href: "#about" },
   { name: "특징", href: "#features" },
   { name: "후기", href: "#testimonials" },
+  { name: "상담 신청", href: "#contact" },
   { name: "FAQ", href: "#faq" },
 ];
 
@@ -54,7 +55,9 @@ export function Header() {
 
         {/* Desktop CTA */}
         <div className="hidden md:block">
-          <Button size="sm">무료 시작하기</Button>
+          <Link href="#contact">
+            <Button size="sm">무료 시작하기</Button>
+          </Link>
         </div>
 
         {/* Mobile Menu Toggle */}
@@ -86,7 +89,9 @@ export function Header() {
                   {item.name}
                 </Link>
               ))}
-              <Button className="w-full mt-2">무료 시작하기</Button>
+              <Link href="#contact" onClick={() => setIsMobileMenuOpen(false)}>
+                <Button className="w-full mt-2">무료 시작하기</Button>
+              </Link>
             </nav>
           </motion.div>
         )}
