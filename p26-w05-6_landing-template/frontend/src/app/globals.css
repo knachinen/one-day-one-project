@@ -27,6 +27,12 @@
   --container-12: 1200px;
 }
 
+@layer utilities {
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+}
+
 @layer base {
   body {
     @apply bg-background text-foreground font-sans antialiased;
