@@ -177,7 +177,7 @@ export function SocialProof() {
               </AnimatePresence>
 
               {/* Navigation Buttons */}
-              <div className="absolute -left-4 md:-left-16 top-1/2 -translate-y-1/2 z-20">
+              {/*<div className="absolute -left-4 md:-left-16 top-1/2 -translate-y-1/2 z-20">
                 <button 
                   onClick={prevSlide}
                   className="w-12 h-12 bg-white rounded-full shadow-lg border border-gray-100 flex items-center justify-center text-gray-400 hover:text-brand-blue hover:scale-110 transition-all"
@@ -192,7 +192,7 @@ export function SocialProof() {
                 >
                   <ChevronRight size={24} />
                 </button>
-              </div>
+              </div>*/}
 
               {/* Dots */}
               <div className="absolute -bottom-12 left-1/2 -translate-x-1/2 flex gap-2">
