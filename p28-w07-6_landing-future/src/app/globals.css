@@ -1,0 +1,35 @@
+@import "tailwindcss";
+
+:root {
+  /* Colors */
+  --background: #050505;
+  --secondary: #121212;
+  --accent-cyan: #00F0FF;
+  --accent-purple: #BF00FF;
+  --text-main: #FFFFFF;
+  --text-sub: #A0A0A0;
+  
+  /* Gradients */
+  --glass-gradient: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-secondary: var(--secondary);
+  --color-accent-cyan: var(--accent-cyan);
+  --color-accent-purple: var(--accent-purple);
+  --color-text-main: var(--text-main);
+  --color-text-sub: var(--text-sub);
+
+  --font-header: var(--font-orbitron), sans-serif;
+  --font-body: var(--font-pretendard), sans-serif;
+  --font-mono: var(--font-jetbrains-mono), monospace;
+  
+  --image-glass-gradient: var(--glass-gradient);
+}
+
+body {
+  background-color: var(--background);
+  color: var(--text-main);
+  font-family: var(--font-body);
+}
