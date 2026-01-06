@@ -12,16 +12,23 @@
   position: relative;
 }
 
-.placeholderImage {
+.imageWrapper {
+  position: relative;
   width: 100%;
   aspect-ratio: 3 / 4;
-  background-color: #eee;
   border-radius: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #aaa;
-  font-weight: 500;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.profileImage {
+  object-fit: cover;
+  filter: grayscale(100%);
+  transition: filter 0.3s ease;
+}
+
+.profileImage:hover {
+  filter: grayscale(0%);
 }
 
 .imageInfo {
@@ -30,7 +37,7 @@
   justify-content: space-between;
   align-items: center;
 }
-
+/* ... existing styles ... */
 .location {
   display: flex;
   align-items: center;
@@ -154,5 +161,9 @@
   .aboutSection {
     grid-template-columns: 1fr;
     gap: 40px;
+  }
+  
+  .imageWrapper {
+    aspect-ratio: 16 / 9;
   }
 }

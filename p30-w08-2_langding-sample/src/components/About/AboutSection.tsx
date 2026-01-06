@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import styles from './AboutSection.module.css';
 
 export default function AboutSection() {
@@ -5,8 +6,14 @@ export default function AboutSection() {
     <section id="about" className={styles.aboutSection}>
       {/* 좌측: 이미지 영역 */}
       <div className={styles.imageArea}>
-        <div className={styles.placeholderImage}>
-          Profile Image
+        <div className={styles.imageWrapper}>
+          <Image 
+            src="/images/profile-placeholder.jpg"
+            alt="Profile Image"
+            fill
+            className={styles.profileImage}
+            priority
+          />
         </div>
         <div className={styles.imageInfo}>
           <div className={styles.location}>
