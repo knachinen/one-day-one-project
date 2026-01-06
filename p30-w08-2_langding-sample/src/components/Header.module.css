@@ -1,28 +1,58 @@
+.headerContainer {
+  height: 72px;
+  background-color: var(--background);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1.5rem 2rem;
+  height: 100%;
+  padding: 0 2rem;
   max-width: 1200px;
   margin: 0 auto;
 }
 
 .logo {
   font-weight: 700;
-  font-size: 1.2rem;
+  font-size: 1.25rem;
+  color: var(--text-main);
 }
 
 .nav ul {
   display: flex;
-  gap: 2rem;
+  gap: 2.5rem;
 }
 
 .nav a {
-  font-size: 0.9rem;
-  color: #666;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text-sub);
   transition: color 0.2s;
 }
 
+.nav a.active {
+  color: var(--primary);
+}
+
 .nav a:hover {
-  color: #000;
+  color: var(--primary);
+}
+
+.resumeBtn {
+  background-color: var(--primary);
+  color: #fff;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: opacity 0.2s;
+}
+
+.resumeBtn:hover {
+  opacity: 0.9;
 }

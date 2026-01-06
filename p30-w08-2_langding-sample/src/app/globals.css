@@ -1,7 +1,11 @@
 :root {
   --background: #ffffff;
-  --foreground: #222222;
-  --gray-light: #f5f5f5;
+  --foreground: #111111;
+  --text-main: #111111;
+  --text-sub: #555555;
+  --primary: #3b82f6; /* Blue 계열 */
+  --primary-light: #eff6ff;
+  --border: #eaeaea;
   --font-main: var(--font-noto-sans-kr), sans-serif;
 }
 
