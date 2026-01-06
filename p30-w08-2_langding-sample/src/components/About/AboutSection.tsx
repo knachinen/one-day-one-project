@@ -30,8 +30,7 @@ export default function AboutSection() {
       <div className={styles.contentArea}>
         <div className={styles.label}>ABOUT ME</div>
         <h2 className={styles.headline}>
-          사용자 경험을 먼저 생각하는<br />
-          디자이너 <strong>김철수</strong>입니다.
+          <span className={styles.subHeadline}>사용자 경험을 먼저 생각하는</span> 디자이너 <strong>김철수</strong>입니다.
         </h2>
         
         <div className={styles.description}>
