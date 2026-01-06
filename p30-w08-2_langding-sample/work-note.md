@@ -27,3 +27,4 @@
 - [x] 2.7 Resume CTA 카드 구현
 
 - [x] 2.8 전체 스타일 다듬기 및 반응형 체크 (Desktop 우선)
+- [x] 2.9 디자인 디테일 개선 (improvement-1.md 반영) ✅

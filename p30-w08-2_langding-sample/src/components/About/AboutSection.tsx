@@ -17,10 +17,10 @@ export default function AboutSection() {
         </div>
         <div className={styles.imageInfo}>
           <div className={styles.location}>
-            <span>📍</span> Seoul, South Korea
+            <span>🔵</span> Seoul, South Korea
           </div>
           <div className={styles.socialButtons}>
-            <button className={styles.iconBtn} aria-label="Email">📧</button>
+            <button className={styles.iconBtn} aria-label="Email">✉️</button>
             <button className={styles.iconBtn} aria-label="Link">🔗</button>
           </div>
         </div>
@@ -47,19 +47,19 @@ export default function AboutSection() {
 
         <div className={styles.infoGrid}>
           <div className={styles.infoItem}>
-            <h4>관심 분야</h4>
+            <h4>✨ 관심 분야</h4>
             <p>UI/UX 디자인, 타이포그래피, 마이크로 인터랙션, 디자인 시스템</p>
           </div>
           <div className={styles.infoItem}>
-            <h4>작업 스타일</h4>
+            <h4>⚙️ 작업 스타일</h4>
             <p>사용자 경험 중심, 간결한 문제 해결, 논리적 설계, 데이터 기반 의사결정</p>
           </div>
           <div className={styles.infoItem}>
-            <h4>주요 도구</h4>
+            <h4>🛠️ 주요 도구</h4>
             <p>Figma, Protopie, React, Framer</p>
           </div>
           <div className={styles.infoItem}>
-            <h4>학력</h4>
+            <h4>🎓 학력</h4>
             <p>한국대학교 시각디자인과 졸업
 2018.03 – 2022.02</p>
           </div>
