@@ -1,43 +1,56 @@
 # Simple Note CRUD with Supabase
 
-이 프로젝트는 Next.js와 Supabase를 사용하여 만든 간단한 노트 관리 애플리케이션입니다.
+이 프로젝트는 Next.js 16과 Supabase를 활용하여 구축된 효율적이고 현대적인 노트 관리 애플리케이션입니다. 직관적인 UI와 강력한 백엔드 통합을 통해 사용자가 쉽고 빠르게 메모를 관리할 수 있도록 설계되었습니다.
 
-## 주요 기능
-- **노트 목록 조회**: 작성된 모든 노트를 최신순으로 확인
-- **노트 작성**: 제목과 내용을 입력하여 새 노트 생성
-- **노트 수정**: 기존 노트의 내용 변경
-- **노트 삭제**: 불필요한 노트 삭제
-- **데이터 백업**: Supabase의 데이터를 JSON 파일로 로컬에 저장
+## 📋 프로젝트 개요
+Simple Note는 기본적인 CRUD(Create, Read, Update, Delete) 기능을 충실히 구현하며, TypeScript를 통한 타입 안정성, Vitest를 이용한 테스트 자동화, 그리고 GitHub Actions를 통한 CI/CD 파이프라인을 포함하고 있어 실제 운영 가능한 수준의 코드 품질을 유지합니다.
 
-## 시작하기
+## ✨ 주요 기능
+- **실시간 데이터 동기화**: Supabase를 통한 즉각적인 데이터 반영
+- **노트 관리**: 제목과 내용이 포함된 노트를 생성, 조회, 수정 및 삭제
+- **반응형 디자인**: 모바일과 데스크톱 모두에 최적화된 사용자 경험
+- **테스트 및 검증**: Vitest와 React Testing Library를 통한 기능 검증
+- **데이터 백업**: 로컬 스크립트를 통한 데이터 JSON 내보내기 기능
 
-### 1. 환경 변수 설정
-`.env.example` 파일을 복사하여 `.env.local` 파일을 만들고 Supabase 정보를 입력하세요.
+## 🚀 시작하기
+
+### 설치 방법
+1. 저장소를 클론합니다.
+2. `simple-crud` 디렉토리로 이동합니다.
+3. 의존성을 설치합니다:
+   ```bash
+   pnpm install
+   ```
+
+### 환경 변수 설정
+`.env.example` 파일을 참고하여 `.env.local` 파일을 생성하고 Supabase API 정보를 입력합니다:
 ```bash
-cp .env.example .env.local
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 ```
 
-### 2. 의존성 설치
-```bash
-pnpm install
-```
-
-### 3. 개발 서버 실행
+### 개발 서버 실행
 ```bash
 pnpm dev
 ```
+브라우저에서 [http://localhost:3000](http://localhost:3000)을 열어 확인하세요.
 
-## 주요 스크립트
+## 🛠 사용 방법
+1. **노트 작성**: 메인 페이지의 '새 노트 작성' 버튼을 클릭하여 제목과 내용을 입력합니다.
+2. **목록 확인**: 작성된 모든 노트를 목록에서 확인할 수 있으며, 작성일자가 표시됩니다.
+3. **수정 및 삭제**: 각 노트 카드의 하단 버튼을 통해 기존 내용을 수정하거나 삭제할 수 있습니다.
+4. **테스트 실행**: `pnpm test` 명령어로 작성된 테스트 코드를 실행할 수 있습니다.
+5. **데이터 백업**: `pnpm export:notes` 명령어로 현재 DB의 내용을 `data/notes_backup.json`으로 저장합니다.
 
-- `pnpm dev`: 개발 서버 실행
-- `pnpm build`: 프로덕션 빌드
-- `pnpm test`: Vitest를 이용한 테스트 실행
-- `pnpm lint`: 코드 스타일 및 오류 검사
-- `pnpm export:notes`: Supabase의 데이터를 `data/notes_backup.json`으로 백업
+## 🤝 기여 안내
+1. 프로젝트를 포크(Fork)합니다.
+2. 새로운 기능 브랜치를 생성합니다 (`git checkout -b feature/AmazingFeature`).
+3. 변경 사항을 커밋합니다 (`git commit -m 'Add some AmazingFeature'`).
+4. 브랜치에 푸시합니다 (`git push origin feature/AmazingFeature`).
+5. Pull Request를 생성합니다.
 
-## 기술 스택
-- **Framework**: Next.js 16 (App Router)
-- **Database**: Supabase
-- **Styling**: Tailwind CSS
+## 🛠 기술 스택
+- **Frontend**: Next.js 16 (App Router), React 19, Tailwind CSS
+- **Backend/DB**: Supabase (PostgreSQL)
 - **Testing**: Vitest, React Testing Library
-- **CI/CD**: GitHub Actions
+- **Automation**: GitHub Actions, ESLint, TypeScript
