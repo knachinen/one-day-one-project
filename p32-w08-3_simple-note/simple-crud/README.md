@@ -1,36 +1,43 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Simple Note CRUD with Supabase
 
-## Getting Started
+이 프로젝트는 Next.js와 Supabase를 사용하여 만든 간단한 노트 관리 애플리케이션입니다.
 
-First, run the development server:
+## 주요 기능
+- **노트 목록 조회**: 작성된 모든 노트를 최신순으로 확인
+- **노트 작성**: 제목과 내용을 입력하여 새 노트 생성
+- **노트 수정**: 기존 노트의 내용 변경
+- **노트 삭제**: 불필요한 노트 삭제
+- **데이터 백업**: Supabase의 데이터를 JSON 파일로 로컬에 저장
 
+## 시작하기
+
+### 1. 환경 변수 설정
+`.env.example` 파일을 복사하여 `.env.local` 파일을 만들고 Supabase 정보를 입력하세요.
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+cp .env.example .env.local
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. 의존성 설치
+```bash
+pnpm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 3. 개발 서버 실행
+```bash
+pnpm dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 주요 스크립트
 
-## Learn More
+- `pnpm dev`: 개발 서버 실행
+- `pnpm build`: 프로덕션 빌드
+- `pnpm test`: Vitest를 이용한 테스트 실행
+- `pnpm lint`: 코드 스타일 및 오류 검사
+- `pnpm export:notes`: Supabase의 데이터를 `data/notes_backup.json`으로 백업
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 기술 스택
+- **Framework**: Next.js 16 (App Router)
+- **Database**: Supabase
+- **Styling**: Tailwind CSS
+- **Testing**: Vitest, React Testing Library
+- **CI/CD**: GitHub Actions
