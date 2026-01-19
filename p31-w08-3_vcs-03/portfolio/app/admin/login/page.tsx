@@ -11,54 +11,35 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [logs, setLogs] = useState<string[]>([]); // New log state
   const router = useRouter();
-
-  const addLog = (msg: string) => setLogs(prev => [...prev, `${new Date().toLocaleTimeString()}: ${msg}`]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    addLog("Attempting login...");
-    addLog(`Supabase URL present: ${!!process.env.NEXT_PUBLIC_SUPABASE_URL}`);
-    
     setLoading(true);
     setError(null);
 
     try {
-      addLog("Calling signInWithPassword...");
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
 
       if (error) {
-        addLog(`Login failed: ${error.message}`);
-        console.error("Login failed:", error);
         setError(error.message);
         setLoading(false);
       } else {
-        addLog("Login successful! User authenticated.");
-        
-        // Refresh session explicitly
-        const { data: { session } } = await supabase.auth.getSession();
-        addLog(session ? "Session retrieved." : "No session found.");
-
-        // Force a hard navigation to ensure cookies are sent to the server for middleware verification
-        addLog("Redirecting to /admin/projects...");
+        // Hard refresh to projects to ensure everything is synced
         window.location.href = '/admin/projects';
       }
     } catch (err: any) {
-      addLog(`Unexpected error: ${err.message || err}`);
-      console.error("Unexpected error during login:", err);
       setError("An unexpected error occurred");
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-[80vh] flex flex-col items-center justify-center gap-8">
+    <div className="min-h-[80vh] flex items-center justify-center">
       <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 w-full max-w-md">
-        {/* ... form content ... */}
         <div className="text-center mb-8">
           <h1 className="text-2xl font-bold text-slate-900">Admin Login</h1>
           <p className="text-slate-500 text-sm mt-2">Enter your credentials to access the CMS</p>
@@ -105,14 +86,6 @@ export default function LoginPage() {
             {loading ? 'Logging in...' : 'Sign In'}
           </Button>
         </form>
-      </div>
-
-      {/* Debug Logs Area */}
-      <div className="w-full max-w-md bg-slate-900 text-green-400 p-4 rounded-xl font-mono text-xs overflow-auto max-h-40">
-        <p className="text-slate-500 border-b border-slate-700 pb-2 mb-2">Debug Logs:</p>
-        {logs.length === 0 ? <p className="opacity-50">Ready...</p> : logs.map((log, i) => (
-          <div key={i}>{log}</div>
-        ))}
       </div>
     </div>
   );
